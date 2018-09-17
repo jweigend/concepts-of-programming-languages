@@ -35,4 +35,4 @@ clean:
 all: build test install
 
 slideshow:
-	cd doc; present
+	cd docs; present

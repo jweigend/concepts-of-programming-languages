@@ -64,9 +64,3 @@ Reimplementing Docker
 
 Lesson 12 - Summary
 Picking the appropriate language for a given problem
-
-Further information
-.link https://github.com/qaware/programmieren-mit-go/wiki
-
-* Hello World!
-.play -numbers ../gettingstarted/hello/main.go
