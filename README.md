@@ -1,10 +1,9 @@
-# concepts-of-programming-languages
+# Concepts of Programming Languages
 Master Course: Concepts of Programming Languages - University of Applied Sciences Rosenheim
 
 <img src="docs/img/go.png" width="10%">
 
-The course "Concepts of Programming Languages" is intended as a master course. Solid programming skills in Java/C/C++ are required. We also assume that students have introductory skills in Scala and Python.
-For all exercises and examples, the course uses Go (Golang) as concrete language.
+The course "Concepts of Programming Languages" is as a master course. Solid programming skills in Java/C/C++ are required. We also assume that students have introductory skills in Scala and Python. For all exercises and examples, the course uses Go (Golang) as concrete example.
 
 ## Goal of the Course
 
