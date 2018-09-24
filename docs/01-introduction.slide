@@ -1,4 +1,4 @@
-Introduction
+Introduction to Golang
 Concepts of Programming Languages
 15:04 29 Jul 2018
 Tags: go, programming, master
@@ -9,4 +9,21 @@ johannes.weigend@qaware.de
 http://www.qaware.de
 @jweigend
 
-* Introduction
+* 
+.image https://talks.golang.org/2012/10things/gopher.jpg
+
+* Introduction to Golang
+
+Rob Pike @ Google 2009 (60 Min)
+.link https://www.youtube.com/watch?v=rKnDgT73v8s
+
+* Some Questions 
+- What makes Go different from other Languages? 
+- What makes Go similar to other Languages?
+- Discuss your personal opinions in a group of three students! (20 Minutes)
+- Present your result to the audience + discussion (30 Minutes)
+
+* See also
+.link https://golang.org/doc/
+.link https://www.youtube.com/watch?v=XCsL89YtqCs
+

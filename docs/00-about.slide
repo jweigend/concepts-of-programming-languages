@@ -7,7 +7,7 @@ Johannes Weigend
 QAware GmbH
 johannes.weigend@qaware.de
 http://www.qaware.de
-@jweigend
+@johannesweigend
 
 
 * Course Requirements
@@ -19,9 +19,10 @@ http://www.qaware.de
 * Goal of the Course
 
 .image img/go.png
-- Learn how to write professional code with Golang
-- Learn how Golang differs conceptionally from other languages
+- Learn how Golang differs conceptional from other languages
 - Get solid skills to pick the right language for a given problem
+- Know the concepts of languages
+- Learn how to write professional code with Golang
 
 * Lessons
 
@@ -64,3 +65,18 @@ Reimplementing Docker
 
 Lesson 12 - Summary
 Picking the appropriate language for a given problem
+
+* Books
+Donovan, Kernigham: The Go Programming Language 
+.link https://www.amazon.de/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440/ref=sr_1_1?ie=UTF8&qid=1537786910&sr=8-1&keywords=go+programming+language
+
+Sebesta: Concepts of Programming Languages 
+.link https://www.amazon.de/Concepts-Programming-Languages-Global-Sebesta/dp/1292100559/ref=sr_1_1?ie=UTF8&qid=1537787024&sr=8-1&keywords=sebesta+programming
+
+* Structure of this course
+- Recap - 15 min 
+- Lecture - 30 min
+- Online Tutorials - 45 min
+- Student Discussions - 30 min
+- Introduction into Excercises -  15 min
+- Excercise Work - 45 min (+ Homework)
