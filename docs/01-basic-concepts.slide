@@ -1,4 +1,4 @@
-Basic Concepts
+Basics
 Concepts of Programming Languages
 15:04 29 Jul 2018
 Tags: go, programming, master
@@ -15,24 +15,31 @@ http://www.qaware.de
 
 * Types of Programming Languages
 
-Imperative
+*Imperative*
 - Assembler++
 
-Declarative
-- Domain Specific Languages (XML, YAML, ...) => Limited in scope. Not turing complete. 
+*Declarative*
+Domain Specific Languages (HTML, XML, YAML, ...) => Limited in scope. Some not turing complete. 
 
-Procedural (Control Structures and Procedures)
-- Fortran / Algol / Pascal / *C* / C++
+*Procedural* (Control Structures and Procedures)
+Fortran / Algol / Pascal / *C* / C++
 
-Object Oriented (Classes and Objects)
-- Smalltalk / Objective C / C++ / Eifel / *Java* / C#
+*Object* *Oriented* (Classes and Objects)
+Smalltalk / Objective C / C++ / Eifel / *Java* / C#
 
-Functional (Lambdas + Closures)
-- Haskel, Erlang, F# 
+*Functional* (Lambdas + Closures)
+Haskel, Erlang, F# 
 
-Best of Breed
-- Kotlin, Scala, Rust, *Go*
- 
+*Best* *of* *Breed*
+Kotlin, Scala, Rust, JS, *Go*
+
+* Areas for Programming Languages
+- Application Programming (small / large scale, web, central, cloud)
+- Systems Programming
+- Network Programming  
+- Realtime
+- User Interface
+- ... 
 
 * Why Go interesting?
 
