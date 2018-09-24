@@ -1,0 +1,47 @@
+Basic Concepts
+Concepts of Programming Languages
+15:04 29 Jul 2018
+Tags: go, programming, master
+
+Johannes Weigend
+QAware GmbH
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* Evolution of Programming Languages
+
+.link http://rigaux.org/language-study/diagram.png
+
+* Types of Programming Languages
+
+Imperative
+- Assembler++
+
+Declarative
+- Domain Specific Languages (XML, YAML, ...) => Limited in scope. Not turing complete. 
+
+Procedural (Control Structures and Procedures)
+- Fortran / Algol / Pascal / *C* / C++
+
+Object Oriented (Classes and Objects)
+- Smalltalk / Objective C / C++ / Eifel / *Java* / C#
+
+Functional (Lambdas + Closures)
+- Haskel, Erlang, F# 
+
+Best of Breed
+- Kotlin, Scala, Rust, *Go*
+ 
+
+* Why Go interesting?
+
+- Go is the major language behind the Cloud Native Stack 
+.link https://www.cncf.io/
+
+- The most important components are written in Go: Docker, Kubernetes, etcd, Prometheus, Grafana, ...
+
+- Go is Open Source and maintained by Google
+
+- Go is a distributed, parallel language designed for systems programming at Google to solve the problems of C++ code.
+
