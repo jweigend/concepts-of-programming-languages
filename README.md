@@ -8,7 +8,7 @@ The course "Concepts of Programming Languages" is as a master course. Solid prog
 ## Goal of the Course
 
 1. Learn the Concepts of Programming Languages
-2. Learn how Go differs conceptional from Java, C/C++ or Scala
+2. Learn how Go differs from Java, C/C++ or Scala
 3. Get solid skills to pick the right language for a given problem
 
 It is somewhat unusual, that we focus on Go in all lessons. Master students are typically well skilled in Java. They
