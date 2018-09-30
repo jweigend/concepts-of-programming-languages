@@ -5,6 +5,7 @@
 package palindrome
 
 // IsPalindrome implementation
+// START OMIT
 func IsPalindrome(word string) bool {
 	for pos := 0; pos < len(word)/2; pos++ {
 		if word[pos] != word[len(word)-pos-1] {
@@ -13,6 +14,8 @@ func IsPalindrome(word string) bool {
 	}
 	return true
 }
+
+// END OMIT
 
 // IsPalindrome2 is implemented by using runes.
 func IsPalindrome2(word string) bool {

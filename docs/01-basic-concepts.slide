@@ -10,45 +10,35 @@ http://www.qaware.de
 @johannesweigend
 
 * Evolution of Programming Languages
-
-.link http://rigaux.org/language-study/diagram.png
+.link img/01-Languages.png
 
 * Types of Programming Languages
-
-*Imperative*
-- Assembler++
-
+*Imperative*: Assembler as root (Operations and Control Structures)
 *Declarative*
 Domain Specific Languages (HTML, XML, YAML, ...) => Limited in scope. Some not turing complete. 
-
 *Procedural* (Control Structures and Procedures)
 Fortran / Algol / Pascal / *C* / C++
-
 *Object* *Oriented* (Classes and Objects)
 Smalltalk / Objective C / C++ / Eifel / *Java* / C#
-
-*Functional* (Lambdas + Closures)
-Haskel, Erlang, F# 
-
-*Best* *of* *Breed*
-Kotlin, Scala, Rust, JS, *Go*
+*Functional* (Lambdas + Closures): Haskell, Erlang, F# 
+*Logic*: Prolog
+*Best* *of* *Breed*: Kotlin, Scala, Rust, JS, *Go*
 
 * Areas for Programming Languages
 - Application Programming (small / large scale, web, central, cloud)
 - Systems Programming
 - Network Programming  
-- Realtime
-- User Interface
-- ... 
+- Realtime Systems
+- User Interface Programming
+- Embedded Systems 
 
-* Why Go interesting?
-
-- Go is the major language behind the Cloud Native Stack 
-.link https://www.cncf.io/
-
-- The most important components are written in Go: Docker, Kubernetes, etcd, Prometheus, Grafana, ...
-
-- Go is Open Source and maintained by Google
-
-- Go is a distributed, parallel language designed for systems programming at Google to solve the problems of C++ code.
+* Orthogonal Classifications
+- Static vs. Dynamic Typed
+- Compiled vs. Interpreted
+- Sequential vs. Parallel
+- Static Linked vs. Dynamic Linked
+- Safe vs. Unsafe (Crash a process or even the system)
+- Simple vs. Complex
+- Platform Independent Bytecode vs. Platform Dependent Assemblercode
+- Plattform Dependent Compiler vs. Cross Compiler
 

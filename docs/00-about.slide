@@ -9,6 +9,9 @@ johannes.weigend@qaware.de
 http://www.qaware.de
 @johannesweigend
 
+* Languages
+.image ./img/00-programming-languages.jpeg
+
 
 * Course Requirements
 - The course is intended as a master course. 
@@ -26,57 +29,94 @@ http://www.qaware.de
 
 * Lessons
 
-Lesson 1 - Introduction
+Lesson 1 - *Introduction*
 Why Go? History, Concepts, Comparison to C/C++/Java/Python/Ruby/Scala/JS
 
-Lesson 2 - Basic Language Overview
+Lesson 2 - *Basic* *Language* *Overview*
 Control Structures, Functions, Pointers, Tooling, Testing and Errorhandling
 
-Lesson 3 - OOP with Go
-Concepts and Differences to other Languages, Modules
+Lesson 3 - *OOP* *with* *Go*
+Concepts and Differences to other Languages
 
-Lesson 4 - Container, Algorithms and Functional Programming
+Lesson 4 - *Functional* *Programming*
 Arrays and Slices, Maps, Functional Programming
 
-Lesson 5 - Input / Output
-Reading, Filtering, Writing, Fan-In / Fan-Out
+Lesson 5 - *Fuctional* *Parsers*
+Parser Combinators with Go
 
-Lesson 6 - Parallel Programming - Part I
+Lesson 6 - *Parallel* *Programming* - Part I
 Go Routines, Channels
 
 * Lessons
 
-Lesson 7 - Parallel Programming - Part II
+Lesson 7 - *Parallel* *Programming* - Part II
 Synchronization with Locks
 
-Lesson 8 - Distributed Programming - Part I
+Lesson 8 - *Distributed* *Programming* - Part I
+GRPC
 
-Lesson 9 - Distributed Programming - Part II
+Lesson 9 - *Distributed* *Programming* - Part II
 Blockchain, Encryption, Security
 
-Lesson 10 - Microservices with Go
+Lesson 10 - *Microservices*
 Microservices with Go, RESTful APIs
 
-Lesson 11 - System Programming for Linux
-Reimplementing Docker 
-.link https://www.youtube.com/watch?v=Utf-A4rODH8
+Lesson 11 - *System* *Programming*
+Reimplementing Docker with Go
 
 * Lessons
 
-Lesson 12 - Summary
+Lesson 12 - *Summary*
 Picking the appropriate language for a given problem
-
-* Books
-Donovan, Kernigham: The Go Programming Language 
-.link https://www.amazon.de/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440/ref=sr_1_1?ie=UTF8&qid=1537786910&sr=8-1&keywords=go+programming+language
-
-Sebesta: Concepts of Programming Languages 
-.link https://www.amazon.de/Concepts-Programming-Languages-Global-Sebesta/dp/1292100559/ref=sr_1_1?ie=UTF8&qid=1537787024&sr=8-1&keywords=sebesta+programming
 
 * Structure of this course
 - Recap - 15 min 
 - Lecture - 30 min
-- Online Tutorials - 45 min
+- Online Tutorials (Video) - 45 min
 - Student Discussions - 30 min
-- Introduction into Excercises -  15 min
-- Excercise Work - 45 min (+ Homework)
+- Introduction to Exercises -  15 min
+- Exercises - 45 min (+ Homework)
+
+* Semester Work
+15 Minutes presentation + 5 pages document (everything in English)
+
+- Compare PP (Procedural Programming) in Go with:
+    C 
+    Modula 
+    Ada 
+
+- Compare OOP (Object Oriented Programming) in Go with:
+    Smalltalk 
+    C++ 
+    Eiffel 
+    Objective C 
+
+- Compare FP (Functional Programming) in Go with:
+    Haskell 
+    Java8 
+    F# 
+
+* Semester Work
+
+- Compare Go Concurrency with:
+    Erlang 
+    Scala Actors 
+    D 
+    Occam 
+
+- Compare Go with:
+    Rust 
+    Swift 
+    JavaScript 
+    Ruby 
+    Kotlin 
+    C++17 
+
+
+
+* Books
+Donovan, Kernigham: The Go Programming Language 
+.link https://www.amazon.de/Programming-Language-Addison-Wesley-Professional-Computing/dp/00 34190440/ref=sr_1_1?ie=UTF8&qid=1537786910&sr=8-1&keywords=go+programming+language
+
+Sebesta: Concepts of Programming Languages 
+.link https://www.amazon.de/Concepts-Programming-Languages-Global-Sebesta/dp/1292100559/ref=sr_1_1?ie=UTF8&qid=1537787024&sr=8-1&keywords=sebesta+programming
