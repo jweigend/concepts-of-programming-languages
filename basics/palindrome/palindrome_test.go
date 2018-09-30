@@ -43,3 +43,21 @@ func TestPalindrome2(t *testing.T) {
 		t.Error("isPalindrome('ottos' should be false. But is true.")
 	}
 }
+
+func TestPalindrome3(t *testing.T) {
+	if !IsPalindrome3("☯otto☯") == true {
+		t.Error("isPalindrome('☯otto☯' should be true. But is false.")
+	}
+	if !IsPalindrome3("") == true {
+		t.Error("isPalindrome(Empty string should be a palindrome. But is not. Method returns false.")
+	}
+	if !IsPalindrome3("o") == true {
+		t.Error("isPalindrome('o' should be true. But is false.")
+	}
+	if !IsPalindrome3("oto") == true {
+		t.Error("isPalindrome('oto' should be true. But is false.")
+	}
+	if !IsPalindrome3("ottos") == false {
+		t.Error("isPalindrome('ottos' should be false. But is true.")
+	}
+}

@@ -4,6 +4,8 @@
 // Package palindrome implements multiple functions for palindromes.
 package palindrome
 
+import "github.com/jweigend/concepts-of-programming-languages/basics/types/strings"
+
 // IsPalindrome implementation
 // START OMIT
 func IsPalindrome(word string) bool {
@@ -26,4 +28,9 @@ func IsPalindrome2(word string) bool {
 		}
 	}
 	return true
+}
+
+// IsPalindrome3 is implemented by reusing Reverse()
+func IsPalindrome3(word string) bool {
+	return strings.Reverse(word) == word
 }
