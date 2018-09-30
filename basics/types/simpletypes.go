@@ -10,9 +10,9 @@ import (
 
 func nop(x int)            {} // no effect
 func add(x, y int) int     { return x + y }
-func addp(px, py *int) int { return *px + *py }                      // adds what px, py are pointing to
-func swap(px, py *int)     { z := *px; *px = *py; *py = z }          // swaps what px, py are pointing to
-func swapp(ppx, ppy **int) { var pz = *ppx; *ppx = *ppy; *ppy = pz } // swaps what ppx, ppy are pointing to
+func addp(px, py *int) int { return *px + *py }        // adds what px, py are pointing to
+func swap(px, py *int)     { *px, *py = *py, *px }     // swaps what px, py are pointing to
+func swapp(ppx, ppy **int) { *ppx, *ppy = *ppy, *ppx } // swaps what ppx, ppy are pointing to
 
 type Integer = int
 type Int struct {
