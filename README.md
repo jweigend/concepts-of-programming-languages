@@ -21,5 +21,5 @@ We go from concrete to the abstraction and not vice versa.
 
 ### Exercise 1
 
-- Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries
+- Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise1.md
 
