@@ -18,7 +18,6 @@ If you are not get finished during the lecture hours, please finish it as homewo
 
 - Test the HelloWorld programm with "go run HelloWorld"
 
-- Run the Makefile (with make) and test the slides with "make slideshow"
 - (Optional: Install Visual Studio Code, IntelliJ or any other Editor with Go support) on your virtual disk.
 
 ## After this Exercise
