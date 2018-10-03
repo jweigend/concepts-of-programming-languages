@@ -13,7 +13,9 @@ The course "Concepts of Programming Languages" is as a master course. Solid prog
 
 It is somewhat unusual, that we focus on Go in all lessons. Master students are typically well skilled in Java. They
 have some basic knowledge in C/C++, maybe JavaScript, Ruby, Python or Scala. Since Go is a multi paradigm language, the lecture uses Go to demonstrate the basic concepts of these languages and discuss features which are missing in Go. 
-We go from concrete to the abstraction and not vice versa. 
+We go from concrete to the abstraction and not vice versa.
+Each student will compare Go to one of these languages as Semester Work: Modula, Ada, Smalltalk, C++, Eiffel, Objective C, Haskell, Clojure, F# , Erlang, Scala, D, Occam, Rust, Swift, JavaScript, Ruby, Python, Kotlin.
+We will release the results here. 
 
 ## Lesson 1 - Introduction
 
