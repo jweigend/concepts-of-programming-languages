@@ -35,12 +35,18 @@ Rob Pike @ Google 2009 (60 Min)
 * Some Questions 
 - What makes Go different to other Languages? 
 - What makes Go similar to other Languages?
-- Discuss your personal opinions in a group of three students! (20 Minutes)
-- Present your result to the audience + discussion (30 Minutes)
+- Discuss your personal opinions in a group of students!
+
+* Exercise 1
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise1.md
+.image img/01-exercise.png 500 700
 
 * See also
-.link https://www.youtube.com/watch?v=XCsL89YtqCs
+
+.link https://github.com/jweigend/concepts-of-programming-languages
 .link https://golang.org/
 .link https://golang.org/doc/
+
+
 
 
