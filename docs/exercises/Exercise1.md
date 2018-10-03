@@ -5,7 +5,7 @@
 - Create a Go workspace on the disk in the /codebase/gopath directory (https://www.youtube.com/watch?v=XCsL89YtqCs)
 - Create a shell script (.sh / .cmd) to make your changes to the GOPATH and PATH environment variables persistent.
 - Create a Github project with your personal account containing a HelloWorld.go programm
-- Use go get https://github.com/\<\<YOUR REPO\>\> to copy the repository into your local GOPATH.
+- Use go get 'https://github.com/\<\<YOUR REPO\>\>' to copy the repository into your local GOPATH.
 - Test the HelloWorld programm with "go run HelloWorld"
 
 - Use go get https://github.com/jweigend/concepts-of-programming-languages/ to copy this repository to your local GOPATH.
