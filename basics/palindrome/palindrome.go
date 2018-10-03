@@ -6,7 +6,7 @@ package palindrome
 
 import "github.com/jweigend/concepts-of-programming-languages/basics/types/strings"
 
-// IsPalindrome implementation
+// IsPalindrome implementation. Does only work for 1-Byte UTF-8 chars (ASCII).
 // START OMIT
 func IsPalindrome(word string) bool {
 	for pos := 0; pos < len(word)/2; pos++ {
@@ -19,7 +19,7 @@ func IsPalindrome(word string) bool {
 
 // END OMIT
 
-// IsPalindrome2 is implemented by using runes.
+// IsPalindrome2 is implemented by using runes. The works for all UTF-8 chars.
 func IsPalindrome2(word string) bool {
 	var runes = []rune(word)
 	for pos, ch := range runes {
@@ -30,7 +30,7 @@ func IsPalindrome2(word string) bool {
 	return true
 }
 
-// IsPalindrome3 is implemented by reusing Reverse()
+// IsPalindrome3 is implemented by reusing Reverse(). Reverse works for UTF-8 chars.
 func IsPalindrome3(word string) bool {
 	return strings.Reverse(word) == word
 }

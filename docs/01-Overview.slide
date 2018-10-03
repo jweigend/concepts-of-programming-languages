@@ -1,6 +1,6 @@
-Basics
+Overview
 Concepts of Programming Languages
-15:04 29 Jul 2018
+04 Oct 2018
 Tags: go, programming, master
 
 Johannes Weigend
@@ -11,18 +11,20 @@ http://www.qaware.de
 
 * Evolution of Programming Languages
 .link img/01-Languages.png
+.image img/01-Languages.png 500 1000
 
 * Types of Programming Languages
 *Imperative*: Assembler as root (Operations and Control Structures)
-*Declarative*
-Domain Specific Languages (HTML, XML, YAML, ...) => Limited in scope. Some not turing complete. 
+*Declarative:*
+Domain Specific Languages (HTML, XML, YAML, ...) => Limited in scope. Some are not Turing Complete. 
 *Procedural* (Control Structures and Procedures)
-Fortran / Algol / Pascal / *C* / C++
+Fortran / Algol / Pascal / *C*
 *Object* *Oriented* (Classes and Objects)
 Smalltalk / Objective C / C++ / Eifel / *Java* / C#
 *Functional* (Lambdas + Closures): Haskell, Erlang, F# 
 *Logic*: Prolog
 *Best* *of* *Breed*: Kotlin, Scala, Rust, JS, *Go*
+.link https://en.wikipedia.org/wiki/List_of_programming_languages_by_type More Languages
 
 * Areas for Programming Languages
 - Application Programming (small / large scale, web, central, cloud)
@@ -42,3 +44,10 @@ Smalltalk / Objective C / C++ / Eifel / *Java* / C#
 - Platform Independent Bytecode vs. Platform Dependent Assemblercode
 - Plattform Dependent Compiler vs. Cross Compiler
 
+* Some Thoughts
+- There are many solutions for a given problem
+- The "best" language is nothing without a proper ecosystem (Libraries, Examples, Community)
+- There are straight forward choices for a given platform (Mac: Swift + Objectiv-C, Linux: C + Python, Android: Java)
+- Dont expect "Magic" from programming Languages
+- Clean code and good programming is orthogonal to the language
+- Learn more than one programming language at a professional level

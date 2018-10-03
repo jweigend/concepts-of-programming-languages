@@ -1,6 +1,6 @@
 Concepts of Programming Languages
 Master Course - Hochschule Rosenheim - WS 2018/2019
-15:04 29 Jul 2018
+04 Oct 2018
 Tags: go, programming, master
 
 Johannes Weigend
@@ -64,10 +64,9 @@ Microservices with Go, RESTful APIs
 Lesson 11 - *System* *Programming*
 Reimplementing Docker with Go
 
-* Lessons
-
 Lesson 12 - *Summary*
 Picking the appropriate language for a given problem
+
 
 * Structure of this course
 - Recap - 15 min 
@@ -78,45 +77,44 @@ Picking the appropriate language for a given problem
 - Exercises - 45 min (+ Homework)
 
 * Semester Work
-15 Minutes presentation + 5 pages document (everything in English)
+15 Minutes presentation + 5-10 pages Asciidoc document (written in English)
 
-- Compare PP (Procedural Programming) in Go with:
-    C 
+- Compare *PP* (Procedural Programming) in Go with:
+    C
     Modula 
     Ada 
 
-- Compare OOP (Object Oriented Programming) in Go with:
+- Compare *OOP* (Object Oriented Programming) in Go with:
     Smalltalk 
     C++ 
     Eiffel 
     Objective C 
 
-- Compare FP (Functional Programming) in Go with:
+- Compare *FP* (Functional Programming) in Go with:
     Haskell 
-    Java8 
+    Clojure 
     F# 
 
 * Semester Work
 
-- Compare Go Concurrency with:
+- Compare Go *Concurrency* with:
     Erlang 
     Scala Actors 
     D 
     Occam 
 
-- Compare Go with:
+- Compare *Go* with:
     Rust 
     Swift 
     JavaScript 
     Ruby 
+    Python 
     Kotlin 
-    C++17 
-
-
+ 
 
 * Books
 Donovan, Kernigham: The Go Programming Language 
-.link https://www.amazon.de/Programming-Language-Addison-Wesley-Professional-Computing/dp/00 34190440/ref=sr_1_1?ie=UTF8&qid=1537786910&sr=8-1&keywords=go+programming+language
+.image https://d3by36x8sj6cra.cloudfront.net/assets/images/book/large/9780/1341/9780134190440.jpg 200 200
 
 Sebesta: Concepts of Programming Languages 
-.link https://www.amazon.de/Concepts-Programming-Languages-Global-Sebesta/dp/1292100559/ref=sr_1_1?ie=UTF8&qid=1537787024&sr=8-1&keywords=sebesta+programming
+.image https://img.yumpu.com/59461192/1/358x441/concepts-of-programming-languages-robert-w-sebesta.jpg?quality=85 200 200

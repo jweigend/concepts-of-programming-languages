@@ -6,7 +6,7 @@ package palindrome
 import "testing"
 
 //START OMIT
-func TestPalindrome(t *testing.T) {
+func TestPalindrome1(t *testing.T) {
 	// Unicode Character do not work with a simple string implementation
 	if !IsPalindrome("") == true {
 		t.Error("isPalindrome('' should be true. But is false.")
@@ -27,37 +27,27 @@ func TestPalindrome(t *testing.T) {
 }
 
 func TestPalindrome2(t *testing.T) {
-	if !IsPalindrome2("☯otto☯") == true {
-		t.Error("isPalindrome('☯otto☯' should be true. But is false.")
-	}
-	if !IsPalindrome2("") == true {
-		t.Error("isPalindrome(Empty string should be a palindrome. But is not. Method returns false.")
-	}
-	if !IsPalindrome2("o") == true {
-		t.Error("isPalindrome('o' should be true. But is false.")
-	}
-	if !IsPalindrome2("oto") == true {
-		t.Error("isPalindrome('oto' should be true. But is false.")
-	}
-	if !IsPalindrome2("ottos") == false {
-		t.Error("isPalindrome('ottos' should be false. But is true.")
-	}
+	testPalindromeUTF8(t, IsPalindrome2)
 }
 
 func TestPalindrome3(t *testing.T) {
-	if !IsPalindrome3("☯otto☯") == true {
+	testPalindromeUTF8(t, IsPalindrome3)
+}
+
+func testPalindromeUTF8(t *testing.T, isPalindrome func(word string) bool) {
+	if !isPalindrome("☯otto☯") == true {
 		t.Error("isPalindrome('☯otto☯' should be true. But is false.")
 	}
-	if !IsPalindrome3("") == true {
+	if !isPalindrome("") == true {
 		t.Error("isPalindrome(Empty string should be a palindrome. But is not. Method returns false.")
 	}
-	if !IsPalindrome3("o") == true {
+	if !isPalindrome("o") == true {
 		t.Error("isPalindrome('o' should be true. But is false.")
 	}
-	if !IsPalindrome3("oto") == true {
+	if !isPalindrome("oto") == true {
 		t.Error("isPalindrome('oto' should be true. But is false.")
 	}
-	if !IsPalindrome3("ottos") == false {
+	if !isPalindrome("ottos") == false {
 		t.Error("isPalindrome('ottos' should be false. But is true.")
 	}
 }
