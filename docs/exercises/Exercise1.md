@@ -18,8 +18,6 @@ If you are not get finished during the lecture hours, please finish it as homewo
 
 - Test the HelloWorld programm with "go run HelloWorld"
 
-- Use go get https://github.com/jweigend/concepts-of-programming-languages/ to copy this repository to your local GOPATH.
-
 - Run the Makefile (with make) and test the slides with "make slideshow"
 - (Optional: Install Visual Studio Code, IntelliJ or any other Editor with Go support) on your virtual disk.
 
@@ -28,5 +26,3 @@ If you are not get finished during the lecture hours, please finish it as homewo
 - You should know about the GOPATH and PATH variables
 - You should have a clean Go installation inside a seperate disk on your computer
 - Your personal Github project is cloned into your workspace. You are able to add and remove files
-
-
