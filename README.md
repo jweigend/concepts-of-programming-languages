@@ -17,7 +17,7 @@ We go from concrete to the abstraction and not vice versa.
 
 ## Lesson 1 - Introduction
 
-- History, Concepts, Why Go?, Comparison to C/C++/Java/Python/Ruby/Scala/JS
+- Overview of Programming Languages, Why Go?, Comparison to C/C++/Java/Python/Ruby/Scala/JS
 
 ### Exercise 1
 
