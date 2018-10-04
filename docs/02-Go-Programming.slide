@@ -1,0 +1,38 @@
+Overview
+Concepts of Programming Languages
+04 Oct 2018
+Tags: go, programming, master
+
+Johannes Weigend
+QAware GmbH
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* Go Programming - Basics
+- Basic Structure: Functions, Files and Packages
+- Types
+- Pointer
+- Strings
+- Arrays
+- Slices
+- Maps
+- User Defined Types
+- Sorting, Searching
+- Container: Linked List, Heap, 
+
+* Functions 
+- Multiple return values
+- VAargs in Functions
+- Function as value
+- Function as parameter
+
+* Working with Pointers (Swap)
+- Swapping Values
+- Swapping Pointers
+
+* Working with Maps
+- Map initialization
+- Map r/w access
+- Emulating Sets with Maps
+
