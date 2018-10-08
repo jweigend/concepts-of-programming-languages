@@ -58,8 +58,8 @@ func TestCasting(t *testing.T) {
 	s.Push(2)
 
 	sum := 0
-	for i := 0; i < len(*s); i++ {
-		sum += (*s)[i].(int) // type assertion = cast from interface{} to int
+	for i := 0; i < s.Size(); i++ {
+		sum += s.Get(i).(int) // type assertion = cast from interface{} to int
 	}
 
 	if sum != 3 {
