@@ -26,3 +26,5 @@ func main() {
 	fmt.Println("\nDefault value for IP: " + *ip)
 	fmt.Println("\nDefault value for port: " + *port)
 }
+
+// END OMIT

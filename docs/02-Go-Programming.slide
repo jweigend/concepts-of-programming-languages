@@ -1,38 +1,147 @@
-Overview
+Go Programming
 Concepts of Programming Languages
-04 Oct 2018
+11 Oct 2018
 Tags: go, programming, master
 
-Johannes Weigend
-QAware GmbH
+Johannes Weigend (QAware GmbH)
+University of Applied Sciences Rosenheim
 johannes.weigend@qaware.de
 http://www.qaware.de
 @johannesweigend
 
-* Go Programming - Basics
-- Basic Structure: Functions, Files and Packages
-- Types
-- Pointer
-- Strings
-- Arrays
-- Slices
-- Maps
-- User Defined Types
-- Sorting, Searching
-- Container: Linked List, Heap, 
+* Golang
+- Go is an open source programming language for distributed and parallel systems
+- Go addresses the problems of C ++ backend development at Google
+- The Go core team is prominent: Robert Griesheimer (Hotspot VM), Ken Thompson (UX / B) and Rob Pike (UTF-8)
+- Go is actively developed since 2008 (current version 1.11)
+- Go is *THE* language behind the Cloud Native Stack
+.link https://www.cncf.io/
+.image ./img/01-cncf-projects.png 100 1024
+- All essential components are written in Go: Docker, Kubernetes, Etcd, Prometheus, Grafana -> An important reason to take a closer look at Go
 
-* Functions 
-- Multiple return values
-- VAargs in Functions
-- Function as value
-- Function as parameter
+* Characteristics
+- Compiled (cross compiler for OS: Mac, Windows, Linux and CPU: ARM, x86 + Amd64)
+- Static type system with runtime support (Reflection, Dynamic Types)
+- Static linker (Single Binary) -> Ideal for Docker containers
+- Focus on fast compile times (the entire Go codebase compiles in <10 seconds)
+- Simple (less keywords like C - 25/32)
+- Object-oriented, Functional, Parallel, Modular (vgo) and Versioned
 
-* Working with Pointers (Swap)
-- Swapping Values
-- Swapping Pointers
+* Gopher - The Go mascot
+.image https://talks.golang.org/2012/10things/gopher.jpg
 
-* Working with Maps
-- Map initialization
-- Map r/w access
-- Emulating Sets with Maps
+* Hello World
+.play ../basics/hello/main.go
+- Go source files are UTF-8 encoded
+- Package names are not hierarchical!
+- Package import names are hierarchical!
+- Public functions begin with a capital letter
 
+* Functions and Control Structures: Example Palindrome
+.code ../basics/palindrome/palindrome.go /IsPalindrome/,/END1 OMIT/
+- The type of a variable is behind the name!
+- The return type of a function is behind the parameter list
+- Conditions (if, for) are not clipped with ()
+- if, for ... statements need curly braces {}
+- semicolons are i.r. omitted
+
+* Go directly supports unit tests via "go test"
+.code ../basics/palindrome/palindrome_test.go /START OMIT/,/END OMIT/
+- The unit test for a file is located in a _test.go file of the same name
+- TestXY functions are called automatically
+- The test context testing.T controls the execution
+
+* Functions and Control Structures: Example Palindrome (UTF-8)
+.code ../basics/palindrome/palindrome.go /IsPalindrome2/,/END2 OMIT/
+- The rune type is an alias for int32 and can store all UTF-8 characters
+- rune (string) converts a string into an array / slice of runes
+- The range operator has two return values: the position and the current value
+   pos, ch: = range runes
+* Functions and control structures: Example String Reverse (UTF-8)
+.code ../basics/types/strings/strings.go /Reverse/,/End OMIT/
+
+* Functions and Control Structures: Example Palindrome (Reverse)
+.code ../basics/palindrome/palindrome.go /IsPalindrome3/,/END3 OMIT/
+- Strings, arrays are compared in Go with ==
+- Slices, Maps are compared with cmp.Equal
+
+* Special comparison with the cmp package
+    opt: = cmp.Comparer (func (x, y float64) bool {
+      delta: = math.Abs ​​(x - y)
+      mean: = math.Abs ​​(x + y) / 2.0
+      return delta / mean <0.00001
+    })
+
+    x: = [] float64 {1.0, 1.1, 1.2, math.Pi}
+    y: = [] float64 {1.0, 1.1, 1.2, 3.14159265359} // Accurate enough to Pi
+    z: = [] float64 {1.0, 1.1, 1.2, 3.1415} // Diverges too far from Pi
+    
+    fmt.Println (cmp.Equal (x, y, opt)) // -> true
+    fmt.Println (cmp.Equal (y, z, opt)) // -> false
+    fmt.Println (cmp.Equal (z, x, opt)) // -> false
+
+- Comparator (Comparer) is optional (as in Java)
+
+* Pointer I
+.code ../basics/swap/main.go /func swap1/,/END1 OMIT/
+.code ../basics/swap/main.go /func swap2/,/END2 OMIT/
+.code ../basics/swap/main.go /func swap3/,/END3 OMIT/
+- The double assignment saves a variable (tmp)!
+- Pointers are transferred as well as values ​​by copy
+- There is no pointer arithmetic (p ++) as in C / C ++
+
+* Pointer II
+.play ../basics/swap/main.go /func main/,/END0 OMIT/
+
+* The Flags API simplifies command line utilities
+.play ../basics/flags/main.go /func main/,/END OMIT/
+
+* Maps and Slices - Example book index
+.code ../basics/index/index.go /Page/,/Stringer/
+
+* Object oriented programing
+* Go knows no classes but only types and functions
+.code ../object-oriented-programming/rational/rational.go /Rational/,/END1 OMIT/
+.code ../object-oriented-programming/rational/rational.go /Multiply/,/Multiply OMIT/
+.code ../object-oriented-programming/rational/rational.go /NewRational/,/END2 OMIT/
+
+* The typical OO syntax (object.method ()) is supported
+.code ../object-oriented-programming/rational/rational_test.go /TestRational/,/END OMIT/
+
+* "toString" - the stringer interface
+.code ../object-oriented-programming/rational/rational.go /Stringer/,/Stringer OMIT/
+  r1: = NewRational (1, 2)
+  fmt.Println (r1) // -> (1/2)
+
+- Works for any data types
+  type number int64
+  func (n Number) String () string {
+      return fmt.Sprintf (% x, n)
+  }
+
+* The base type for containers is the empty interface (interface {})
+.code ../object-oriented-programming/stack/stack.go /Stack/,/END OMIT/
+
+* The downcast syntax is identical to a function call
+.code ../object-oriented-programming/stack/stack_test.go /TestCasting/,/END OMIT/
+Object types (e.g., containers) are i.A. used by pointer (no copies)
+- Data types (e.g., Money, Date, ...) are used i.A. used by value (no pointers)
+- The downcast is safe (== dynamic_cast in C ++ or Cast in Java)
+- No dereference (* s) is required when calling the method
+
+* Send mail with Go: Interfaces and polymorphism
+.code ../object-oriented-programming/mail/mail.go /Address/,/END OMIT/
+- The Rookie Camp example for service-oriented components
+
+* A type implements an interface when providing the required methods
+.code ../object-oriented-programming/mail/smtp/sender.go /Package/,/END OMIT/
+- Import references fully qualified VC directories in $ GOPATH / src
+
+* The Go interface can be used as in Java
+.code ../object-oriented-programming/mail/client/client.go /Package/,/EOF OMIT/
+
+* Additional
+- Several interfaces can be put together to form an interface
+- Go does not support inheritance but type embedding (delegation without syntactic ballast)
+- Go supports polymorphism only via interfaces, not through classes
+- Interfaces with a method end with the ending "he"

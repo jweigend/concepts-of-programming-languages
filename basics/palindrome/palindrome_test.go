@@ -6,8 +6,8 @@ package palindrome
 import "testing"
 
 //START OMIT
-func TestPalindrome1(t *testing.T) {
-	// Unicode Character do not work with a simple string implementation
+// palindrome_test.go
+func TestPalindrome(t *testing.T) {
 	if !IsPalindrome("") == true {
 		t.Error("isPalindrome('' should be true. But is false.")
 	}
@@ -21,9 +21,6 @@ func TestPalindrome1(t *testing.T) {
 		t.Error("isPalindrome('ottos' should be false. But is true.")
 	}
 	//END OMIT
-	if IsPalindrome("☯otto☯") == true {
-		t.Error("isPalindrome('☯otto☯' does not work with the simple string implementation!")
-	}
 }
 
 func TestPalindrome2(t *testing.T) {
