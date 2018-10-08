@@ -10,7 +10,8 @@ If you are not get finished during the lecture hours, please finish it as homewo
 - Create a Go workspace on the disk in the /codebase/gopath directory (https://www.youtube.com/watch?v=XCsL89YtqCs)
 - Create a shell script (.sh / .cmd) to make your changes to the GOPATH and PATH environment variables persistent.
 - Create a Github project with your personal account containing a HelloWorld.go programm
-- Use go get https://github.com/\<\<YOUR REPO\>\> to copy the repository into your local GOPATH.
+- Use go get github.com/\<\<YOUR REPO\>\> to copy the repository into your local GOPATH.
+- Add HelloWorld.go to the checkout path and commit / push the file.
 - Test the HelloWorld programm with "go run HelloWorld"
 - (Optional: Install Visual Studio Code, IntelliJ or any other Editor with Go support) on your virtual disk.
 
