@@ -129,19 +129,5 @@ Object types (e.g., containers) are i.A. used by pointer (no copies)
 - The downcast is safe (== dynamic_cast in C ++ or Cast in Java)
 - No dereference (* s) is required when calling the method
 
-* Send mail with Go: Interfaces and polymorphism
-.code ../object-oriented-programming/mail/mail.go /Address/,/END OMIT/
-- The Rookie Camp example for service-oriented components
-
-* A type implements an interface when providing the required methods
-.code ../object-oriented-programming/mail/smtp/sender.go /Package/,/END OMIT/
-- Import references fully qualified VC directories in $ GOPATH / src
-
-* The Go interface can be used as in Java
-.code ../object-oriented-programming/mail/client/client.go /Package/,/EOF OMIT/
-
-* Additional
-- Several interfaces can be put together to form an interface
-- Go does not support inheritance but type embedding (delegation without syntactic ballast)
-- Go supports polymorphism only via interfaces, not through classes
-- Interfaces with a method end with the ending "he"
+* Exercise 2
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.md
