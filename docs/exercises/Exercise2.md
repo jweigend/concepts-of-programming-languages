@@ -1,8 +1,6 @@
-# Exercise 2 - Basics
+# Exercise 2 - Basics and OOP
 
 If you are not get finished during the lecture hours, please finish it as homework.
-
-
 
 ## Pointers (swap.go)
 - Write a function to swap two integer variables in the caller function (2 ways)
