@@ -10,9 +10,9 @@ If you are not get finished during the lecture hours, please finish it as homewo
 What is the difference between a pointer and a Java object reference?
 What happens if you assign nil to a pointer variable?
 
-## Book Index (Working with maps and slices)
-A Book Index is a inverted index which lists all pages per word in the book. 
-Write a program which generates such an index out of an array of pages. 
+## Book Index (Working with maps, arrays and slices)
+A Book Index is a inverted index which lists all pages a word occurs in a book. 
+Write a program which generates an inverted index out of an array of book pages. 
 Each Page contains an array of words. 
 - Use an OO design for the book and the index
 - Make sure the Stringer() interface is implemented for the book and the index
