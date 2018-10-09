@@ -131,3 +131,4 @@ Object types (e.g., containers) are i.A. used by pointer (no copies)
 
 * Exercise 2
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.md
+.image img/02-exercise.png 500 700
