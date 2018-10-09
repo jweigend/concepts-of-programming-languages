@@ -7,7 +7,7 @@ package smtp
 import (
 	"log"
 
-	"github.com/qaware/programmieren-mit-go/01_object-oriented-programming/mail"
+	"github.com/jweigend/concepts-of-programming-languages/oop/mail"
 )
 
 // MailSenderImpl is a sender object.

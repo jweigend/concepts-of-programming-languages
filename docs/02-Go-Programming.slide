@@ -101,15 +101,15 @@ http://www.qaware.de
 
 * Object oriented programing
 * Go knows no classes but only types and functions
-.code ../object-oriented-programming/rational/rational.go /Rational/,/END1 OMIT/
-.code ../object-oriented-programming/rational/rational.go /Multiply/,/Multiply OMIT/
-.code ../object-oriented-programming/rational/rational.go /NewRational/,/END2 OMIT/
+.code ../oop/rational/rational.go /Rational/,/END1 OMIT/
+.code ../oop/rational/rational.go /Multiply/,/Multiply OMIT/
+.code ../oop/rational/rational.go /NewRational/,/END2 OMIT/
 
 * The typical OO syntax (object.method ()) is supported
-.code ../object-oriented-programming/rational/rational_test.go /TestRational/,/END OMIT/
+.code ../oop/rational/rational_test.go /TestRational/,/END OMIT/
 
 * "toString" - the stringer interface
-.code ../object-oriented-programming/rational/rational.go /Stringer/,/Stringer OMIT/
+.code ../oop/rational/rational.go /Stringer/,/Stringer OMIT/
   r1: = NewRational (1, 2)
   fmt.Println (r1) // -> (1/2)
 
@@ -120,10 +120,10 @@ http://www.qaware.de
   }
 
 * The base type for containers is the empty interface (interface {})
-.code ../object-oriented-programming/stack/stack.go /Stack/,/END OMIT/
+.code ../oop/stack/stack.go /Stack/,/END OMIT/
 
 * The downcast syntax is identical to a function call
-.code ../object-oriented-programming/stack/stack_test.go /TestCasting/,/END OMIT/
+.code ../oop/stack/stack_test.go /TestCasting/,/END OMIT/
 Object types (e.g., containers) are i.A. used by pointer (no copies)
 - Data types (e.g., Money, Date, ...) are used i.A. used by value (no pointers)
 - The downcast is safe (== dynamic_cast in C ++ or Cast in Java)

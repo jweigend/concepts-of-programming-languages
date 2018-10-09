@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/qaware/programmieren-mit-go/01_object-oriented-programming/rational"
+	"github.com/jweigend/concepts-of-programming-languages/oop/rational"
 )
 
 func TestStack(t *testing.T) {

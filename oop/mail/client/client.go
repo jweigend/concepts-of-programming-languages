@@ -4,7 +4,7 @@
 // Package client contains sample code for the mail components.
 package client
 
-import "github.com/qaware/programmieren-mit-go/01_object-oriented-programming/mail"
+import "github.com/jweigend/concepts-of-programming-languages/oop/mail"
 
 func sendMail(s mail.Sender) {
 

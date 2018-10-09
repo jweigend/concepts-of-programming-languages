@@ -10,15 +10,15 @@ http://www.qaware.de
 @johannesweigend
 
 * Send mail with Go: Interfaces and polymorphism
-.code ../object-oriented-programming/mail/mail.go /Address/,/END OMIT/
+.code ../oop/mail/mail.go /Address/,/END OMIT/
 - A example for service-oriented components
 
 * A type implements an interface when providing the required methods
-.code ../object-oriented-programming/mail/smtp/sender.go /Package/,/END OMIT/
+.code ../oop/mail/smtp/sender.go /Package/,/END OMIT/
 - Import references fully qualified VC directories in $ GOPATH / src
 
 * The Go interface can be used as in Java
-.code ../object-oriented-programming/mail/client/client.go /Package/,/EOF OMIT/
+.code ../oop/mail/client/client.go /Package/,/EOF OMIT/
 
 * Additional
 - Several interfaces can be put together to form an interface

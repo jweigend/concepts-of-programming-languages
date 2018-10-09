@@ -5,7 +5,7 @@ package client
 import (
 	"testing"
 
-	"github.com/qaware/programmieren-mit-go/01_object-oriented-programming/mail/smtp"
+	"github.com/jweigend/concepts-of-programming-languages/oop/mail/smtp"
 )
 
 func TestMail(t *testing.T) {
