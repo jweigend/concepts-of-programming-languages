@@ -16,7 +16,7 @@ Write a program which generates an inverted index out of an array of book pages.
 Each Page contains an array of words. 
 - Use an OO design for the book and the index
 - Make sure the Stringer() interface is implemented for the book and the index
-- Write an unit test which generates a book and calculates the index and prints it to stdout
+- Write an unit test which generates a book and calculates the index and prints it to Stdout
 
 ## Rational Numbers (Datatypes)
 Write a type for rational numbers (a/b). Implement a constructor, methods for adding and multiplying 
