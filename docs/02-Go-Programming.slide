@@ -1,4 +1,4 @@
-Go Programming
+Go Programming - Basics and OOP
 Concepts of Programming Languages
 11 Oct 2018
 Tags: go, programming, master
@@ -26,6 +26,7 @@ http://www.qaware.de
 - Focus on fast compile times (the entire Go codebase compiles in <10 seconds)
 - Simple (less keywords like C - 25/32)
 - Object-oriented, Functional, Parallel, Modular (vgo) and Versioned
+.link https://www.youtube.com/watch?v=5kj5ApnhPAE
 
 * Gopher - The Go Mascot
 .image https://talks.golang.org/2012/10things/gopher.jpg
