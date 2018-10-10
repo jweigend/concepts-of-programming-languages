@@ -27,7 +27,7 @@ http://www.qaware.de
 - Simple (less keywords like C - 25/32)
 - Object-oriented, Functional, Parallel, Modular (vgo) and Versioned
 
-* Gopher - The Go mascot
+* Gopher - The Go Mascot
 .image https://talks.golang.org/2012/10things/gopher.jpg
 
 * Hello World
@@ -43,9 +43,9 @@ http://www.qaware.de
 - The return type of a function is behind the parameter list
 - Conditions (if, for) are not clipped with ()
 - if, for ... statements need curly braces {}
-- semicolons are i.r. omitted
+- semicolons are omitted
 
-* Go directly supports unit tests via "go test"
+* Go directly supports Unit Tests via "go test"
 .code ../basics/palindrome/palindrome_test.go /START OMIT/,/END OMIT/
 - The unit test for a file is located in a _test.go file of the same name
 - TestXY functions are called automatically
@@ -54,16 +54,35 @@ http://www.qaware.de
 * Functions and Control Structures: Example Palindrome (UTF-8)
 .code ../basics/palindrome/palindrome.go /IsPalindrome2/,/END2 OMIT/
 - The rune type is an alias for int32 and can store all UTF-8 characters
-- rune (string) converts a string into an array / slice of runes
+- rune (string) converts a string into a slice of runes
 - The range operator has two return values: the position and the current value
    pos, ch: = range runes
-* Functions and control structures: Example String Reverse (UTF-8)
+
+* Functions and Control Structures: Example String Reverse (UTF-8)
 .code ../basics/types/strings/strings.go /Reverse/,/End OMIT/
+
+* Arrays and Slices
+- Arrays have a fixed length and can not resized
+- Slices are views to underlying arrays 
+- Slices can be resized (append()) 
+- The underlying array grows automatically (if needed)
+- Both have a length and a capacity
+  
+    var array = [3]int{1, 2, 3}
+    fmt.Println(array) // -> [1 2 3]
+
+    slice := array[:] // len(slice) == 3, cap(slice) == 4
+
+    slice = append(slice, 4) // len(slice) == 4, cap(slice) == 4 
+    slice = append(slice, 5) // len(slice) == 5, cap(slice) == 8 
+
+    fmt.Printf("%v\n", slice) // -> [1 2 3 4, 5]
+    fmt.Printf("%v\n", array) // -> [1 2 3]
 
 * Functions and Control Structures: Example Palindrome (Reverse)
 .code ../basics/palindrome/palindrome.go /IsPalindrome3/,/END3 OMIT/
 - Strings, arrays are compared in Go with ==
-- Slices, Maps are compared with cmp.Equal
+- Slices, Maps are compared with cmp.Equal 
 
 * Special comparison with the cmp package
     opt: = cmp.Comparer (func (x, y float64) bool {
@@ -93,41 +112,41 @@ http://www.qaware.de
 * Pointer II
 .play ../basics/swap/main.go /func main/,/END0 OMIT/
 
-* The Flags API simplifies command line utilities
+* The Flag API simplifies Command Line Utilities
 .play ../basics/flags/main.go /func main/,/END OMIT/
 
-* Maps and Slices - Example book index
+* Maps and Slices - Example Book Index
 .code ../basics/index/index.go /Page/,/Stringer/
 
-* Object oriented programing
-* Go knows no classes but only types and functions
+* Object Oriented Programming
+* Go has no classes but types and functions
 .code ../oop/rational/rational.go /Rational/,/END1 OMIT/
 .code ../oop/rational/rational.go /Multiply/,/Multiply OMIT/
 .code ../oop/rational/rational.go /NewRational/,/END2 OMIT/
 
-* The typical OO syntax (object.method ()) is supported
+* The typical OO Syntax (object.method ()) is supported in Go
 .code ../oop/rational/rational_test.go /TestRational/,/END OMIT/
 
-* "toString" - the stringer interface
+* "ToString" - The Stringer Interface
 .code ../oop/rational/rational.go /Stringer/,/Stringer OMIT/
   r1: = NewRational (1, 2)
   fmt.Println (r1) // -> (1/2)
 
-- Works for any data types
+- Works for any type
   type number int64
   func (n Number) String () string {
       return fmt.Sprintf (% x, n)
   }
 
-* The base type for containers is the empty interface (interface {})
+* The Base Type for Container is the Empty Interface (interface {})
 .code ../oop/stack/stack.go /Stack/,/END OMIT/
 
-* The downcast syntax is identical to a function call
+* The Downcast Syntax is similar to a Function Call
 .code ../oop/stack/stack_test.go /TestCasting/,/END OMIT/
-Object types (e.g., containers) are i.A. used by pointer (no copies)
-- Data types (e.g., Money, Date, ...) are used i.A. used by value (no pointers)
-- The downcast is safe (== dynamic_cast in C ++ or Cast in Java)
-- No dereference (* s) is required when calling the method
+- Object types (e.g., Containers) are used by pointers (no copies)
+- Data types (e.g., Money, Date, ...) are used by value (copies)
+- The downcast is safe (== dynamic_cast in C ++ or cast in Java)
+- No dereference (*s) is needed to call a method
 
 * Exercise 2
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.md

@@ -8,7 +8,7 @@ If you are not get finished during the lecture hours, please finish it as homewo
 - Write test example code "ExampleSwap inside a swap_test file
 ### Questions
 What is the difference between a pointer and a Java object reference?
-What happens if you assign nil to a pointer variable?
+What happens if you assign nil to a pointer variable and dereference the pointer?
 
 ## Book Index (Working with maps, arrays and slices)
 A Book Index is a inverted index which lists all pages a word occurs in a book. 
