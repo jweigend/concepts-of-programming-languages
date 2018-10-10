@@ -25,3 +25,11 @@ We will release the results here.
 
 - Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise1.md
 
+## Lesson 1 - Basics in Go Programming
+
+- Pointer, Arrays, Maps, Object Oriented Programming
+
+### Exercise 2
+
+- Swap, Index, Rational Numbers, Containers 
+https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.md
