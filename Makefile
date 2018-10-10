@@ -34,5 +34,9 @@ clean:
 
 all: build test install
 
+coverage:
+	go test -coverprofile=coverage.out $(PKGS)
+	go tool cover -html=coverage.out
+
 slideshow:
 	cd docs; present
