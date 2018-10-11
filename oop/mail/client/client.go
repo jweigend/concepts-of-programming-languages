@@ -4,14 +4,23 @@
 // Package client contains sample code for the mail components.
 package client
 
-import "github.com/jweigend/concepts-of-programming-languages/oop/mail"
+import (
+	"github.com/jweigend/concepts-of-programming-languages/oop/mail"
+	"github.com/jweigend/concepts-of-programming-languages/oop/mail/util"
+)
 
-func sendMail(s mail.Sender) {
+// Registry is the central configration for the service locator
+var Registry = new(util.Registry)
 
-	address := mail.Address{Address: "johannes.weigend@qaware.de"}
-	message := "EMail from Go!"
+// SendMail sends a mail to a receiver.
+func SendMail(address, message string) {
 
-	s.SendMail(address, message)
+	// Create an implementation for the mail.Sender interface.
+	var sender mail.Sender
+	Registry.Get(&sender)
+
+	mailaddrs := mail.Address{Address: address}
+	sender.SendMail(mailaddrs, message)
 }
 
 // EOF OMIT

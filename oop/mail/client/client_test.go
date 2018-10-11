@@ -8,10 +8,11 @@ import (
 	"github.com/jweigend/concepts-of-programming-languages/oop/mail/smtp"
 )
 
-func TestMail(t *testing.T) {
-	// Create an implementation for the mail.Sender interface.
-	sender := new(smtp.MailSenderImpl)
+// configure Registry to know which mail implementation is used.
+func init() {
+	Registry.Register(new(smtp.MailSenderImpl))
+}
 
-	// We can use different mail implementations for this method.
-	sendMail(sender)
+func TestMail(t *testing.T) {
+	SendMail("johannes.weigend@qaware.de", "Hello from Go!")
 }

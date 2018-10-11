@@ -13,7 +13,7 @@ func TestIndex(t *testing.T) {
 
 	// prepare book
 	p1 := MakePage([]string{"A", "A", "B", "C"})
-	p2 := MakePage([]string{"A", "C", "D"})
+	p2 := MakePage([]string{"A", "C", "D", "A"})
 	p3 := MakePage([]string{"A", "B", "D"})
 	book := MakeBook([]Page{p1, p2, p3})
 

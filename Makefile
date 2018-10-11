@@ -3,7 +3,7 @@
 # 
 PKGS := $(shell go list ./... | grep -v /vendor)
 
-.PHONY: test all build test install clean slideshow help
+.PHONY: test all build test install clean slideshow help coverage
 
 help:
 	clear
@@ -16,6 +16,7 @@ help:
 	@echo "       make test : Runs all tests."
 	@echo "       make install : Installs all packages."
 	@echo "       make clean : Clean up and clears caches."
+	@echo "       make coverage : Executes the tests with coverage and starts the go tool cover"
 	@echo "       make slideshow : Starts a golang present slideshow on port 3999. Blocks until CTRL-C ist pressed. "
 	@echo "       make help : This info.                                                                            "
 	@echo "---------------------------------------------------------------------------------------------------------"
