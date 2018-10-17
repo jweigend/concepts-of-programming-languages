@@ -22,7 +22,7 @@ type Sender interface {
 }
 ```
 Implement the interface and write a client. The implementation should be provided by
-a service locator registry:
+a simple self made service locator registry:
 
 ```go
     // Create an implementation for the mail.Sender interface
@@ -31,6 +31,8 @@ a service locator registry:
 	mailaddrs := mail.Address{Address: address}
 	sender.SendMail(mailaddrs, message)
 ```
+Interface, client and implementation should be in seperate packages. 
+
 
 ## Exercise 3.3 - AST - Abstract Syntax Tree
 Write a programm which builds an AST with nodes to evaluate logical expressions with (And, Not, Or with variables)
