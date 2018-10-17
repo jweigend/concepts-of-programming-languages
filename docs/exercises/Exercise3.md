@@ -1,4 +1,4 @@
-# Exercise 3 - OOP 
+# Exercise 3 - OOP in Go
 
 If you are not get finished during the lecture hours, please finish it as homework.
 
@@ -52,6 +52,9 @@ Sample Expression: (A AND B) OR C
 ```
 
 The tree should be evaluated with a evaluation methods which suppports named variables:
+
+```go
 eval(vars map[string]bool) bool
+```
 
 Write a unit test which builds the AST and evaluates with given variables.

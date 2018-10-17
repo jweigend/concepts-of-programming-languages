@@ -1,4 +1,4 @@
-# Exercise 2 - Basics and OOP
+# Exercise 2 - Basics
 
 If you are not get finished during the lecture hours, please finish it as homework.
 
