@@ -38,6 +38,7 @@ http://www.qaware.de
 - Go does not support inheritance but type embedding (delegation without syntactic ballast)
 - Go supports polymorphism only via interfaces, not through classes
 - Interfaces with a method end with the ending "er" (Stringer, Writer, Reader...)
+.link https://youtu.be/Ng8m5VXsn8Q?t=414
 
 * Exercise 3
 .image img/03-exercise.png 600 800
