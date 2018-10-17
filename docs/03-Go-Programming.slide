@@ -1,6 +1,6 @@
 Go Programming - OOP Part II
 Concepts of Programming Languages
-11 Oct 2018
+18 Oct 2018
 Tags: go, programming, master
 
 Johannes Weigend (QAware GmbH)
@@ -8,7 +8,6 @@ University of Applied Sciences Rosenheim
 johannes.weigend@qaware.de
 http://www.qaware.de
 @johannesweigend
-
 
 * Interfaces, Embedding and Polymorphism
 - Go supports embedding of other structs inside a struct
