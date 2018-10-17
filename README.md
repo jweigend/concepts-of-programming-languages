@@ -42,4 +42,4 @@ https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/e
 - Slides https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/03-Go-Programming-OOP.pdf
 
 ### Exercise 3
-https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md
+- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md
