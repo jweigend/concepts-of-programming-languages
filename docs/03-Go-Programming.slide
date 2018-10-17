@@ -40,13 +40,13 @@ http://www.qaware.de
 - Interfaces with a method end with the ending "er" (Stringer, Writer, Reader...)
 
 * Exercise 3
-.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md 
 .image img/03-exercise.png 600 800
 
 * Exercise 
 - Implement the UML diagram with Go
 - The Paint() method should print the names and values of the fields to the console
 - Allocate an array of polymorph objects and call Paint() in a loop 
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md 
 
 * Questions
 - What is the difference between inheritance in Java and embedding in Go?

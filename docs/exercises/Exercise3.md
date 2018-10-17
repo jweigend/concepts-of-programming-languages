@@ -36,25 +36,25 @@ a service locator registry:
 Write a programm which builds an AST with nodes to evaluate logical expressions with (And, Not, Or with variables)
 
 ```
-Sample Expression: (A AND B) OR C
+Sample Expression: A AND B OR C
 
-            ----------
-            |   OR   |
-            ----------
-            /        \
-        ---------     ----------
-        |  AND  |     |  VAR:C |
-        ---------     ----------
+             ----------
+             |   OR   |
+             ----------
+            /          \
+        ---------      ----------
+        |  AND  |      |  Var:C |
+        ---------      ----------
         /       \
   ---------   --------- 
   | Var:A |   | Var:B |
   ---------   ---------
 ```
 
-The tree should be evaluated with a evaluation methods which suppports named variables:
+The tree should be evaluated with a evaluation methods which supports named variables:
 
 ```go
 eval(vars map[string]bool) bool
 ```
 
-Write a unit test which builds the AST and evaluates with given variables.
+Write a unit test which builds the AST and evaluate the expression with given boolean values for the variables A, B, C.
