@@ -25,8 +25,8 @@ Implement the interface and write a client. The implementation should be provide
 a service locator registry:
 
 ```go
-    var sender mail.Sender
-	Registry.Get(&sender)
+    // Create an implementation for the mail.Sender interface
+	var sender = Registry.Get("mail.Sender").(mail.Sender)
 
 	mailaddrs := mail.Address{Address: address}
 	sender.SendMail(mailaddrs, message)

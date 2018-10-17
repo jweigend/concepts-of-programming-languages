@@ -1,38 +1,28 @@
+// Copyright 2018 Johannes Weigend, Johannes  Siedersleben
+// Licensed under the Apache License, Version 2.0
+
+// Package util contains a simple Service Locator.
 package util
 
-import (
-	"reflect"
-)
-
+// Registry is a simple Service Locator for interfaces.
 type Registry struct {
-	services []interface{}
-	types    []reflect.Type
-	values   []reflect.Value
+	services map[string]interface{}
 }
 
-func (s *Registry) Register(some interface{}) {
-	s.services = append(s.services, some)
-	s.types = append(s.types, reflect.TypeOf(some))
-	s.values = append(s.values, reflect.ValueOf(some))
+// NewRegistry constructor
+func NewRegistry() *Registry {
+	registry := new(Registry)
+	registry.services = make(map[string]interface{})
+	return registry
 }
 
-func (s *Registry) Get(some interface{}) bool {
-	k := reflect.TypeOf(some).Elem()
-	kind := k.Kind()
-	if kind == reflect.Ptr {
-		k = k.Elem()
-		kind = k.Kind()
-	}
-	for i, t := range s.types {
-		if kind == reflect.Interface && t.Implements(k) {
-			reflect.Indirect(
-				reflect.ValueOf(some),
-			).Set(s.values[i])
-			return true
-		} else if kind == reflect.Struct && k.AssignableTo(t.Elem()) {
-			reflect.ValueOf(some).Elem().Set(s.values[i])
-			return true
-		}
-	}
-	return false
+// Register registers a single interface for a unique name
+func (s *Registry) Register(name string, some interface{}) {
+	s.services[name] = some
+}
+
+// Get returns the registered interface for a given name
+func (s *Registry) Get(name string) interface{} {
+	result := s.services[name]
+	return result
 }

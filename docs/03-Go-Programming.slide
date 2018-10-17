@@ -39,7 +39,8 @@ http://www.qaware.de
 - Go supports polymorphism only via interfaces, not through classes
 - Interfaces with a method end with the ending "er" (Stringer, Writer, Reader...)
 
-* Exercise - Typical OOP Design 
+* Exercise 3
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md 
 .image img/03-exercise.png 600 800
 
 * Exercise 

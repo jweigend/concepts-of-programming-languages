@@ -10,7 +10,7 @@ import (
 
 // configure Registry to know which mail implementation is used.
 func init() {
-	Registry.Register(new(smtp.MailSenderImpl))
+	Registry.Register("mail.Sender", new(smtp.MailSenderImpl))
 }
 
 func TestMail(t *testing.T) {

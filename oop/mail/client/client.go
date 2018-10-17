@@ -10,14 +10,13 @@ import (
 )
 
 // Registry is the central configration for the service locator
-var Registry = new(util.Registry)
+var Registry = util.NewRegistry()
 
 // SendMail sends a mail to a receiver.
 func SendMail(address, message string) {
 
 	// Create an implementation for the mail.Sender interface.
-	var sender mail.Sender
-	Registry.Get(&sender)
+	var sender = Registry.Get("mail.Sender").(mail.Sender)
 
 	mailaddrs := mail.Address{Address: address}
 	sender.SendMail(mailaddrs, message)
