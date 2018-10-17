@@ -39,7 +39,7 @@ https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/e
 ## Lesson 3 - OOP in Go
 
 - Structs, Interfaces, Embedding, Polymorphism
-- Slides https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/03-Go-Programming-OOP.pdf
+- Slides https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/03-Go-Programming.pdf
 
 ### Exercise 3
 - https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md
