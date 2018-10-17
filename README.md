@@ -35,3 +35,11 @@ We will release the results here.
 
 - Swap, Index, Rational Numbers, Containers 
 https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.md
+
+## Lesson 3 - OOP in Go
+
+- Structs, Interfaces, Embedding, Polymorphism
+- Slides https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/03-Go-Programming-OOP.pdf
+
+### Exercise 3
+https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise3.md
