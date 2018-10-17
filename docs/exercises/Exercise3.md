@@ -6,7 +6,7 @@ If you are not get finished during the lecture hours, please finish it as homewo
 
 The image shows a typical UML design with inheritance, aggregation and polymorph methods.
 
-![oo](../img/03-excercise.png "A typical OO design")
+![oo](../img/03-exercise.png "A typical OO design")
 
 Implement this design as close as possible to the design in Go:
 - The Paint() method should print the names and values of the fields to the console
