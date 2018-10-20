@@ -93,6 +93,7 @@ Functions can be composed with functions as parameters
 - Why is it useful?
 - Where did it came from?
 .link https://www.youtube.com/watch?v=eis11j_iGMs Professor Graham Hutton explains the Lambda Calculus (Cool Stuff :-)
+.link https://www.youtube.com/watch?v=3VQ382QG-y4 Fundamentals of Lambda Calculus & Functional Programming in JavaScript
 
 Hint: To understand this video you will watch it at least three times :-)
 
@@ -141,6 +142,21 @@ Hint: To understand this video you will watch it at least three times :-)
         
         fmt.Println(NOT(FALSE)(f, g)(3))
 
+* Lambda Calculus in JavaScript
+.link https://www.youtube.com/watch?v=3VQ382QG-y4
+        TRUE = a => b => a; 
+        FALSE = a => b => b; 
+        NOT = f => a => b => f(b)(a);
+         
+        f = x => x + 10
+        g = x => x + 20
+         
+        TRUE(f)(g)(3)       // -> 13
+        FALSE(f)(g)(3)      // -> 23
+         
+        NOT(TRUE)(f)(g)(3)  // -> 23
+        NOT(FALSE)(f)(g)(3) // -> 13
+
 * Famous Functional Languages inspired by the Lamda Calculus
 - Haskell
 .link https://www.youtube.com/watch?v=1jZ7j21g028
@@ -148,6 +164,7 @@ Hint: To understand this video you will watch it at least three times :-)
 - Clojure
 - F#
 - Scala
+- JavaScript
 
 * Palindrome Problem in Functional (pure) Languages
 

@@ -74,7 +74,7 @@ func concat(a Any, b Any) Any {
 // Classic wordcount sample
 // ========================
 //
-func ExampleStream() {
+func TestWordCount(t *testing.T) {
 	strings := []Any{"a", "a", "b", "b", "D", "a"}
 
 	// Map/Reduce
