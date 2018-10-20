@@ -50,26 +50,33 @@ Functional programming supports distributed computing
 Functions can be composed to new functions
     g(f(x)) -> (g ◦ f)(x) 
 
-    // go
-    f := func(x int) int { return x * x }
-    
-    g := func(x int) int { return x + 1 }
-    
-    // Functional Composition: (g◦f)(x)
-    gf := func(x int) int { return g(f(x)) }
-    
-    fmt.Printf("%v", gf(2)) // --> 5
+        // Functional Composition in Go
+        f := func(x int) int { return x * x }
+        
+        g := func(x int) int { return x + 1 }
+
+        // Functional Composition: (g◦f)(x)
+        gf := func(x int) int { return g(f(x)) }
+
+        fmt.Printf("%v\n", gf(2)) // --> 5
+
+        // Generic Composition of two functions
+        compose := func(g, f func(int) int) func(int) int {
+            return func(x int) int {
+                return g(f(x))
+            }
+        }
+        square := func(x int) int { return x * x }
+        fmt.Printf("%v\n", compose(square, f)(2)) // --> 16
 
 * History: The Lambda Calculus
+.image https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Knights_of_the_Lambda_Calculus.svg/316px-Knights_of_the_Lambda_Calculus.svg.png 200 200
 - What is it?
 - Why is it useful?
 - Where did it came from?
 .link https://www.youtube.com/watch?v=eis11j_iGMs Professor Graham Hutton explains the Lambda Calculus (Cool Stuff :-)
 
 Hint: To understand this video you will watch it at least three times :-)
-
-    AND: (λx, λy). x y FALSE
-    OR: (λx, λy). x TRUE y
 
 * Summary of the Introduction to Lambda Calculus
 - Pure Functions have no internal state
@@ -117,6 +124,7 @@ Hint: To understand this video you will watch it at least three times :-)
 
 * Famous Functional Languages inspired by the Lamda Calculus
 - Haskell
+.link https://www.youtube.com/watch?v=1jZ7j21g028
 - ML
 - Clojure
 - F#
@@ -180,5 +188,6 @@ Hint: To understand this video you will watch it at least three times :-)
 
 - Parallel Execution
 - Split Iterators and parallel execution
+
 
 

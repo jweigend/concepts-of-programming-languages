@@ -39,5 +39,4 @@ func main() {
 
 	fmt.Println(NOT(TRUE)(f, g)(3))
 	fmt.Println(NOT(FALSE)(f, g)(3))
-
 }
