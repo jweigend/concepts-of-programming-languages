@@ -9,7 +9,6 @@ import (
 func main() {
 
 	f := func(x int) int { return x * x }
-
 	g := func(x int) int { return x + 1 }
 
 	// Functional Composition: (g◦f)(x)
@@ -18,12 +17,17 @@ func main() {
 	fmt.Printf("%v\n", gf(2)) // --> 5
 
 	// Generic Composition
-	compose := func(g, f func(int) int) func(int) int {
-		return func(x int) int {
+	type any interface{}
+	type function func(any) any
+
+	compose := func(g, f function) function {
+		return func(x any) any {
 			return g(f(x))
 		}
 	}
+	square := func(x any) any { return x.(int) * x.(int) }
+	f2 := func(x any) any { return f(x.(int)) }
 
-	square := func(x int) int { return x * x }
-	fmt.Printf("%v\n", compose(square, f)(2)) // --> 16
+	fmt.Printf("%v\n", compose(square, f2)(2))              // --> 16
+	fmt.Printf("%v\n", compose(compose(square, f2), f2)(2)) // --> 256
 }

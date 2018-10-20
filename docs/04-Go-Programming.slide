@@ -50,25 +50,43 @@ Functional programming supports distributed computing
 Functions can be composed to new functions
     g(f(x)) -> (g ◦ f)(x) 
 
-        // Functional Composition in Go
-        f := func(x int) int { return x * x }
-        
-        g := func(x int) int { return x + 1 }
+        // Function f()
+        f := func(x int) int { 
+            return x * x 
+        }
+
+        // Function g()
+        g := func(x int) int { 
+            return x + 1 
+        }
 
         // Functional Composition: (g◦f)(x)
-        gf := func(x int) int { return g(f(x)) }
-
+        gf := func(x int) int { 
+            return g(f(x)) 
+        }
+        
         fmt.Printf("%v\n", gf(2)) // --> 5
 
-        // Generic Composition of two functions
-        compose := func(g, f func(int) int) func(int) int {
-            return func(x int) int {
-                return g(f(x))
-            }
-        }
-        square := func(x int) int { return x * x }
-        fmt.Printf("%v\n", compose(square, f)(2)) // --> 16
+* Functional Composition (2)
+Functions can be composed with functions as parameters
+    g(f(x)) -> (g ◦ f)(x) 
 
+    // Type any makes the code readable
+    type any interface{}
+    type function func(any) any
+
+	compose := func(g, f function) function {
+		return func(x any) any {
+			return g(f(x))
+		}
+	}
+
+    square := func(x any) any { return x.(int) * x.(int) }
+          
+    fmt.Printf("%v\n", compose(square, square)(2)) // --> 4*4 = 16
+    
+    fmt.Printf("%v\n", compose(compose(square, square), square)(2)) // --> 256
+  
 * History: The Lambda Calculus
 .image https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Knights_of_the_Lambda_Calculus.svg/316px-Knights_of_the_Lambda_Calculus.svg.png 200 200
 - What is it?
@@ -87,40 +105,41 @@ Hint: To understand this video you will watch it at least three times :-)
 - Lambda Calculus is present in most major programming languages
 
 * Lambda Calculus in Go
-.link https://play.golang.org/p/GFdS5UxVb6z
+.link https://play.golang.org/p/IFknxxxd1vx
 
         // Lambda Calculus in Golang --> See Video Graham Hutton
+        // https://www.youtube.com/watch?v=eis11j_iGMs
 
         // Some sample functions - strings are only used for debugging purposes
-        f := func(x int) string { return fmt.Sprintf("f(%v)=%v", x, x+10) }	
+        f := func(x int) string { return fmt.Sprintf("f(%v)=%v", x, x+10) }
         g := func(y int) string { return fmt.Sprintf("g(%v)=%v", y, y+20) }
-
+         
+        type fn func(int) string
+             
         // TRUE as function: λx.λy.x
-        TRUE := func(x, y func(int) string) func(int) string { return x }
-
+        TRUE := func(x, y fn) fn { return x }
+             
         // FALSE as function: λx.λy.y
-        FALSE := func(x, y func(int) string) func(int) string { return y }
+        FALSE := func(x, y fn) fn { return y }
+             
+        fmt.Println(TRUE(f, g)(1))  // -> f(1)=11
+        fmt.Println(FALSE(f, g)(1)) // -> g(1)=21
 
-        fmt.Println(TRUE(f, g)(1))  // -> 11
-        fmt.Println(FALSE(f, g)(1)) // -> 21
 
-        // NOT TRUE
-        fmt.Println(TRUE(FALSE(f, g), TRUE(f, g))(2)) // -> 22 
-
-        // NOT FALSE
-        fmt.Println(TRUE(TRUE(f, g), FALSE(f, g))(2)) // -> 12
-
-* Lambda Calculus in Go -> NOT
+* Lambda Calculus in Go: NOT
         // NOT as function λb.b
-        NOT := func(b func(f, g func(int) string) func(int) string) 
-                    func(x, y func(int) string) func(int) string {
-            return func(f, g func(int) string) func(int) string {
+        
+        type bool func(fn, fn) fn
+             
+        NOT := func(b bool) bool {
+            return func(f, g fn) fn {
                 return b(FALSE(f, g), TRUE(f, g))
             }
         }
-
-        fmt.Println(NOT(TRUE)(f, g)(3))   // -> 23
-        fmt.Println(NOT(FALSE)(f, g)(3))  // -> 13
+         
+        fmt.Println(NOT(TRUE)(f, g)(3))
+        
+        fmt.Println(NOT(FALSE)(f, g)(3))
 
 * Famous Functional Languages inspired by the Lamda Calculus
 - Haskell
@@ -162,7 +181,7 @@ Hint: To understand this video you will watch it at least three times :-)
 - Functions can be created inside functions
 - The Go standard library uses functional constructs
 
-* Samples from the Go Standard Library
+* Sample from the Go Standard Library
 - strings.map
     // Map returns a copy of the string s with all its characters modified
     // according to the mapping function. If mapping returns a negative value, the character is
@@ -189,5 +208,10 @@ Hint: To understand this video you will watch it at least three times :-)
 - Parallel Execution
 - Split Iterators and parallel execution
 
-
-
+* Summary
+- Go is not a functional language
+- Generics and type inference for functions are missing 
+- Type definitions for functions make code more readable
+- You can use functional patterns with generic programming and extra casting (type assertions) 
+- Functional patterns like map/filter/reduce are easy to programm in Go
+- Reflection can help, but is slow
