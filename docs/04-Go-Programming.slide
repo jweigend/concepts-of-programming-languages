@@ -10,11 +10,13 @@ http://www.qaware.de
 @johannesweigend
 
 * What is Functional Programming?
+.image ./img/04-lambda.png 200 350
 - the combination of pure functions;
 - avoiding shared state, mutable data, and side-effects;
 - the prevalence of declarative approach rather than imperative approach.
 
 * Functional Programming – Characteristics
+
 The most prominent characteristics of functional programming are as follows
 
 - Functional programming languages are designed on the concept of mathematical functions that use conditional expressions and recursion to perform computation.
@@ -93,7 +95,6 @@ Functions can be composed with functions as parameters
 - Why is it useful?
 - Where did it came from?
 .link https://www.youtube.com/watch?v=eis11j_iGMs Professor Graham Hutton explains the Lambda Calculus (Cool Stuff :-)
-.link https://www.youtube.com/watch?v=3VQ382QG-y4 Fundamentals of Lambda Calculus & Functional Programming in JavaScript
 
 Hint: To understand this video you will watch it at least three times :-)
 
@@ -143,7 +144,6 @@ Hint: To understand this video you will watch it at least three times :-)
         fmt.Println(NOT(FALSE)(f, g)(3))
 
 * Lambda Calculus in JavaScript
-.link https://www.youtube.com/watch?v=3VQ382QG-y4
         TRUE = a => b => a; 
         FALSE = a => b => b; 
         NOT = f => a => b => f(b)(a);
@@ -156,6 +156,8 @@ Hint: To understand this video you will watch it at least three times :-)
          
         NOT(TRUE)(f)(g)(3)  // -> 23
         NOT(FALSE)(f)(g)(3) // -> 13
+
+.link https://www.youtube.com/watch?v=3VQ382QG-y4 Fundamentals of Lambda Calculus & Functional Programming in JavaScript
 
 * Famous Functional Languages inspired by the Lamda Calculus
 - Haskell
