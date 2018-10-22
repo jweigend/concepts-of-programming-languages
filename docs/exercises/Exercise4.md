@@ -9,6 +9,7 @@ Write a Go Programm which shows the following concepts:
 - Functions as Variables
 - Anonymous Lambda Functions
 - High Order Functions (functions as parameters or return values)
+- Clojures (https://en.wikipedia.org/wiki/Closure_(computer_programming))
 
 Compare the Syntax with Java and discuss this in a group of students.
 
@@ -19,9 +20,9 @@ Write a Unit Test for that function.
  
 ## Exercise 4.2 - Map / Filter / Reduce
 Map/Reduce is a famous functional construct implemented in many parallel and distributed collection frameworks like
-HADOOP, SPARK, Java Streams (not distributed but parallel), C# Link
+Hadoop, Apache Spark, Java Streams (not distributed but parallel), C# Linq
 
-- Implement a custom Java like Stream API with the following interface:
+- Implement a custom M/R API with the following interface:
  ```go
     type Stream interface {
     	Map(m Mapper) Stream
