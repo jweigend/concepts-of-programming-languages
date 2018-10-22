@@ -51,11 +51,13 @@ The usage of the interface should be like this:
 
 ## Exercise 4.4 - Wordcount (WC)
 WC is a famous Hello World Algorithm for demonstrating the power of distributed functional collections. 
-WC counts all words in a collection. After running this in parallel or even distributed, you get the following result:
+WC counts how often a word occurs in a collection. It is easy to address that problem with shared state (a map).
+The question here is to use a pure functional algorithm to enable running parallel and distributed.
+After running WC, you should get the following result:
 
 INPUT:  "A" "B" "C" "A" "B" "A"
 
-OUTPUT: "A:3" "B:2" "C:1"
+OUTPUT: ("A":3) ("B":2) ("C":1) 
 
 *Questions*
 - How can you implement the problem with the already built Map()/Filter()/Reduce() functions?

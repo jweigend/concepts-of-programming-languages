@@ -89,6 +89,9 @@ Functions can be composed with functions as parameters
     
     fmt.Printf("%v\n", compose(compose(square, square), square)(2)) // --> 256
   
+* Clojures (Only impure if you modify the closed-over variable)
+.play ../fp/clojures/main.go /intSeq/,/EOF OMIT/
+
 * History: The Lambda Calculus
 .image https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Knights_of_the_Lambda_Calculus.svg/316px-Knights_of_the_Lambda_Calculus.svg.png 200 200
 - What is it?
@@ -221,16 +224,14 @@ Hint: To understand this video you will watch it at least three times :-)
 * Classic Word Count Sample
 .code ../fp/streams/streams_test.go /wordcount/,/ENDWC OMIT/
 
-* Functional Programming and Iterators
-- How to write an iterator in Go?
-
-- Parallel Execution
-- Split Iterators and parallel execution
+* Questions
+- How can you implement parallel execution for our API?
+- How can you implement distributed execution for our API?
 
 * Summary
-- Go is not a functional language
-- Generics and type inference for functions are missing 
-- Type definitions for functions make code more readable
-- You can use functional patterns with generic programming and extra casting (type assertions) 
-- Functional patterns like map/filter/reduce are easy to programm in Go
-- Reflection can help, but is slow
+- You can do functional programming with Go
+- Generics and type inference for functions are missing (maybe 2.0?)
+- Type definitions for functions make code readable
+- You can use functional patterns and generic programming with extra casting (type assertions) 
+- Functional patterns like Map/Filter/Reduce are easy to implement in Go
+- Reflection can help to avoid casting, but it is slow!
