@@ -1,62 +1,61 @@
-# Exercise 3 - OOP in Go
+# Exercise 4 - Functional Programming in Go
 
 If you are not get finished during the lecture hours, please finish it as homework.
 
-## Exercise 3.1 - Interfaces, Polymorphism and Embedding
+## Exercise 4.1 - Warm Up
 
-The image shows a typical UML design with inheritance, aggregation and polymorph methods.
+Write a Go Programm which shows the following concepts:
 
-![oo](../img/03-exercise.png "A typical OO design")
+- Functions as Variables
+- Anonymous Lambda Functions
+- High Order Functions (functions as parameters or return values)
 
-Implement this design as close as possible to the design in Go:
-- The Paint() method should print the names and values of the fields to the console
-- Allocate an array of polymorph objects and call Paint() in a loop 
+Compare the Syntax with Java and discuss this in a group of students.
 
-## Exercise 3.2 - Mail Component and Service Locator
-Implement the following interface:
+## Exercise 4.2 - Functional Composition
+
+Write a Go function to compose two unknown unary functions with one parameter and one return value. The functions to compose should be parameters.
+Write a Unit Test for that function.
+
+## Exercise 4.2 - Map / Filter / Reduce
+Map/Reduce is a famous functional construct implemented in many parallel and distributed collection frameworks like
+HADOOP, SPARK, Java Streams (not distributed but parallel), C# Link
+
+- Implement a custom Java like Stream API with the following interface:
+ ```go
+    type Stream interface {
+    	Map(m Mapper) Stream
+    	Filter(p Predicate) Stream
+    	Reduce(a Accumulator) Any
+    }
+```
+The usage of the interface should be like this:
 ```go
-type Sender interface {
+    stringSlice := []Any{"a", "b", "c", "1", "D"}
 
-	// Send an email to a given address with a  message.
-	SendMail(address Address, message string)
-}
-```
-Implement the interface and write a client. The implementation should be provided by
-a simple self made service locator registry:
+	// Map/Reduce
+	result := ToStream(stringSlice).
+		Map(toUpperCase).
+		Filter(notDigit).
+		Reduce(concat).(string)
 
-```go
-    // Create an implementation for the mail.Sender interface
-	var sender = Registry.Get("mail.Sender").(mail.Sender)
-
-	mailaddrs := mail.Address{Address: address}
-	sender.SendMail(mailaddrs, message)
-```
-Interface, client and implementation should be in seperate packages. 
-
-
-## Exercise 3.3 - AST - Abstract Syntax Tree
-Write a programm which builds an AST with nodes to evaluate logical expressions with (And, Not, Or with variables)
-
-```
-Sample Expression: A AND B OR C
-
-             ----------
-             |   OR   |
-             ----------
-            /          \
-        ---------      ----------
-        |  AND  |      |  Var:C |
-        ---------      ----------
-        /       \
-  ---------   --------- 
-  | Var:A |   | Var:B |
-  ---------   ---------
+	if result != "A,B,C,D" {
+		t.Error(fmt.Sprintf("Result should be 'A,B,C,D' but is: %v", result))
+    }
 ```
 
-The tree should be evaluated with a evaluation methods which supports named variables:
+ Questions:
+ - Describe the type of Mapper, Predicate and Accumulator
+ - How can you make the types generic, so they work not only for strings?
 
-```go
-eval(vars map[string]bool) bool
-```
+## Exercise 4.3 - Wordcount
+Wordcount is a famous Hello World Algorithm for demonstrating the power of distributed functional collection frameworks. 
+Wordcount counts all words in a collection. After running this in parallel or even distributed, you have the following result:
 
-Write a unit test which builds the AST and evaluate the expression with given boolean values for the variables A, B, C.
+INPUT:  "A" "B" "C" "A" "B" "A"
+OUTPUT: "A:3" "B:2" "C:1"
+
+- How can you implement the problem with the already built Map/Filter/Reduce functions?
+- Write an Unit Test to prove that your solution works correct
+
+
