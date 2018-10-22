@@ -49,11 +49,13 @@ The usage of the interface should be like this:
  - What is the type of Mapper, Predicate and Accumulator?
  - How can you make the types generic, so they work for any type, not only for string?
 
-## Exercise 4.4 - Wordcount (WC)
-WC is a famous Hello World Algorithm for demonstrating the power of distributed functional collections. 
-WC counts how often a word occurs in a collection. It is easy to address that problem with shared state (a map).
-The question here is to use a pure functional algorithm to enable running parallel and distributed.
-After running WC, you should get the following result:
+## Exercise 4.4 - Word Count (WC)
+Word Count is a famous algorithm for demonstrating the power of distributed collections and functional programming. 
+Word Count counts how often a word (string) occurs in a collection. It is easy to address that problem with shared state (a map), but
+this solution does not scale well.
+The question here is how to use a pure functional algorithm to enable parallel and distributed execution.
+
+After running Word Count, you should get the following result:
 
 INPUT:  "A" "B" "C" "A" "B" "A"
 
