@@ -16,7 +16,7 @@ Compare the Syntax with Java and discuss this in a group of students.
 
 Write a Go function to compose two unknown unary functions with one parameter and one return value. The functions to compose should be parameters.
 Write a Unit Test for that function.
-
+ 
 ## Exercise 4.2 - Map / Filter / Reduce
 Map/Reduce is a famous functional construct implemented in many parallel and distributed collection frameworks like
 HADOOP, SPARK, Java Streams (not distributed but parallel), C# Link
