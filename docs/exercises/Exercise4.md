@@ -15,10 +15,10 @@ Compare the Syntax with Java and discuss this in a group of students.
 
 ## Exercise 4.2 - Functional Composition
 
-Write a Go function to compose two unknown unary functions with one parameter and one return value. The functions to compose should be parameters.
+Write a Go function to compose two unknown unary functions (one argument and one return value). The functions to compose should be arguments.
 Write a Unit Test for that function.
  
-## Exercise 4.2 - Map / Filter / Reduce
+## Exercise 4.3 - Map / Filter / Reduce
 Map/Reduce is a famous functional construct implemented in many parallel and distributed collection frameworks like
 Hadoop, Apache Spark, Java Streams (not distributed but parallel), C# Linq
 
@@ -45,18 +45,17 @@ The usage of the interface should be like this:
     }
 ```
 
- Questions:
- - Describe the type of Mapper, Predicate and Accumulator
- - How can you make the types generic, so they work not only for strings?
+ *Questions*
+ - What is the type of Mapper, Predicate and Accumulator?
+ - How can you make the types generic, so they work for any type, not only for string?
 
-## Exercise 4.3 - Wordcount
-Wordcount is a famous Hello World Algorithm for demonstrating the power of distributed functional collection frameworks. 
-Wordcount counts all words in a collection. After running this in parallel or even distributed, you have the following result:
+## Exercise 4.4 - Wordcount (WC)
+WC is a famous Hello World Algorithm for demonstrating the power of distributed functional collections. 
+WC counts all words in a collection. After running this in parallel or even distributed, you get the following result:
 
 INPUT:  "A" "B" "C" "A" "B" "A"
 OUTPUT: "A:3" "B:2" "C:1"
 
-- How can you implement the problem with the already built Map/Filter/Reduce functions?
-- Write an Unit Test to prove that your solution works correct
-
-
+*Questions*
+- How can you implement the problem with the already built Map()/Filter()/Reduce() functions?
+- Write an Unit Test to prove that your solution works as expected!
