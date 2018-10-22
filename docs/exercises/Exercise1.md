@@ -1,6 +1,6 @@
 # Exercise 1 - Getting Started with Go
 
-If you are not get finished during the lecture hours, please finish it as homework.
+If you do not finish during the lecture period, please finish it as homework.
 
 
 ## Setup

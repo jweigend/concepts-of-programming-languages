@@ -1,6 +1,6 @@
 # Exercise 3 - OOP in Go
 
-If you are not get finished during the lecture hours, please finish it as homework.
+If you do not finish during the lecture period, please finish it as homework.
 
 ## Exercise 3.1 - Interfaces, Polymorphism and Embedding
 

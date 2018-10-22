@@ -1,6 +1,6 @@
 # Exercise 2 - Basics
 
-If you are not get finished during the lecture hours, please finish it as homework.
+If you do not finish during the lecture period, please finish it as homework.
 
 ## Pointers (swap.go)
 - Write a function to swap two integer variables in the caller function (2 ways)

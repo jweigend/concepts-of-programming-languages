@@ -1,6 +1,6 @@
 # Exercise 4 - Functional Programming in Go
 
-If you are not get finished during the lecture hours, please finish it as homework.
+If you do not finish during the lecture period, please finish it as homework.
 
 ## Exercise 4.1 - Warm Up
 
@@ -13,9 +13,9 @@ Write a Go Programm which shows the following concepts:
 
 Compare the Syntax with Java and discuss this in a group of students.
 
-## Exercise 4.2 - Functional Composition
+## Exercise 4.2 - Functional Composition (g◦f)(x)
 
-Write a Go function to compose two unknown unary functions (one argument and one return value). The functions to compose should be arguments.
+Write a Go function to compose two *unknown* unary functions (one argument and one return value). The functions to compose should be arguments.
 Write a Unit Test for that function.
  
 ## Exercise 4.3 - Map / Filter / Reduce
@@ -54,6 +54,7 @@ WC is a famous Hello World Algorithm for demonstrating the power of distributed 
 WC counts all words in a collection. After running this in parallel or even distributed, you get the following result:
 
 INPUT:  "A" "B" "C" "A" "B" "A"
+
 OUTPUT: "A:3" "B:2" "C:1"
 
 *Questions*
