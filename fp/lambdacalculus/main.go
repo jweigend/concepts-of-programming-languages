@@ -17,7 +17,7 @@ func main() {
 
 	// Some sample functions - strings are only used for debugging purposes
 
-	type fnf func(fnf) fnf // recursive type definition
+	type fnf func(fnf) fnf // recursive function definition
 
 	f := func(x fnf) fnf { fmt.Printf("f()=%v\n", x); return x }
 
