@@ -26,7 +26,7 @@ type Or struct {
 
 // Eval implements the Node interface
 func (o Or) Eval(vars map[string]bool) bool {
-	return (o.lhs).Eval(vars) || (o.rhs).Eval(vars)
+	return o.lhs.Eval(vars) || o.rhs.Eval(vars)
 }
 
 func (o Or) String() string {
@@ -41,7 +41,7 @@ type And struct {
 
 // Eval implements the Node interface
 func (a And) Eval(vars map[string]bool) bool {
-	return (a.lhs).Eval(vars) && (a.rhs).Eval(vars)
+	return a.lhs.Eval(vars) && a.rhs.Eval(vars)
 }
 
 func (a And) String() string {
@@ -55,7 +55,7 @@ type Not struct {
 
 // Eval implements the Node interface
 func (n Not) Eval(vars map[string]bool) bool {
-	return !(n.ex).Eval(vars)
+	return !n.ex.Eval(vars)
 }
 
 func (n Not) String() string {

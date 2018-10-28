@@ -10,37 +10,55 @@ func main() {
 
 	// Lambda Calculus in Golang --> See Video Graham Hutton
 	// https://www.youtube.com/watch?v=eis11j_iGMs
+	// Lambda Calculus with JS
+	// TRUE = x => y => x;
+	// FALSE = x => y => y;
+	// NOT = f => x => y => f(y)(x);
 
 	// Some sample functions - strings are only used for debugging purposes
-	f := func(x int) string { return fmt.Sprintf("f(%v)=%v", x, x+10) }
-	g := func(y int) string { return fmt.Sprintf("g(%v)=%v", y, y+20) }
 
-	type fn func(int) string
+	type fnf func(fnf) fnf // recursive type definition
+
+	f := func(x fnf) fnf { fmt.Printf("f()=%v\n", x); return x }
+
+	g := func(y fnf) fnf { fmt.Printf("g()=%v\n", y); return y }
+
+	id := func(z fnf) fnf { return z } // print
 
 	// TRUE as function: λx.λy.x
-	TRUE := func(x, y fn) fn { return x }
-
-	// FALSE as function: λx.λy.y
-	FALSE := func(x, y fn) fn { return y }
-
-	fmt.Println(TRUE(f, g)(1))
-	fmt.Println(FALSE(f, g)(1))
-
-	// NOT TRUE
-	fmt.Println(TRUE(FALSE(f, g), TRUE(f, g))(2))
-
-	// NOT FALSE
-	fmt.Println(TRUE(TRUE(f, g), FALSE(f, g))(2))
-
-	// NOT as function λb.b
-	type bool func(fn, fn) fn
-
-	NOT := func(b bool) bool {
-		return func(f, g fn) fn {
-			return b(FALSE(f, g), TRUE(f, g))
+	True := func(x fnf) fnf {
+		return func(y fnf) fnf {
+			return x
 		}
 	}
+	// FALSE as function: λx.λy.y
+	False := func(x fnf) fnf {
+		return func(y fnf) fnf {
+			return y
+		}
+	}
+	// FALSE as function: λx.λy.y
+	Not := func(b fnf) fnf {
+		return b(False)(True)
+	}
 
-	fmt.Println(NOT(TRUE)(f, g)(3))
-	fmt.Println(NOT(FALSE)(f, g)(3))
+	fmt.Printf("Id = %p\n", id)
+	fmt.Printf("True = %p\n", True)
+	fmt.Printf("False = %p\n", False)
+
+	// false
+	fmt.Printf("True(False)(True) = %p\n", True(False)(True))
+	fmt.Printf("Not(True) = %p\n", Not(True))
+
+	// true
+	fmt.Printf("False(False)(True) = %p\n", False(False)(True))
+	fmt.Printf("Not(False) = %p\n", Not(False))
+
+	// select f
+	False(False)(True)(f)(g)(id)
+	Not(False)(f)(g)(id)
+
+	// select g
+	True(False)(True)(f)(g)(id)
+	Not(True)(f)(g)(id)
 }
