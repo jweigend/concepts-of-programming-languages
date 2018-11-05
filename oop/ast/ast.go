@@ -20,58 +20,58 @@ type Node interface {
 
 // Or is the logical OR Operator in an AST
 type Or struct {
-	lhs Node
-	rhs Node
+	Lhs Node
+	Rhs Node
 }
 
 // Eval implements the Node interface
 func (o Or) Eval(vars map[string]bool) bool {
-	return o.lhs.Eval(vars) || o.rhs.Eval(vars)
+	return o.Lhs.Eval(vars) || o.Rhs.Eval(vars)
 }
 
 func (o Or) String() string {
-	return fmt.Sprintf("|(%v,%v)", o.lhs, o.rhs)
+	return fmt.Sprintf("|(%v,%v)", o.Lhs, o.Rhs)
 }
 
 // And is the logical AND Operator in an AST
 type And struct {
-	lhs Node
-	rhs Node
+	Lhs Node
+	Rhs Node
 }
 
 // Eval implements the Node interface
 func (a And) Eval(vars map[string]bool) bool {
-	return a.lhs.Eval(vars) && a.rhs.Eval(vars)
+	return a.Lhs.Eval(vars) && a.Rhs.Eval(vars)
 }
 
 func (a And) String() string {
-	return fmt.Sprintf("&(%v,%v)", a.lhs, a.rhs)
+	return fmt.Sprintf("&(%v,%v)", a.Lhs, a.Rhs)
 }
 
 // Not is the NOT operator in the AST
 type Not struct {
-	ex Node
+	Ex Node
 }
 
 // Eval implements the Node interface
 func (n Not) Eval(vars map[string]bool) bool {
-	return !n.ex.Eval(vars)
+	return !n.Ex.Eval(vars)
 }
 
 func (n Not) String() string {
-	return fmt.Sprintf("!(%v)", n.ex)
+	return fmt.Sprintf("!(%v)", n.Ex)
 }
 
 // Val is a boolean variable in an AST
 type Val struct {
-	name string
+	Name string
 }
 
 // Eval implements the Node interface
 func (v Val) Eval(vars map[string]bool) bool {
-	return vars[v.name] // missing vars will be evaluated to false!
+	return vars[v.Name] // missing vars will be evaluated to false!
 }
 
 func (v Val) String() string {
-	return fmt.Sprintf("'%v'", v.name)
+	return fmt.Sprintf("'%v'", v.Name)
 }
