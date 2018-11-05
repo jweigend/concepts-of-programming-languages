@@ -1,0 +1,332 @@
+Parser Combinators in Go
+Concepts of Programming Languages
+08 Nov  2018
+Tags: go, programming, master
+
+Johannes Weigend (QAware GmbH), Armin Heller (QAware GmbH)
+University of Applied Sciences Rosenheim
+johannes.weigend@qaware.de, armin.heller@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* What's a parser?
+- A parser is a function converting an *input* to a *result*.
+  func parser (input ParserInput) ParserResult {
+    ...
+  }
+.image img/05-parser-is-function.svg 510 680
+
+
+* What's the input of a parser?
+
+- The input of a parser is text.
+
+.image img/05-input-is-text.svg 480 640
+
+* What's the output of a parser?
+
+- Syntax trees
+- Numbers
+- Results of calculations
+- etc.
+
+.image img/05-result-is-anything.svg 480 640
+
+* A Parser ..
+
+- .. is a function converting an *input* to a *result*.
+
+  func parser (input ParserInput) ParserResult {
+    ...
+  }
+
+- .. takes text as an argument.
+
+- .. returns whatever we can and want to make it return, e. g. trees, numbers or boolean values.
+
+* What is text in Go?
+
+- We could use `string`
+- We could use `[]rune`, (rune is just a unicode code point)
+- We could use `os.File`
+- We could use our own interface
+
+* Using string as input?
+
+- Bad: `s[i]` will only give you bytes (except in range loops)
+- Good: it's a built-in type with many library functions
+- Possible Solution: `[]rune`
+
+.image img/05-strings-are-bytes.svg 520 1024
+
+* Using []rune as input? (runes are unicode code points)
+
+- Bad: The whole input needs to be in memory, just like with strings
+- Good: Arrays are fast
+- Bad: What if we want to read a file that doesn't fit in memory?
+- Possible Solution: `os.File`
+
+.image img/05-rune-array.svg 520 1024
+
+* Using os.File as input?
+
+- Good: Files don't have the RAM limitation
+- Bad: Slow access
+- What if we want to read from a socket? Can we still use `os.File`?
+
+.image img/05-os-file.svg 390 560
+
+* Problems of the built-in types
+
+- `string`: in-memory, byte-level indexing
+- `[]rune`: in-memory
+- `os.File`: slow access
+- `net.TCPConn`: slow access
+- All of the above are inflexible, i. e. they're not covering all possible use-cases.
+- We want to choose the correct input type depending on the use-case!
+- Solution: We write our own interface
+
+* The parser input is of the following type
+
+  type ParserInput interface {
+
+    CurrentCodePoint () rune
+
+    RemainingInput () ParserInput
+
+  }
+
+- We can use `string`, `[]rune`, `os.File` or `net.TCPConn` to implement this
+- The implementation mustn't have side-effects!
+
+* Exercise
+
+  type ParserInput interface {
+
+    CurrentCodePoint () rune
+
+    RemainingInput () ParserInput
+
+  }
+
+- Implement this interface using a `[]rune` and an `int` that marks the current position.
+- If there's no more input just return `nil`.
+- Implement a function `func stringToInput (s string) ParserInput` using your implementation.
+- Help your classmates understand the solution if you can.
+
+# TODO: Write a test that the students can use to test their implementation.
+
+
+* How about the following ParserResult
+
+  type ParserResult struct {
+
+    Result interface{}
+
+  }
+
+* How about the following ParserResult
+
+  type ParserResult struct {
+
+    Result interface{}
+
+  }
+
+- What if we can only parse half of the input?
+- How do we communicate what we still have to parse?
+
+* The parser result is of the following type
+
+  type ParserResult struct {
+
+    Result interface{}
+
+    RemainingInput ParserInput
+
+  }
+
+- We mustn't use side-effects on this struct!
+- I. e. no field assignments after its construction!
+
+* Summary
+
+  type Parser func (ParserInput) ParserResult
+
+  type ParserInput interface {
+    CurrentCodePoint () rune
+    RemainingInput () ParserInput
+  }
+
+  type ParserResult struct {
+    Result interface{} // null iff parsing fails!
+    RemainingInput ParserInput
+  }
+
+- Write a parser that parses exactly one letter 'A' from the beginning of an input.
+
+# TODO: Provide a test that checks the result of the parser.
+
+* Context-free grammars
+
+.html html/05-grammar.html
+
+* A | B
+
+- Parse A or B
+
+.image img/alternative.png 480 640
+
+* A ^ B
+
+- Parse A and then B
+
+.image img/concatenation.png 480 640
+
+* A+
+
+- Parse A once or more
+
+.image img/once_or_more.png 480 640
+
+* A*
+
+- Parse A zero or more times
+
+.image img/repetition.png 480 640
+
+* A?
+
+- Parse A zero or one times
+
+.image img/optional.png 480 640
+
+* Example Grammar
+
+  Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+  Number = Digit+
+
+  WordStartChar = "a" | "b" | "c" | ..
+                | "A" | "B" | "C" | ..
+  WordChar = WordStartChar | Digit
+  Word = WordStartChar ^ WordChar*
+
+- A Digit is a "0" or a "1" or a "2" or ..
+- A Number is one or more Digits
+- A WordStartChar is an "a" or a "b" or a "c" ..
+- A WordChar is a WordStartChar or a Digit
+- A Word is a WordStartChar followed by zero or more WordChars
+
+* Example Grammar
+
+  Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+  Number = Digit+
+
+.image img/number_grammar.png 480 640
+
+* The point of this lecture
+
+- We implement the parts of the grammar as functions on parsers.
+
+.html html/05-combinators.html
+
+* A | B
+
+- Try to parse `A`. If that failed, try to parse `B`.
+
+  func (a Parser) OrElse (b Parser) Parser {
+
+    return func (input ParserInput) ParserResult {
+
+      var resultA = a (input)
+
+      if resultA.Result == nil {
+        return b (input)
+      }
+
+      return resultA
+    }
+  }
+
+- Limitation 1: If `A` is a prefix of `B`, then `A` will win.
+- Limitation 2: When `A|A` fails, `OrElse` will try to parse `A` twice.
+
+* A ^ B
+
+- Parse `A` and with the rest of the input parse `B`.
+
+  func (a Parser) AndThen (b Parser) Parser {
+    return func (input ParserInput) ParserResult {
+
+      var resultA = a (input)
+
+      if resultA.Result == nil {
+        return resultA
+      }
+
+      var resultB = b (resultA.RemainingInput)
+
+      if resultB.Result == nil {
+        return resultB
+      }
+
+      return ParserResult { Pair { resultA.Result, resultB.Result }, resultB.RemainingInput }
+    }
+  }
+
+* a.Convert (f)
+
+- Convert the result of a parser.
+
+  func (a Parser) Convert (f func (interface {}) interface {}) Parser {
+    return func (input ParserInput) ParserResult {
+
+      var result = a (input)
+
+      if result.Result == nil {
+        return result
+      }
+
+      result.Result = f (result.Result)
+    }
+  }
+
+* An Example Parser
+
+  var ParseDigit Parser = Expect ('0') .OrElse (Expect ('1')).OrElse (Expect ('2')).
+                  OrElse (Expect ('3')).OrElse (Expect ('4')).OrElse (Expect ('5')).
+                  OrElse (Expect ('6')).OrElse (Expect ('7')).OrElse (Expect ('8')).
+                  OrElse (Expect ('9'))
+
+  var ParseNumber Parser = ParseDigit.OnceOrMore ()
+
+* A Recursive Example
+
+We rewrite the number parser recursively.
+Number := Digit Number | Digit
+
+  func ParseNumber (input ParserInput) ParserResult {
+
+    return ParseDigit.AndThen (ParseNumber).
+           OrElse (ParseDigit)
+
+  }
+
+* Abstract Syntax Trees
+
+- TODO: Explain how to represent trees.
+
+* Exercise
+
+- Implement the following grammar using parser combinators
+- Use the type `Node` in "github.com/jweigend/concepts-of-programming-languages/oop/ast" as a syntax tree
+- Use the method `Convert` to convert all the pairs and lists into values of type Node
+- Print the trees to check your parser
+
+  Atom       = VariableName
+             | "(" ^ Expression ^ ")"
+  Not        = "!"* ^ Atom
+  And        = Not ^ ("&" ^ Not)*
+  Or         = And ^ ("|" ^ And)*
+  Expression = Or
+

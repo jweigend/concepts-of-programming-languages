@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charsert="utf-8">
+  <title>Context-Free Grammars</title>
+</head>
+<body>
+  <table>
+    <tr>
+      <th>Operator</th>
+      <th>Method call</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>A | B</td>
+      <td>A.OrElse(B)</td>
+      <td>Try parsing with A.<br>
+        If parsing fails, try B.</td>
+    </tr>
+    <tr>
+      <td>A ^ B</td>
+      <td>A.AndThen(B)</td>
+      <td>Parse with A.<br>
+        Parse remaining input with B.</td>
+    </tr>
+    <tr>
+      <td>A+</td>
+      <td>A.OnceOrMore()</td>
+      <td>Repeat parsing with A.</td>
+    </tr>
+    <tr>
+      <td>A*</td>
+      <td>A.Repeated()</td>
+      <td>Repeat parsing with A, zero or more times.</td>
+    </tr>
+    <tr>
+      <td>A?</td>
+      <td>A.Optional()</td>
+      <td>Parse with p or succeed<br>
+        without parsing anything.</td>
+    </tr>
+    <tr>
+      <td>"F"</td>
+      <td>Expect('F')</td>
+      <td>Succeed iff the input<br>
+        starts with this character.</td>
+  </table>
+<!--
+  +=========+================+===============================+
+  | Grammar |  Method call   |          Description          |
+  +=========+================+===============================+
+  | p | q   | p.OrElse(q)    | Try parsing with p.           |
+  |         |                | If parsing fails, try q.      |
+  | p ^ q   | p.AndThen(q)   | Parse with p.                 |
+  |         |                | Parse remaining input with q. |
+  | p+      | p.OnceOrMore() | Repeat parsing with p.        |
+  |         |                |                               |
+  | "0"     | Expect('0')    | Succeed iff the input         |
+  |         |                | starts with this character.   |
+  |  p?     | p.Optional()   | Parse with p or succeed       |
+  |         |                | without parsing anything.     |
+  | n/a     | p.Convert(f)   | Apply the function f to the   |
+  |         |                | result of the parser p.       |
+  +=========+================+===============================+
+-->
+
+</body>
+</html>
