@@ -3,7 +3,7 @@ Concepts of Programming Languages
 08 Nov  2018
 Tags: go, programming, master
 
-Johannes Weigend (QAware GmbH), Armin Heller (QAware GmbH)
+Armin Heller on behalf of Johannes Weigend (QAware GmbH)
 University of Applied Sciences Rosenheim
 johannes.weigend@qaware.de, armin.heller@qaware.de
 http://www.qaware.de
@@ -14,7 +14,7 @@ http://www.qaware.de
   func parser (input ParserInput) ParserResult {
     ...
   }
-.image img/05-parser-is-function.svg 510 680
+.image img/05-parser-is-function.svg 360 680
 
 
 * What's the input of a parser?
@@ -30,7 +30,7 @@ http://www.qaware.de
 - Results of calculations
 - etc.
 
-.image img/05-result-is-anything.svg 480 640
+.image img/05-result-is-anything.svg 360 640
 
 * A Parser ..
 
@@ -57,7 +57,7 @@ http://www.qaware.de
 - Good: it's a built-in type with many library functions
 - Possible Solution: `[]rune`
 
-.image img/05-strings-are-bytes.svg 520 1024
+.image img/05-strings-are-bytes.svg 420 1024
 
 * Using []rune as input? (runes are unicode code points)
 
@@ -66,7 +66,7 @@ http://www.qaware.de
 - Bad: What if we want to read a file that doesn't fit in memory?
 - Possible Solution: `os.File`
 
-.image img/05-rune-array.svg 520 1024
+.image img/05-rune-array.svg 370 1024
 
 * Using os.File as input?
 
@@ -169,37 +169,38 @@ http://www.qaware.de
 
 * Context-free grammars
 
+- Context-free grammars are recursive regular expressions
 .html html/05-grammar.html
 
 * A | B
 
 - Parse A or B
 
-.image img/alternative.png 480 640
+.image img/05-alternative.svg 480 640
 
 * A ^ B
 
 - Parse A and then B
 
-.image img/concatenation.png 480 640
+.image img/05-concatenation.svg 480 1024
 
 * A+
 
 - Parse A once or more
 
-.image img/once_or_more.png 480 640
+.image img/05-once-or-more.svg 480 1024
 
 * A*
 
 - Parse A zero or more times
 
-.image img/repetition.png 480 640
+.image img/05-repetition.svg 520 1024
 
 * A?
 
 - Parse A zero or one times
 
-.image img/optional.png 480 640
+.image img/05-optional.svg 480 640
 
 * Example Grammar
 
@@ -222,7 +223,7 @@ http://www.qaware.de
   Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
   Number = Digit+
 
-.image img/number_grammar.png 480 640
+.image img/05-number-grammar.svg 480 640
 
 * The point of this lecture
 
@@ -288,6 +289,7 @@ http://www.qaware.de
       }
 
       result.Result = f (result.Result)
+      return result
     }
   }
 
@@ -314,7 +316,9 @@ Number := Digit Number | Digit
 
 * Abstract Syntax Trees
 
-- TODO: Explain how to represent trees.
+- Abstract syntax trees are algebraic data types
+- Example: [[https://github.com/jweigend/concepts-of-programming-languages/blob/master/oop/ast/ast.go][Boolean Formulas]]
+.image img/05-ast.svg 480 1024
 
 * Exercise
 
