@@ -36,4 +36,4 @@ func TestPhilosophers(t *testing.T) {
 	// simulate 10 milliseconds --> check output
 	time.Sleep(10 * time.Millisecond)
 }
-```go
+```
