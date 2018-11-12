@@ -1,0 +1,192 @@
+Concurrent Programming with Go
+Concepts of Programming Languages
+15 Nov 2018
+Tags: go, programming, concurrent, go routines, channels
+
+Johannes Weigend (QAware GmbH)
+University of Applied Sciences Rosenheim
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* Why Concurrent Programming?
+- Computer clock rates do not get higher anymore (since 2004!)
+- But Moores Law is still valid (Multicore!)
+
+* The modern world is parallel
+
+Multicore.
+
+Networks.
+
+Clouds of CPUs.
+
+Loads of users.
+
+* Concurrent Programming with Go
+.image img/06-go-concurrency.jpeg
+- Don't communicate by sharing memory; share memory by communicating (Rob Pike)
+
+* Go provides:
+- concurrent execution (goroutines)
+- synchronization and messaging (channels)
+- multi-way concurrent control (select)
+- low level blocking primitives (locks) - Usually not needed!
+
+* Goroutines
+
+A goroutine is a function running independently  in the same address space as other goroutines
+
+.code snippets/cp /f.runs/
+
+.code snippets/cp /f.starts.running/,/return/
+
+Like launching a function with shell's `&` notation.
+
+* Goroutines are not threads 
+
+(They're a bit like threads, but they're much cheaper.)
+
+Goroutines are multiplexed onto OS threads as required.
+
+When a goroutine blocks, that thread blocks but no other goroutine blocks.
+
+* Channels
+- Go routines can use channels for safe communication
+- Construct a channel
+    c := make(chan int)     // buffer size = 0
+    c := make(chan int, 10) // buffer size = 10
+- Send to channel
+    c <- 1
+- Read from channel
+    x = <- c
+- size = 0 (=default): Sender blocks until a reader requests a value from the channel
+- size = n: Sender is not blocked until the buffer size is reached
+
+* Channels
+
+Channels are typed values that allow goroutines to synchronize and exchange information.
+
+.code snippets/cp /make.*chan/,/completedAt/
+
+* Ping Pong 
+.play ../cp/channels/pingpong/pingpong.go /Ball/,/EOF/
+
+* Channel and Errors
+- Channel can be closed. Readers will return immediately. Successive writes will cause panic.
+    close(c)
+- If a channel was closed, the reader gets "false" as return code (second return value)
+    x, rc := <-c
+- Reading from a channel until closed
+            for {
+                x, ok := <-c
+                if !ok {
+                    break
+                }
+                // do something with x
+            }
+            // channel closed
+
+
+* Fan Out
+- Read tasks from a channel and start parallel processing. Results will be written in a result channel.
+    // FanOut reads from a channel and starts an async processing task.
+    // The result values of the tasks will be returned in the result channel
+    func FanOut(input chan int, task func(int, chan int)) chan int {
+        result := make(chan int)
+        go func() {
+            for {
+                x, ok := <-input
+                if !ok {
+                    break
+                }
+                go task(x, result)
+            }
+        }()
+        return result
+    }
+
+* Fan In
+- Merge n channels into one
+    // FanIn reads from N-Channels and forwards the result to the output channel.
+    func FanIn(channels []chan int, output chan int) {
+        for i := 0; i < len(channels); i++ {
+            // fan in
+            go func(i int) {
+                for {
+                    n, ok := <-channels[i]
+                    if !ok {
+                        break
+                    }
+                    output <- n
+                }
+                fmt.Println("input channel closed: done.")
+            }(i)
+        }
+    }
+
+
+* Select
+
+The `select` statement is like a `switch`, but the decision is based on ability to communicate rather than equal values.
+
+.code snippets/cp /select/,/}/
+
+* Go really supports concurrency
+
+Really.
+
+It's routine to create thousands of goroutines in one program.
+(Once debugged a program after it had created 1.3 million.)
+
+Stacks start small, but grow and shrink as required.
+
+Goroutines aren't free, but they're very cheap.
+
+More information about Go and concurrency
+.link https://youtu.be/f6kdp27TYZs?t=1
+
+
+* Java like BlockingQueue with Channels
+.code ../cp/channels/blockingqueue/blockingqueue.go /BlockingQueue/,/EOF/
+
+* Java like BlockingQueue - Test
+.code ../cp/channels/blockingqueue/blockingqueue_test.go /TestBlockingQueue/,/EOF OMIT/
+
+* Java like BlockingQueue with Locks (Low Level)
+.code ../cp/locks/blockingqueue/blockingqueue.go /BlockingQueue/,/A1/
+
+* Java like BlockingQueue with Locks (Low Level)
+.code ../cp/locks/blockingqueue/blockingqueue.go /Put/,/A2/
+
+
+* Dining Philosophers
+
+.image img/06-dining-philosophers.png 500 600
+
+* Dining Philosophers - Hints
+- Never grab one fork and wait for the other. This is a deadlock situation.
+- If you cant get the second fork, you should immediately release the first one.
+- The table itself should be a Go Routine and return the forks to a requesting philosopher, this makes synchronization easy (the table is single threaded)
+- The philosopher loop looks like this:
+    // Main loop
+    func (p *Philosopher) run() {
+        for {
+            p.takeForks()
+            p.eat()
+            p.putForks()
+            p.think()
+        }
+    }
+* Wrong Solutions
+There are many wrong solution on the web. 
+Most of them share the problem that the Philosopher picks up the left fork (implemented with channels or locks) and immediately the right fork. 
+The problem arises, when the second fork is in use. There is a potential deadlock, when all Philosophers wait on the second fork. 
+In theory a deadlock occurs if there is a cycle in the Resource Allocation Graph.
+.link https://play.golang.org/p/rXCotNNY24
+
+* Summary
+- With Go you can solve sync problems with channels 
+- Channels use Message Passing instead of locks
+- Go has a low level lock API, but this is seldom needed
+- It is possible to port all classes from java.util.locking easily
