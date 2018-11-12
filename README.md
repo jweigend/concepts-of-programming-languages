@@ -61,3 +61,28 @@ Functional Programming and the Lambda Calculus
 
 *Exercises*
 - https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise4.md
+
+## Lesson 5 - Functional Parsers
+Functional Parsers
+- What is a Parser?
+- Functional Parsers and Parser Combinators
+- Building a Parser in Go
+
+*Slides*
+- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/05-Parser-Combinators.pdf
+
+*Exercises*
+- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise5.md
+
+## Lesson 6 - Concurrent Programming
+Concurrent Programming
+- Why concurrent programming matters!
+- Go routines and channels
+- Go concurrency patterns
+- The dining philosophers problem
+
+*Slides*
+- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/06-Concurrent-Programming.pdf
+
+*Exercises*
+- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise6.md
