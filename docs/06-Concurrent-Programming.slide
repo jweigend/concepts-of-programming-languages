@@ -12,6 +12,7 @@ http://www.qaware.de
 * Why Concurrent Programming?
 - Computer clock rates do not get higher anymore (since 2004!)
 - But Moores Law is still valid (Multicore!)
+.image img/06-moores-law.png 450 800
 
 * The modern world is parallel
 
@@ -163,6 +164,11 @@ More information about Go and concurrency
 * Dining Philosophers
 
 .image img/06-dining-philosophers.png 500 600
+
+
+* Dining Philosophers with Channels
+
+.image img/06-philosophers-channel.jpeg 600 800
 
 * Dining Philosophers - Hints
 - Never grab one fork and wait for the other. This is a deadlock situation.
