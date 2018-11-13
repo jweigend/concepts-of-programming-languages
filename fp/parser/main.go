@@ -24,13 +24,14 @@
 package main
 
 import (
+  "container/list"
   "github.com/QAhell/Parser-Gombinators/parse"
   "github.com/jweigend/concepts-of-programming-languages/oop/ast"
 )
 
 /** main is our playground where we can use parseExpression to write
    command-line tool or to perform experiments. */
-func main () {
+func main() {
 }
 
 /** parseExpression parses the following grammar:
@@ -38,7 +39,7 @@ func main () {
   The syntax tree is exactly the one returned by Or.
 */
 func parseExpression(input parse.ParserInput) parse.ParserResult {
-  return parse.ParserResult{nil, input}
+  return parse.Parser(parseOr).AndThen(parse.ExpectSpaces.Optional()).First() (input)
 }
 
 /** parseOr parses the following grammar:
@@ -49,7 +50,7 @@ func parseExpression(input parse.ParserInput) parse.ParserResult {
   the symbol "|", i. e. it actually allows for Space* ^ "|".
 */
 func parseOr(input parse.ParserInput) parse.ParserResult {
-  return parse.ParserResult{nil, input}
+  return parse.Parser(parseAnd).AndThen(expect("|").AndThen(parseOr).Second().Optional()).Convert(makeOr)(input)
 }
 
 /** parseAnd parses the following grammar:
@@ -60,7 +61,7 @@ func parseOr(input parse.ParserInput) parse.ParserResult {
   the symbol "&", i. e. it actually allows for Space* ^ "&".
 */
 func parseAnd(input parse.ParserInput) parse.ParserResult {
-  return parse.ParserResult{nil, input}
+  return parse.Parser(parseNot).AndThen(expect("&").AndThen(parseAnd).Second().Optional()).Convert(makeAnd)(input)
 }
 
 /** parseNot parses the following grammar:
@@ -71,9 +72,11 @@ func parseAnd(input parse.ParserInput) parse.ParserResult {
   Not nodes as there are exclamation marks.
  */
 func parseNot(input parse.ParserInput) parse.ParserResult {
-  return parse.ParserResult{nil, input}
+  return parseExclamationMarks.AndThen(parseAtom).Convert(func (arg interface{}) interface{} {
+    var pair = arg.(parse.Pair)
+    return makeNot (pair.First.(int), pair.Second.(ast.Node))
+  }) (input)
 }
-
 
 /** parseExclamationMarks parses the following grammar:
   "!"*
@@ -81,10 +84,12 @@ func parseNot(input parse.ParserInput) parse.ParserResult {
   parseExclamationMarks uses expect to parse the symbol "!", i. e. it actually
   allows for Space* ^ "!".
 */
-var parseExclamationMarks parse.Parser =
-  func(input parse.ParserInput) parse.ParserResult {
-    return parse.ParserResult{nil, input}
-  }
+var parseExclamationMarks parse.Parser = func(input parse.ParserInput) parse.ParserResult {
+  return expect("!").Repeated().Convert(func (arg interface{}) interface{} {
+    var list = arg.(* list.List)
+    return list.Len()
+  }) (input)
+}
 
 /** parseAtom parses the followiong grammar:
   Atom := Variable
@@ -94,7 +99,7 @@ var parseExclamationMarks parse.Parser =
   parseExpression.
  */
 func parseAtom(input parse.ParserInput) parse.ParserResult {
-  return parse.ParserResult{nil, input}
+  return parseVariable.OrElse(expect("(").AndThen(parseExpression).AndThen(expect(")")).First().Second())(input)
 }
 
 /** parseVariable parses the following grammar:
@@ -103,15 +108,21 @@ func parseAtom(input parse.ParserInput) parse.ParserResult {
   combinators package and uses the Convert method on parsers to create the
   ast.Val node.
  */
-var parseVariable parse.Parser =
-  func(input parse.ParserInput) parse.ParserResult {
-    return parse.ParserResult{nil, input}
-  }
+var parseVariable parse.Parser = func(input parse.ParserInput) parse.ParserResult {
+  return parse.MaybeSpacesBefore(parse.ExpectIdentifier).Convert(func (arg interface{}) interface{} {
+    var name = arg.(string)
+    return ast.Val { name }
+  }) (input)
+}
 
 /** makeNot wraps the node into num ast.Not nodes.
  */
 func makeNot(num int, node ast.Node) ast.Node {
-  return ast.Not{ast.Val{"x"}}
+  if num <= 0 {
+    return node
+  } else {
+    return ast.Not { makeNot (num - 1, node) }
+  }
 }
 
 /** makeAnd takes a parse.Pair of ast.Node as an argument and returns an
@@ -121,7 +132,14 @@ func makeNot(num int, node ast.Node) ast.Node {
   component of the Pair as sub-nodes.
  */
 func makeAnd(argument interface{}) interface{} {
-  return ast.And{ast.Val{"a"}, ast.Val{"b"}}
+  var pair = argument.(parse.Pair)
+  if pair.Second == (parse.Nothing{}) {
+    return pair.First
+  } else {
+    var firstNode = pair.First.(ast.Node)
+    var secondNode = pair.Second.(ast.Node)
+    return ast.And{firstNode, secondNode}
+  }
 }
 
 /** makeOr takes a parse.Pair of ast.Node as an argument and returns an
@@ -131,7 +149,14 @@ func makeAnd(argument interface{}) interface{} {
   component of the Pair as sub-nodes.
  */
 func makeOr(argument interface{}) interface{} {
-  return ast.Or{ast.Val{"a"}, ast.Val{"b"}}
+  var pair = argument.(parse.Pair)
+  if pair.Second == (parse.Nothing{}) {
+    return pair.First
+  } else {
+    var firstNode = pair.First.(ast.Node)
+    var secondNode = pair.Second.(ast.Node)
+    return ast.Or{firstNode, secondNode}
+  }
 }
 
 /** expect expects the string s at the beginning of the input and ignores
