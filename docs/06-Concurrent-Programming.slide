@@ -91,40 +91,11 @@ Channels are typed values that allow goroutines to synchronize and exchange info
 
 * Fan Out
 - Read tasks from a channel and start parallel processing. Results will be written in a result channel.
-    // FanOut reads from a channel and starts an async processing task.
-    // The result values of the tasks will be returned in the result channel
-    func FanOut(input chan int, task func(int, chan int)) chan int {
-        result := make(chan int)
-        go func() {
-            for {
-                x, ok := <-input
-                if !ok {
-                    break
-                }
-                go task(x, result)
-            }
-        }()
-        return result
-    }
+.code ../cp/channels/fan/fanout.go /FanOut/,/EOF OMIT/
 
 * Fan In
 - Merge n channels into one
-    // FanIn reads from N-Channels and forwards the result to the output channel.
-    func FanIn(channels []chan int, output chan int) {
-        for i := 0; i < len(channels); i++ {
-            // fan in
-            go func(i int) {
-                for {
-                    n, ok := <-channels[i]
-                    if !ok {
-                        break
-                    }
-                    output <- n
-                }
-                fmt.Println("input channel closed: done.")
-            }(i)
-        }
-    }
+.code ../cp/channels/fan/fanin.go /FanIn/,/FanIn OMIT/
 
 
 * Select

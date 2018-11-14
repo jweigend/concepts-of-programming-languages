@@ -16,3 +16,5 @@ func FanOut(input chan int, task func(int, chan int)) chan int {
 	}()
 	return result
 }
+
+// EOF OMIT

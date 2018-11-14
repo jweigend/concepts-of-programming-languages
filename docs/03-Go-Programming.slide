@@ -17,9 +17,6 @@ http://www.qaware.de
 - Polymorphism is only supported by using interfaces  
 
 * Interfaces, Embedding and Polymorphism
-.code ../oop/polymorphism/polymorphism.go /intSeq/,/
-
-* Interfaces, Embedding and Polymorphism
 .play ../oop/polymorphism/polymorphism.go /func main/,/END2 OMIT/
 
 * Send mail with Go: Interfaces and polymorphism

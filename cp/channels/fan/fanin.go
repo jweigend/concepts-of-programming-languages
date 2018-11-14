@@ -6,6 +6,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 )
 
 // FanIn reads from N-Channels and forwards the result to the output channel.
@@ -20,13 +21,15 @@ func FanIn(channels []chan int, output chan int) {
 				}
 				output <- n
 			}
-			fmt.Println("input channel closed: done.")
+			log.Println("input channel closed: done.")
 		}(i)
 	}
 }
 
-// AsyncReadAndPrintFromCh prints all data from a channel until the channel is closed.
-func AsyncReadAndPrintFromCh(ch chan int) {
+// FanIn OMIT
+
+// Print prints all data from a channel until the channel is closed.
+func Print(ch chan int) {
 	go func() {
 		for {
 			res, ok := <-ch
@@ -35,6 +38,6 @@ func AsyncReadAndPrintFromCh(ch chan int) {
 			}
 			fmt.Println(res)
 		}
-		fmt.Println("output channel closed: done.")
+		log.Println("output channel closed: done.")
 	}()
 }

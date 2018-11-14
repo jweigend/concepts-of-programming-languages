@@ -19,7 +19,7 @@ func TestFanIn(t *testing.T) {
 	FanIn(inCh, outCh)
 
 	// read from one channel and print results to stdout.
-	AsyncReadAndPrintFromCh(outCh)
+	Print(outCh)
 
 	inCh[0] <- 2
 	inCh[1] <- 1

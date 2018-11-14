@@ -5,29 +5,26 @@
 package utils
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
 
 func TestFanOut(t *testing.T) {
 
-	inCh := make(chan int)
-	task := func(v int, res chan int) {
-		fmt.Printf("Doing something with v:%v\n", v)
-		time.Sleep(100 * time.Millisecond)
-		fmt.Printf("Finished v: %v\n", v)
-		res <- v * v // return v*v
-	}
-
-	outChan := FanOut(inCh, task)
-
+	inCh := make(chan int, 10)
 	// write data to in channel
 	for i := 0; i < 10; i++ {
 		inCh <- i
 	}
 
-	AsyncReadAndPrintFromCh(outChan)
+	task := func(v int, res chan int) {
+		time.Sleep(1 * time.Millisecond) // simulate long running calculation
+		res <- v * v                     // return v*v
+	}
+
+	outChan := FanOut(inCh, task)
+
+	Print(outChan)
 
 	time.Sleep(100 * time.Millisecond)
 
