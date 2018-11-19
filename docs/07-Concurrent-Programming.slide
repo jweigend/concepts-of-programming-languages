@@ -1,0 +1,94 @@
+Concurrent Programming with Go - Part II
+Concepts of Programming Languages
+15 Nov 2018
+Tags: go, programming, concurrent, go routines, channels
+
+Johannes Weigend (QAware GmbH)
+University of Applied Sciences Rosenheim
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* Deadlock and Data race Detection
+- The Go runtime detects a deadlock if all Go routines are asleep
+- Data races are among the most common and hardest to debug types of bugs in concurrent systems. 
+- A data race occurs when two goroutines access the same variable concurrently and at least one of the accesses is a write. 
+- The Go Data race detector detects these problems at runtime 
+ 
+    $ go test -race mypkg    // to test the package
+    $ go run -race mysrc.go  // to run the source file
+    $ go build -race mycmd   // to build the command
+    $ go install -race mypkg // to install the package ==> Performance impact
+
+* Data race examples
+- Unprotected global variable (maps are not threadsafe!)
+    var service map[string]net.Addr
+
+    func RegisterService(name string, addr net.Addr) {
+        service[name] = addr
+    }
+
+    func LookupService(name string) net.Addr {
+        return service[name]
+    }
+
+* Solution
+    var (
+        service   map[string]net.Addr
+        serviceMu sync.Mutex
+    )
+
+    func RegisterService(name string, addr net.Addr) {
+        serviceMu.Lock()
+        defer serviceMu.Unlock()
+        service[name] = addr
+    }
+
+    func LookupService(name string) net.Addr {
+        serviceMu.Lock()
+        defer serviceMu.Unlock()
+        return service[name]
+    }
+
+* Necessary Conditions for Deadlock
+- Deadlock can arise if the following 4 conditions hold simultaneously:
+- Mutual exclusion: only one process at a time can use a resource
+- Hold and wait: a process holding at least one resource is waiting to acquire additional resources held by other processes
+- No preemption: a resource can be released only voluntarily by the process holding it, after that process has completed its task
+- Circular wait (see slides)
+.link http://www.cs.colostate.edu/~cs370/Fall15/slides/7deadlocks.pdf
+
+* Building a Deadlock Avoidance Detector in Go
+.code ../cp/locks/resourcemanager/resourcegraph.go /ResourceGraph/,33
+
+* Building a Deadlock Avoidance Detector in Go
+.code ../cp/locks/resourcemanager/resourcemanager.go /ResourceManager/,33
+
+* Building a Deadlock Avoidance Detector in Go
+.code ../cp/locks/resourcemanager/resourcemanager.go /Acquire\(processName/,63
+
+* Building a Deadlock Avoidance Detector in Go
+.code ../cp/locks/resourcemanager/resourcemanager.go /Release\(/,87
+
+* Dining Philosophers with ResourceManager
+        // take forks
+        for !gotForks {
+            gotForks := manager.Acquire("P" + id, "F" + id))
+            if gotForks {
+                gotForks = manager.Acquire("P" + id, "F" + (id + 1) % COUNT)
+                if !gotForks { // deadlock detected
+                    m.Release("P" + id, "F" + id))
+                }
+            } else {
+                // deadlock detected -> try again
+            }
+        }
+        
+        // eat
+        
+        // put forks
+        manager.Release("P" + id, "F" + ((id + 1) % COUNT))   
+        manager.Release("P" + id, "F" + id)
+
+.link https://github.com/jweigend/concepts-of-programming-languages/tree/master/cp/locks/resourcemanger
+

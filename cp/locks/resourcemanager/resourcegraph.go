@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0
 
 // Package resourcemanger contains a blocking resource manger which avoids deadlocks
-package resourcemanger
+package resourcemanager
 
 import (
 	"encoding/json"
