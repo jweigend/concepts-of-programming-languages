@@ -1,8 +1,17 @@
 // Copyright 2018 Johannes Weigend
 // Licensed under the Apache License, Version 2.0
+
+// Package resourcemanger contains a blocking resource manger which avoids deadlocks
 package resourcemanger
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // ResourceGraph is a simple RAG ResourceAllocationGraph.
+// A graph is a collection of edges. Each edge is of the form
+// edge := source -> [target1, target2, ... targetN]
 type ResourceGraph struct {
 	edges map[string][]string
 }
@@ -16,21 +25,31 @@ func NewResourceGraph() *ResourceGraph {
 
 // AddLink adds a link to the graph.
 func (r *ResourceGraph) AddLink(source, dest string) {
-	destinations := (*r).edges[dest]
-	destinations = append(destinations, source)
-	(*r).edges[dest] = destinations
+	destinations := r.edges[source]
+	destinations = append(destinations, dest)
+	r.edges[source] = destinations
 }
 
 // RemoveLink removes a link from the graph.
 func (r *ResourceGraph) RemoveLink(source, dest string) {
-	destinations := (*r).edges[dest]
-	destinations = removeItem(destinations, source)
-	(*r).edges[dest] = destinations
+	destinations := r.edges[source]
+	destinations = removeItem(destinations, dest)
+	if len(destinations) > 0 {
+		r.edges[source] = destinations
+	} else {
+		delete(r.edges, source) // remove entry complete from map
+	}
 }
 
 // DetectCycle reports true if there is a cycle between source and dest
 func (r *ResourceGraph) DetectCycle(source string, dest string) bool {
 	return r.detectCycle1(source, source, dest)
+}
+
+// Get destinations.
+func (r *ResourceGraph) Get(dest string) []string {
+	destinations := r.edges[dest]
+	return destinations
 }
 
 // Internal helper does the work.
@@ -40,7 +59,7 @@ func (r *ResourceGraph) detectCycle1(first string, source string, dest string) b
 		return true
 	}
 	result := false
-	destinations := (*r).edges[dest]
+	destinations := r.edges[source]
 	if destinations == nil {
 		return result
 	}
@@ -50,6 +69,11 @@ func (r *ResourceGraph) detectCycle1(first string, source string, dest string) b
 	}
 
 	return result
+}
+
+func (r *ResourceGraph) String() string {
+	b, _ := json.MarshalIndent(r.edges, "", "  ")
+	return fmt.Sprintf("%v", string(b))
 }
 
 // Helper removes an item from a string list.

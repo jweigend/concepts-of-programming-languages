@@ -1,0 +1,102 @@
+Distributed Programming with Go
+Concepts of Programming Languages
+22 Nov 2018
+Tags: go, programming, grpc, network, sockets
+
+Johannes Weigend (QAware GmbH)
+University of Applied Sciences Rosenheim
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* Distributed Programming with Go
+- Go supports all major network protocols within the standard library
+- Channels and Go Routines simplify concurrent servers
+- Typical samples can be found here:
+.link https://github.com/tumregels/Network-Programming-with-Go
+
+* Some samples
+- TCP/IP Sockets
+.link https://github.com/tumregels/Network-Programming-with-Go/blob/master/socket/tcp_sockets.md
+- 
+
+
+* Distributed Computing is Hard!
+
+Fallacies of distributed computing
+
+- The network is reliable.
+- Latency is zero.
+- Bandwidth is infinite.
+- The network is secure.
+- Topology doesn't change.
+- There is one administrator.
+- Transport cost is zero.
+- The network is homogeneous.
+
+* Remote Procedure Calls 
+- Enable application to call functions on another process or machine
+- Binary transfer of marshalled objects (-> Fast) 
+- Long history (Sun RPC (NFS), OMG Corba, DCE RPC, MS RPC, XML RPC, GRPC)
+- Every major language has a proprietary RPC Framework (Go - net.rpc)
+- Can be implemented on top of other protocols (HTTP/REST, HTTP/SOAP) 
+
+* Introduction into GRPC
+- Google RPC / GRPC is a language independent RPC based on Protocol Buffers
+- Native implementations are available for Go, Java and C++
+- Language bindings (by using C/C++) are available for many other Languages
+- Major design decisions: Interoperability, Speed, HTTP based  
+.link https://www.youtube.com/watch?v=J-NTfvYL_OE
+
+* UUID Service with GRPC
+In the following slides, we develop an UUID service which returns a network wide, unique id to a client. 
+We will separate the business logic from the GRPC code in a way to switch between a non distributed system and a distributed system with two processes (client/server)
+
+* UUID Service - Business API
+.code ../dp/idserv/idserv-api.go /IDService/,12
+- The Business API is a non technical API without any knowledge of distribution
+- The API can be local tested (location transparent/independent)
+- Local testability is strongly needed for non trivial functionality
+- To enable distribution, methods should not use/return complex networks of objects
+
+* UUID Service - Client
+.code ../dp/idserv/client/main.go /GenerateIds/,20
+- The client logic has no idea which implementation is behind the API interface
+
+* UUID Service - Local Implementation (The Business Logic)
+.code ../dp/idserv/impl/idserv-impl.go /struct/,28
+- The implementation uses the atomic package to make it thread safe
+
+* Monolith First - The Proxy Pattern
+.image img/07-proxy-pattern.png 600 1000
+
+* Building a GRPC Proxy/Stub Combination
+- The GRPC interface definition (Protocol Buffers (idserv.pb))
+.code ../dp/idserv/remote/idserv/idserv.proto /IDService/,15
+- You have to generate the idserv.pb.go file with the GRPC protoc compiler (not part of the Go installation) 
+- The .pb.go file contains types and structures to implement and call the service
+
+* The Proxy implements the API interface on the client side (1/2)
+.code ../dp/idserv/remote/proxy/proxy.go /Proxy/,/NewUUID/
+
+* The Proxy implements the API interface on the client side (2/2)
+.code ../dp/idserv/remote/proxy/proxy.go /NewUUID/,49
+
+- The generated GRPC code differs from the local function call
+- The proxy acts as adapter between the API and the GRPC interface 
+- Parameters, Return Values and Errors are different  
+- The Proxy maps all these to remote structures, errors or exceptions
+
+* The Stub implements the GRPC interface and calls the Business API
+.code ../dp/idserv/remote/stub/idserv-stub.go 
+
+* The Server starts the Listener and registers the Stub
+.code ../dp/idserv/remote/server/main.go /func main/,31
+
+* The Directory Layout separates Logic from RPC code
+.image img/07-idserv.png 500 300
+
+* Further Information
+.link https://grpc.io/
+.link https://grpc.io/docs/quickstart/go.html
+.link https://github.com/grpc/grpc-go/tree/master/examples
