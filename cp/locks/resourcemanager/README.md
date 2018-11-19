@@ -29,7 +29,7 @@ Acquire ("P1", "R2" ) returns false : P1 -> R2 (deadlock) - acquire will recogni
             gotForks := manager.Acquire("P" + id, "F" + id))
             if gotForks {
                 gotForks = manager.Acquire("P" + id, "F" + (id + 1) % COUNT)
-                if !gotForks { // deadlock detected
+                if !gotForks { // deadlock detected, release fork
                     m.Release("P" + id, "F" + id))
                 }
             } else {
