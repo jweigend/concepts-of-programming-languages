@@ -1,5 +1,4 @@
-![Logo](../../doc/article/img/Logo.png "Logo")
-### *Concurrency with Go*
+## *Concurrency with Go*
 
 - Resource Manager
 
@@ -16,9 +15,10 @@ The Acquire() method returns true if the resource could be claimed. In case of a
 It is up to the caller to retry the operation, if the resource is in use and the claim will produce a deadlock operation. 
 
 Sample
-
+'''sh
 Acquire ("P1", "R1" ) : P1 <- R1 (ok) - Process 1 got Resource 1
 Acquire ("P1", "R3" ) : P1 <- R3 (ok) - Process 1 got Resource 3
 Acquire ("P2", "R2" ) : P2 <- R2 (ok) - Process 2 got Resource 2
 Acquire ("P2", "R1" ) : P2 -> R1 (wait) - Process 2 cant get Resource 1 (in use by Process 1) : wait
 Acquire ("P1", "R2" ) returns false : P1 -> R2 (deadlock) - acquire will recognize the deadlock and returns false
+'''
