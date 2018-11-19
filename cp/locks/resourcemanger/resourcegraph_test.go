@@ -31,8 +31,6 @@ func TestResourceGraph(t *testing.T) {
 	if graph.DetectCycle("c", "a") {
 		t.Error("c->a is not a cycle!")
 	}
-
-	fmt.Println(graph)
 }
 
 func TestSimpleResourceManager(t *testing.T) {
