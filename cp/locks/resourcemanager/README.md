@@ -24,7 +24,7 @@ Acquire ("P1", "R2" ) returns false : P1 -> R2 (deadlock) - acquire will recogni
 
 ### Dining Philosophers
 ```go
-      // take forks
+        // take forks
         for !gotForks {
             gotForks := manager.Acquire("P" + id, "F" + id))
             if gotForks {
