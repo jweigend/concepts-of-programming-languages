@@ -24,22 +24,22 @@ Acquire ("P1", "R2" ) returns false : P1 -> R2 (deadlock) - acquire will recogni
 
 ### Dining Philosophers
 ```go
-        // take forks
-        for !gotForks {
-            gotForks := manager.Acquire("P" + id, "F" + id))
-            if gotForks {
-                gotForks = manager.Acquire("P" + id, "F" + (id + 1) % COUNT)
-                if !gotForks { // deadlock detected, release fork
-                    m.Release("P" + id, "F" + id))
-                }
-            } else {
-                // deadlock detected -> try again
-            }
+// take forks
+for !gotForks {
+    gotForks := manager.Acquire("P" + id, "F" + id))
+    if gotForks {
+        gotForks = manager.Acquire("P" + id, "F" + (id + 1) % COUNT)
+        if !gotForks { // deadlock detected, release fork
+            m.Release("P" + id, "F" + id))
         }
-        
-        // eat
-        
-        // put forks
-        manager.Release("P" + id, "F" + ((id + 1) % COUNT))   
-        manager.Release("P" + id, "F" + id)
+    } else {
+        // deadlock detected -> try again
+    }
+}
+
+// eat
+
+// put forks
+manager.Release("P" + id, "F" + ((id + 1) % COUNT))   
+manager.Release("P" + id, "F" + id)
 ```
