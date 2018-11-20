@@ -72,15 +72,16 @@ http://www.qaware.de
 
 * Dining Philosophers with ResourceManager
         // take forks
+        gotForks := false
         for !gotForks {
-            gotForks := manager.Acquire("P" + id, "F" + id))
+            gotForks = manager.Acquire("P" + p.id, "F" + p.id)
             if gotForks {
-                gotForks = manager.Acquire("P" + id, "F" + (id + 1) % COUNT)
+                gotForks = manager.Acquire(ph, f2)
                 if !gotForks { // deadlock detected
-                    m.Release("P" + id, "F" + id))
+                    manager.Release("P" + p.id, "F" + ((p.id + 1) % COUNT)
                 }
             } else {
-                // deadlock detected -> try again
+                log.Println("Deadlock detected -> try again")
             }
         }
         
@@ -91,4 +92,5 @@ http://www.qaware.de
         manager.Release("P" + id, "F" + id)
 
 .link https://github.com/jweigend/concepts-of-programming-languages/tree/master/cp/locks/resourcemanger
+.link https://github.com/jweigend/concepts-of-programming-languages/tree/master/cp/locks/philosophers
 
