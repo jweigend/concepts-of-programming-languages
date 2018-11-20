@@ -47,12 +47,14 @@ func (p *Philosopher) run() {
 // Take forks by channeling our id to the table and wait until the table returns true on the reserved channel.
 func (p *Philosopher) takeForks() {
 	manager := p.table.GetManager()
+	// Names
+	ph := fmt.Sprintf("P%v", p.id)
+	f1 := fmt.Sprintf("F%v", p.id)
+	f2 := fmt.Sprintf("F%v", (p.id+1)%p.table.nbrOfSeats)
+
 	// take forks
 	gotForks := false
 	for !gotForks {
-		ph := fmt.Sprintf("P%v", p.id)
-		f1 := fmt.Sprintf("F%v", p.id)
-		f2 := fmt.Sprintf("F%v", (p.id+1)%p.table.nbrOfSeats)
 		gotForks = manager.Acquire(ph, f1)
 		if gotForks {
 			gotForks = manager.Acquire(ph, f2)

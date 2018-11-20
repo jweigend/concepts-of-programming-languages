@@ -53,7 +53,7 @@ func (r *ResourceManager) Acquire(processName string, resourceName string) bool 
 			r.graph.RemoveLink(processName, resourceName)
 			return false // Deadlock detected
 		}
-		//log.Printf("Blocking %v, %v, %v", resourceName, processName, r.graph)
+		// log.Printf("Blocking %v, %v, %v", resourceName, processName, r.graph)
 		r.c.Wait()
 	}
 

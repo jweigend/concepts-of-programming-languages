@@ -36,5 +36,5 @@ func TestPhilosophers(t *testing.T) {
 	}
 
 	// wait 1 millisecond --> check output
-	time.Sleep(60000 * time.Millisecond)
+	time.Sleep(1000 * time.Millisecond)
 }
