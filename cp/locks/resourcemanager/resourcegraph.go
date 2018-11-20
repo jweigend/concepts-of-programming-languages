@@ -1,7 +1,7 @@
 // Copyright 2018 Johannes Weigend
 // Licensed under the Apache License, Version 2.0
 
-// Package resourcemanger contains a blocking resource manger which avoids deadlocks
+// Package resourcemanager contains a blocking resource manger which avoids deadlocks
 package resourcemanager
 
 import (
@@ -41,18 +41,18 @@ func (r *ResourceGraph) RemoveLink(source, dest string) {
 	}
 }
 
+// Get destinations for a given source.
+func (r *ResourceGraph) Get(source string) []string {
+	destinations := r.edges[source]
+	return destinations
+}
+
 // DetectCycle reports true if there is a cycle between source and dest
 func (r *ResourceGraph) DetectCycle(source string, dest string) bool {
 	return r.detectCycle1(source, source, dest)
 }
 
-// Get destinations.
-func (r *ResourceGraph) Get(dest string) []string {
-	destinations := r.edges[dest]
-	return destinations
-}
-
-// Internal helper does the work.
+// traverse the graph and check if dest is reachable from first
 func (r *ResourceGraph) detectCycle1(first string, source string, dest string) bool {
 
 	if first == dest {
@@ -71,6 +71,7 @@ func (r *ResourceGraph) detectCycle1(first string, source string, dest string) b
 	return result
 }
 
+// Stringer implementation.
 func (r *ResourceGraph) String() string {
 	b, _ := json.MarshalIndent(r.edges, "", "  ")
 	return fmt.Sprintf("%v", string(b))
