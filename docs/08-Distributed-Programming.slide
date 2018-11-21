@@ -18,8 +18,6 @@ http://www.qaware.de
 * Some samples
 - TCP/IP Sockets
 .link https://github.com/tumregels/Network-Programming-with-Go/blob/master/socket/tcp_sockets.md
-- 
-
 
 * Distributed Computing is Hard!
 
@@ -64,7 +62,7 @@ We will separate the business logic from the GRPC code in a way to switch betwee
 - The client logic has no idea which implementation is behind the API interface
 
 * UUID Service - Local Implementation (The Business Logic)
-.code ../dp/idserv/impl/idserv-impl.go /struct/,28
+.code ../dp/idserv/core/idserv-impl.go /struct/,28
 - The implementation uses the atomic package to make it thread safe
 
 * Monolith First - The Proxy Pattern
