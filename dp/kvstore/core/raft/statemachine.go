@@ -34,7 +34,7 @@ func NewStatemachine() *Statemachine {
 
 // Next advances the state and make sure only valid transitions are made.
 func (s *Statemachine) Next(next State) {
-	if !s.isValid(next) {
+	if !s.IsTransitionValid(next) {
 		panic(fmt.Sprintf("State change from %v to %v is not allowed.", s.current, next))
 	}
 	s.current = next
@@ -45,7 +45,8 @@ func (s *Statemachine) Current() State {
 	return s.current
 }
 
-func (s *Statemachine) isValid(next State) bool {
+// IsTransitionValid returns true if next state is a possible transition.
+func (s *Statemachine) IsTransitionValid(next State) bool {
 	nextStates := s.validTransitions[s.current]
 	for _, v := range nextStates {
 		if v == next {
