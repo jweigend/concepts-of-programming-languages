@@ -30,9 +30,9 @@ func NewNode(id int, config *Configuration) *Node {
 
 func (n *Node) Start() {
 	// todo move time interval to configuration
-	timeOutTicker := time.NewTicker(time.Duration(100+rand.Intn(1000)) * time.Millisecond)
+	n.timeOutTicker = time.NewTicker(time.Duration(100+rand.Intn(1000)) * time.Millisecond)
 	go func() {
-		for range timeOutTicker.C {
+		for range n.timeOutTicker.C {
 			n.Timeout()
 		}
 	}()
