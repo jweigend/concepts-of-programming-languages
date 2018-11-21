@@ -83,19 +83,25 @@ Concurrent Programming
 
 *Slides*
 - https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/06-Concurrent-Programming.pdf
-- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/07-Concurrent-Programming.pdf
 
 *Exercises*
 - https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise6.md
-- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise7.md
 
-## Lesson 7 - Distributed Programming
+## Lesson 7 - Concurrent Programming - Part II
+- Deadlocks and Detection
+- The Resource Access Graph
+- Building a Resource Manager
+[Slides](docs/07-Concurrent-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise7.md)
+
+## Lesson 8 - Distributed Programming
 Distributed Programming
 - Introduction
 - Sockets and low level programming
 - RPC and GRPC
 - ID generator with GRPC 
 
-[Slides](docs/07-Distributed-Programming.pdf)
+[Slides](docs/08-Distributed-Programming.pdf)
 
 [Exercises](docs/exercises/Exercise8.md)
