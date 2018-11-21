@@ -91,6 +91,7 @@ Concurrent Programming
 - Deadlocks and Detection
 - The Resource Access Graph
 - Building a Resource Manager
+
 [Slides](docs/07-Concurrent-Programming.pdf)
 
 [Exercises](docs/exercises/Exercise7.md)
