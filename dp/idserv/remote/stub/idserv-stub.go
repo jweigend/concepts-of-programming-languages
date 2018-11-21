@@ -6,7 +6,7 @@ package stub
 import (
 	"context"
 
-	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/impl"
+	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/core"
 	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/remote/idserv"
 )
 
@@ -15,6 +15,6 @@ type Server struct{}
 
 // NewUUID implements idserv.IdService interface
 func (s *Server) NewUUID(c context.Context, r *idserv.IdRequest) (*idserv.IdReply, error) {
-	service := impl.IDServiceImpl{}
+	service := core.IDServiceImpl{}
 	return &idserv.IdReply{Uuid: service.NewUUID(r.GetClientId())}, nil
 }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0
 
 // Package impl contains the business logic of the IDService
-package impl
+package core
 
 import (
 	"fmt"

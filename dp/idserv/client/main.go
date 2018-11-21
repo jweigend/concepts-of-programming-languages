@@ -6,8 +6,8 @@ import (
 	"log"
 
 	"github.com/jweigend/concepts-of-programming-languages/dp/idserv"
-	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/impl"
 	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/remote/proxy"
+	"github.com/qaware/programmieren-mit-go/04_distributed-programming/idserv/server/impl"
 )
 
 // GenerateIds calls n-times NewUUID() in a loop and returns the result as slice.
