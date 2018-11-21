@@ -97,7 +97,7 @@ Distributed Programming
 - ID generator with GRPC 
 
 *Slides*
-- https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/07-Distributed-Programming.pdf
+- docs/07-Distributed-Programming.pdf
 
 *Exercises*
 - https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise8.md
