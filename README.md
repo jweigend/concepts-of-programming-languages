@@ -98,4 +98,4 @@ Distributed Programming
 
 [Slides](docs/07-Distributed-Programming.pdf)
 
-[Exercises] (docs/exercises/Exercise8.md)
+[Exercises](docs/exercises/Exercise8.md)
