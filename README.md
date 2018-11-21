@@ -20,12 +20,11 @@ We will release the results here.
 ## Lesson 1 - Introduction
 
 - Overview of Programming Languages, Why Go?, Comparison to C/C++/Java/Python/Ruby/Scala/JS
+- Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries 
 
 [Slides](docs/01-Introduction%20to%20Golang.pdf)
 
-*Exercises*
-- Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries 
-- [Exercises](docs/exercises/Exercise1.md)
+[Exercises](docs/exercises/Exercise1.md)
 
 ## Lesson 2 - Basics in Go Programming, OOP Part I
 
@@ -46,7 +45,6 @@ We will release the results here.
 [Exercises](docs/exercises/Exercise3.md)
 
 ## Lesson 4 - Functional Programming and the Lambda Calculus
-Functional Programming and the Lambda Calculus
 - Functional Programming
 - Lambda Calculus
 - Streams in Go
@@ -56,7 +54,6 @@ Functional Programming and the Lambda Calculus
 [Exercises](docs/exercises/Exercise4.md)
 
 ## Lesson 5 - Functional Parsers
-Functional Parsers
 - What is a Parser?
 - Functional Parsers and Parser Combinators
 - Building a Parser in Go
@@ -67,7 +64,6 @@ Functional Parsers
 
 
 ## Lesson 6 - Concurrent Programming
-Concurrent Programming
 - Why concurrent programming matters!
 - Go routines and channels
 - Go concurrency patterns
@@ -87,7 +83,6 @@ Concurrent Programming
 [Exercises](docs/exercises/Exercise7.md)
 
 ## Lesson 8 - Distributed Programming
-Distributed Programming
 - Introduction
 - Sockets and low level programming
 - RPC and GRPC
