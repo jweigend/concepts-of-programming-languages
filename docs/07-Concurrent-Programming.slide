@@ -50,6 +50,28 @@ http://www.qaware.de
         return service[name]
     }
 
+* The Lock/Wait/Signal Pattern - Blocking with Conditions
+
+Mutex - A condition contains a lock. 
+
+       c.L.Lock() // c is sync.Cond
+       defer c.L.Unlock()
+
+Wait Condition - Wait could be only called if the lock is closed.
+
+       for waitCondition {
+            c.Wait()
+        }
+ 
+Signal Change - If something changed, wake up with c.Signal()
+
+        c.Signal()
+
+- 1. Close the lock - typically at first action in a method
+- 2. Make sure to call release - typically as defer command 
+- 3. Check for wait condition in a loop! -> call c.Wait()
+
+
 * Necessary Conditions for Deadlock
 - Deadlock can arise if the following 4 conditions hold simultaneously:
 - Mutual exclusion: only one process at a time can use a resource
