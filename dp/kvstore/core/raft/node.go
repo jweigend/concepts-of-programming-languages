@@ -1,26 +1,27 @@
 package raft
 
 import (
+	"log"
 	"math/rand"
 	"time"
 )
 
 // Node is a RAFT node.
 type Node struct {
-	id            int
-	config        *Configuration
-	statemachine  *Statemachine
-	replicatedLog *ReplicatedLog
-	timeOutTicker *time.Ticker
-	currentTerm   int
-	votedFor      int
+	id             int
+	statemachine   *Statemachine
+	replicatedLog  *ReplicatedLog
+	electionTimer  *time.Timer
+	heartbeatTimer *time.Timer // runs only if the node is in MASTER state
+	currentTerm    int
+	votedFor       int
+	cluster        *Cluster
 }
 
 // NewNode constructs a node.
-func NewNode(id int, config *Configuration) *Node {
+func NewNode(id int) *Node {
 	node := new(Node)
 	node.id = id
-	node.config = config
 	node.currentTerm = 0
 	node.votedFor = 0
 	node.statemachine = NewStatemachine()
@@ -28,32 +29,87 @@ func NewNode(id int, config *Configuration) *Node {
 	return node
 }
 
-func (n *Node) Start() {
-	// todo move time interval to configuration
-	n.timeOutTicker = time.NewTicker(time.Duration(100+rand.Intn(1000)) * time.Millisecond)
+// Start setup timers for heartbeat and election.
+func (n *Node) Start(cluster *Cluster) {
+	n.cluster = cluster
+	n.restartElectionTimer()
+}
+
+// Stop stops timers.
+func (n *Node) Stop() {
+	if n.electionTimer != nil {
+		n.electionTimer.Stop()
+	}
+	if n.heartbeatTimer != nil {
+		n.heartbeatTimer.Stop()
+	}
+}
+
+// restartElectionTimer restarts random timer.
+func (n *Node) restartElectionTimer() {
+	if n.electionTimer != nil {
+		n.electionTimer.Stop()
+	}
+	n.electionTimer = time.NewTimer(time.Duration(2000+rand.Intn(3000)) * time.Millisecond)
 	go func() {
-		for range n.timeOutTicker.C {
-			n.Timeout()
+		<-n.electionTimer.C
+		n.electionTimeout()
+	}()
+}
+
+// startHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
+func (n *Node) startHeartbeat() {
+	if n.heartbeatTimer != nil {
+		n.heartbeatTimer.Stop()
+	}
+	n.heartbeatTimer = time.NewTimer(time.Duration(500+rand.Intn(1000)) * time.Millisecond)
+	go func() {
+		_, ok := <-n.heartbeatTimer.C // check this: If the time was stopped, the channel should return false (closed?)
+		if ok {
+			n.sendHeartbeat()
+			defer n.startHeartbeat() // restart again
 		}
 	}()
 }
 
-func (n *Node) Stop() {
-	n.timeOutTicker.Stop()
+// sendHeartbeat
+func (n *Node) sendHeartbeat() {
+	if n.statemachine.current != LEADER {
+		panic("setHeatbeat should only run on LEADER")
+	}
+	log.Printf("[%v] SendHeartbeat on Node: %v", n.statemachine.Current(), n.id)
 }
 
-func (n *Node) Timeout() {
-	if n.statemachine.current == FOLLOWER {
-		n.StartElection()
-	} else if n.statemachine.current == LEADER {
+// electionTimeout happens when a node receives no heartbeat in a given time period.
+func (n *Node) electionTimeout() {
+	if n.statemachine.current == LEADER {
+		panic("The election timeout should not happen, when a node is LEADER.")
+	}
+	n.startElection()
+}
 
+func (n *Node) startElection() {
+	n.statemachine.Next(CANDIDATE)
+	n.currentTerm++
+
+	// for all nodes in the cluster send RequestVote
+	// if more than 50% return true, set n.statemachine.Next(LEADER)
+
+	electionWon := true
+	if electionWon {
+		n.startLeader()
+	} else {
+		n.restartElectionTimer() // try again, split vote or cluster down
 	}
 }
 
-func (n *Node) StartElection() {
-	n.statemachine.Next(CANDIDATE)
-
+func (n *Node) startLeader() {
+	n.statemachine.Next(LEADER)
+	n.electionTimer = nil
+	n.startHeartbeat()
 }
+
+// NodeRPC server implementation
 
 // AppendEntries implementation is used as heardbeat and log replication.
 func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, entries []string, leaderCommit int) (currentTerm int, success bool) {
@@ -63,12 +119,14 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 		return n.currentTerm, false
 	}
 
-	// heartbeat
+	// heartbeat received in FOLLOWER -> reset election timer!
 	if len(entries) == 0 {
-		//ResetElectionTimer()
-	}
+		n.restartElectionTimer()
+	} else {
+		// todo: replicate logs
+		log.Printf("[%v] AppendEntries replicate logs on Node: %v", n.statemachine.Current(), n.id)
 
-	// todo
+	}
 
 	return n.currentTerm, true
 }
@@ -77,6 +135,11 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 // It returns the current term to update the candidate
 // It returns true when the candidate received vote.
 func (n *Node) RequestVote(term, candidateID, lastLogIndex, lastLogTerm int) (int, bool) {
-	// todo
-	return 0, false
+	if term <= n.currentTerm {
+		return n.currentTerm, false
+	}
+	n.currentTerm = term // ok: we join the master term
+	log.Printf("[%v] RequestVote voting for MASTER: %v", n.statemachine.Current(), candidateID)
+
+	return n.currentTerm, true
 }

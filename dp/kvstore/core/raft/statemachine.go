@@ -14,6 +14,19 @@ const (
 	LEADER
 )
 
+func (s State) String() string {
+	switch s {
+	case FOLLOWER:
+		return "FOLLOWER"
+	case LEADER:
+		return "LEADER"
+	case CANDIDATE:
+		return "CANDIDATE"
+	default:
+		panic("Unknown State! Should never happen.")
+	}
+}
+
 // Statemachine encapsulates the current state and ensures only valid state changes are executed.
 type Statemachine struct {
 	current          State
