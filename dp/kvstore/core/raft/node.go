@@ -1,12 +1,15 @@
 package raft
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
+	"sync"
 	"time"
 )
 
-// Node is a RAFT node.
+// Node is a node in a Raft consensus cluster. It is called "server" in the original Raft paper.
+// Node seems to be more accurate because for testing purposes we can run multiple nodes in a single server process.
 type Node struct {
 	id             int
 	statemachine   *Statemachine
@@ -85,22 +88,54 @@ func (n *Node) electionTimeout() {
 	if n.statemachine.current == LEADER {
 		panic("The election timeout should not happen, when a node is LEADER.")
 	}
-	n.startElection()
+	n.startElectionProcess()
 }
 
-func (n *Node) startElection() {
+// startElectionProcess sends a RequestVote request to other members in the cluster.
+// if successful - we get are the new leader in a new term.
+func (n *Node) startElectionProcess() {
 	n.statemachine.Next(CANDIDATE)
-	n.currentTerm++
-
-	// for all nodes in the cluster send RequestVote
-	// if more than 50% return true, set n.statemachine.Next(LEADER)
-
-	electionWon := true
+	n.currentTerm++ // new term starts now
+	electionWon := n.executeElection()
 	if electionWon {
+		n.log(fmt.Sprintf("Election won. Starting as leader."))
 		n.startLeader()
 	} else {
+		n.log(fmt.Sprintf("Election was not won. Restarting election timer."))
 		n.restartElectionTimer() // try again, split vote or cluster down
 	}
+}
+
+// executeElection executes a leader election by sending RequestVote to other nodes.
+// for all other nodes in the cluster RequestVote is sent
+func (n *Node) executeElection() bool {
+	rpcIfs := n.cluster.GetFollowers(n.id)
+	var wg sync.WaitGroup
+	votes := make([]bool, len(rpcIfs))
+	wg.Add(len(rpcIfs))
+	for i, rpcIf := range rpcIfs {
+		go func(w *sync.WaitGroup, i int, rpcIf NodeRPC) {
+			term, ok := rpcIf.RequestVote(n.currentTerm, n.id, 0, 0)
+			if term > n.currentTerm {
+				// convert to follower
+				n.statemachine.Next(FOLLOWER)
+				n.restartElectionTimer()
+			}
+			votes[i] = ok
+			w.Done()
+		}(&wg, i, rpcIf)
+	}
+	wg.Wait() // wait until all nodes have voted
+
+	// Count votes
+	nbrOfVotes := 0
+	for _, vote := range votes {
+		if vote {
+			nbrOfVotes++
+		}
+	}
+	// If more than 50% respond with true - The election was won!
+	return (nbrOfVotes > len(rpcIfs)/2)
 }
 
 func (n *Node) startLeader() {
@@ -139,7 +174,11 @@ func (n *Node) RequestVote(term, candidateID, lastLogIndex, lastLogTerm int) (in
 		return n.currentTerm, false
 	}
 	n.currentTerm = term // ok: we join the master term
-	log.Printf("[%v] RequestVote voting for MASTER: %v", n.statemachine.Current(), candidateID)
+	n.log(fmt.Sprintf("RequestVote received from MASTER: %v. Vote OK.", candidateID))
 
 	return n.currentTerm, true
+}
+
+func (n *Node) log(msg string) {
+	log.Printf("[%v] [%v] [%v] : %v", n.id, n.statemachine.Current(), n.currentTerm, msg)
 }
