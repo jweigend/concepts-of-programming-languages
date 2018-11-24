@@ -80,7 +80,7 @@ func (n *Node) sendHeartbeat() {
 	if n.statemachine.current != LEADER {
 		panic("setHeatbeat should only run on LEADER")
 	}
-	log.Printf("[%v] SendHeartbeat on Node: %v", n.statemachine.Current(), n.id)
+	n.log("SendingHeartbeat to FOLLOWERS")
 }
 
 // electionTimeout happens when a node receives no heartbeat in a given time period.
