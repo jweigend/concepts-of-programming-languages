@@ -83,8 +83,8 @@ func (n *Node) electionTimeout() {
 // StartElectionProcess sends a RequestVote request to other members in the cluster.
 // if successful - we get are the new leader in a new term.
 func (n *Node) startElectionProcess() {
+	n.currentTerm++ // new term starts now -> see 5.2
 	n.statemachine.Next(CANDIDATE)
-	n.currentTerm++ // new term starts now
 	n.votedFor = nil
 	electionWon := n.executeElection()
 	if electionWon {
