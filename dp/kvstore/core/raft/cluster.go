@@ -14,7 +14,8 @@ func NewCluster(allNodes []NodeRPC) *Cluster {
 
 // GetFollowers returns the RPC interfaces of all followers for a given leader
 func (c *Cluster) GetFollowers(leaderID int) []NodeRPC {
-	// swap leader with last element
-	c.allNodes[leaderID], c.allNodes[len(c.allNodes)-1] = c.allNodes[len(c.allNodes)-1], c.allNodes[leaderID]
-	return c.allNodes[:len(c.allNodes)-1]
+	buf := make([]NodeRPC, len(c.allNodes))
+	copy(buf, c.allNodes)
+	result := append(buf[:leaderID], buf[leaderID+1:]...)
+	return result
 }

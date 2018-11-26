@@ -14,10 +14,10 @@ type Node struct {
 	id             int
 	statemachine   *Statemachine
 	replicatedLog  *ReplicatedLog
-	electionTimer  *time.Timer
-	heartbeatTimer *time.Timer // runs only if the node is in MASTER state
+	electionTimer  *time.Timer // runs only if the node is FOLLOWER or CANDIDATE
+	heartbeatTimer *time.Timer // runs only if the node is in LEADER state
 	currentTerm    int
-	votedFor       int
+	votedFor       *int
 	cluster        *Cluster
 }
 
@@ -26,7 +26,7 @@ func NewNode(id int) *Node {
 	node := new(Node)
 	node.id = id
 	node.currentTerm = 0
-	node.votedFor = 0
+	node.votedFor = nil
 	node.statemachine = NewStatemachine()
 	node.replicatedLog = NewReplicatedLog()
 	return node
@@ -35,7 +35,7 @@ func NewNode(id int) *Node {
 // Start setup timers for heartbeat and election.
 func (n *Node) Start(cluster *Cluster) {
 	n.cluster = cluster
-	n.restartElectionTimer()
+	n.resetElectionTimer()
 }
 
 // Stop stops timers.
@@ -48,12 +48,14 @@ func (n *Node) Stop() {
 	}
 }
 
-// restartElectionTimer restarts random timer.
-func (n *Node) restartElectionTimer() {
-	if n.electionTimer != nil {
+// resetElectionTimer initializes or restarts a random timer.
+func (n *Node) resetElectionTimer() {
+	if n.electionTimer == nil {
+		n.electionTimer = time.NewTimer(time.Duration(5000+rand.Intn(3000)) * time.Millisecond)
+	} else {
 		n.electionTimer.Stop()
+		n.electionTimer = time.NewTimer(time.Duration(5000+rand.Intn(3000)) * time.Millisecond)
 	}
-	n.electionTimer = time.NewTimer(time.Duration(2000+rand.Intn(3000)) * time.Millisecond)
 	go func() {
 		<-n.electionTimer.C
 		n.electionTimeout()
@@ -62,16 +64,15 @@ func (n *Node) restartElectionTimer() {
 
 // startHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
 func (n *Node) startHeartbeat() {
-	if n.heartbeatTimer != nil {
-		n.heartbeatTimer.Stop()
+	if n.heartbeatTimer == nil {
+		n.heartbeatTimer = time.NewTimer(time.Duration(500+rand.Intn(1000)) * time.Millisecond)
+	} else {
+		n.heartbeatTimer.Reset(time.Duration(500+rand.Intn(1000)) * time.Millisecond)
 	}
-	n.heartbeatTimer = time.NewTimer(time.Duration(500+rand.Intn(1000)) * time.Millisecond)
 	go func() {
-		_, ok := <-n.heartbeatTimer.C // check this: If the time was stopped, the channel should return false (closed?)
-		if ok {
-			n.sendHeartbeat()
-			defer n.startHeartbeat() // restart again
-		}
+		<-n.heartbeatTimer.C
+		n.sendHeartbeat()
+		n.startHeartbeat()
 	}()
 }
 
@@ -80,11 +81,31 @@ func (n *Node) sendHeartbeat() {
 	if n.statemachine.current != LEADER {
 		panic("setHeatbeat should only run on LEADER")
 	}
-	n.log("SendingHeartbeat to FOLLOWERS")
+
+	n.log("SendingHeartbeat to followers ...")
+
+	rpcIfs := n.cluster.GetFollowers(n.id)
+	var wg sync.WaitGroup
+	result := make([]bool, len(rpcIfs))
+	wg.Add(len(rpcIfs))
+	for i, rpcIf := range rpcIfs {
+		go func(w *sync.WaitGroup, i int, nodeRPC NodeRPC) {
+			term, ok := nodeRPC.AppendEntries(n.currentTerm, n.id, 0, 0, nil, 0)
+			if term > n.currentTerm {
+				// todo
+			}
+			result[i] = ok
+			w.Done()
+		}(&wg, i, rpcIf)
+	}
+	wg.Wait() // wait until all nodes have voted
+
+	n.log("SendingHeartbeat - Done.")
 }
 
 // electionTimeout happens when a node receives no heartbeat in a given time period.
 func (n *Node) electionTimeout() {
+	n.log(fmt.Sprintf("Election timout."))
 	if n.statemachine.current == LEADER {
 		panic("The election timeout should not happen, when a node is LEADER.")
 	}
@@ -96,13 +117,15 @@ func (n *Node) electionTimeout() {
 func (n *Node) startElectionProcess() {
 	n.statemachine.Next(CANDIDATE)
 	n.currentTerm++ // new term starts now
+	n.votedFor = nil
 	electionWon := n.executeElection()
 	if electionWon {
 		n.log(fmt.Sprintf("Election won. Starting as leader."))
 		n.startLeader()
 	} else {
-		n.log(fmt.Sprintf("Election was not won. Restarting election timer."))
-		n.restartElectionTimer() // try again, split vote or cluster down
+		n.log(fmt.Sprintf("Election was not won. Stopping election timer"))
+		n.statemachine.Next(FOLLOWER)
+		n.resetElectionTimer() // try again, split vote or cluster down
 	}
 }
 
@@ -117,9 +140,7 @@ func (n *Node) executeElection() bool {
 		go func(w *sync.WaitGroup, i int, rpcIf NodeRPC) {
 			term, ok := rpcIf.RequestVote(n.currentTerm, n.id, 0, 0)
 			if term > n.currentTerm {
-				// convert to follower
-				n.statemachine.Next(FOLLOWER)
-				n.restartElectionTimer()
+				// todo
 			}
 			votes[i] = ok
 			w.Done()
@@ -140,6 +161,7 @@ func (n *Node) executeElection() bool {
 
 func (n *Node) startLeader() {
 	n.statemachine.Next(LEADER)
+	n.electionTimer.Stop()
 	n.electionTimer = nil
 	n.startHeartbeat()
 }
@@ -148,15 +170,14 @@ func (n *Node) startLeader() {
 
 // AppendEntries implementation is used as heardbeat and log replication.
 func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, entries []string, leaderCommit int) (currentTerm int, success bool) {
-	if n.statemachine.Current() == LEADER {
-		return n.currentTerm, false
-	} else if term < n.currentTerm {
-		return n.currentTerm, false
+	if term < n.currentTerm {
+		return n.currentTerm, false // §5.1
 	}
 
 	// heartbeat received in FOLLOWER -> reset election timer!
-	if len(entries) == 0 {
-		n.restartElectionTimer()
+	if entries == nil || len(entries) == 0 {
+		n.log("Heartbeat received. Reset election timer.")
+		n.resetElectionTimer()
 	} else {
 		// todo: replicate logs
 		log.Printf("[%v] AppendEntries replicate logs on Node: %v", n.statemachine.Current(), n.id)
@@ -170,11 +191,19 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 // It returns the current term to update the candidate
 // It returns true when the candidate received vote.
 func (n *Node) RequestVote(term, candidateID, lastLogIndex, lastLogTerm int) (int, bool) {
-	if term <= n.currentTerm {
+	// see RequestVoteRPC receiver implementation 1
+	if term < n.currentTerm {
 		return n.currentTerm, false
 	}
+	// see RequestVoteRPC receiver implementation 2
+	if n.votedFor != nil {
+		return n.currentTerm, false
+	}
+
 	n.currentTerm = term // ok: we join the master term
-	n.log(fmt.Sprintf("RequestVote received from MASTER: %v. Vote OK.", candidateID))
+	n.votedFor = &candidateID
+
+	n.log(fmt.Sprintf("RequestVote received from Candidate %v. Vote OK.", candidateID))
 
 	return n.currentTerm, true
 }

@@ -6,11 +6,16 @@ import (
 )
 
 func TestHeartbeat(t *testing.T) {
-	n := NewNode(0)
-	n.statemachine.Next(CANDIDATE)
-	n.statemachine.Next(LEADER)
+	// single node cluster
+	n1 := NewNode(0)
+	nodes := []NodeRPC{n1}
+	n1.cluster = NewCluster(nodes)
+
 	// startHeartbeat is only allowed in leader state
-	n.startHeartbeat()
+	n1.statemachine.Next(CANDIDATE)
+	n1.statemachine.Next(LEADER)
+	n1.startHeartbeat()
+
 	// wait 5 millisecond --> check console output
 	time.Sleep(5000 * time.Millisecond)
 }
@@ -29,5 +34,4 @@ func TestElection(t *testing.T) {
 	n3.Start(c)
 
 	time.Sleep(15000 * time.Millisecond)
-
 }
