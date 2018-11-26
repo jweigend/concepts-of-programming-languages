@@ -1,7 +1,11 @@
+// Copyright 2018 Johannes Weigend
+// Licensed under the Apache License, Version 2.0
+
+// Package raft is an implementation of the RAFT consensus algorithm.
 package raft
 
 // Cluster knows the RPC interface of all members.
-// The cluster works with multiple nodes for testing or with RPC proxies for remote access.
+// The cluster works with multiple nodes for testing or with RPC proxies for remote access in a distributed scenario.
 type Cluster struct {
 	allNodes []NodeRPC
 }

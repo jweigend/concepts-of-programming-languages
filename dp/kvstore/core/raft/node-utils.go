@@ -4,6 +4,10 @@
 // Package raft is an implementation of the RAFT consensus algorithm.
 package raft
 
-// Configuration contains setup information for initializing a remote cluster.
-type Configuration struct {
+import (
+	"log"
+)
+
+func (n *Node) log(msg string) {
+	log.Printf("[%v] [%v] [%v] : %v", n.id, n.statemachine.Current(), n.currentTerm, msg)
 }

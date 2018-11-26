@@ -1,3 +1,7 @@
+// Copyright 2018 Johannes Weigend
+// Licensed under the Apache License, Version 2.0
+
+// Package raft is an implementation of the RAFT consensus algorithm.
 package raft
 
 import (
@@ -51,7 +55,11 @@ func (n *Node) Stop() {
 	}
 }
 
-// resetElectionTimer initializes or restarts a random timer.
+//
+// Election
+//
+
+// ResetElectionTimer initializes or restarts a random timer.
 func (n *Node) resetElectionTimer() {
 	if n.electionTimer != nil {
 		n.electionTimer.Stop()
@@ -63,47 +71,7 @@ func (n *Node) resetElectionTimer() {
 	}()
 }
 
-// startHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
-func (n *Node) startHeartbeat() {
-	if n.heartbeatTimer == nil {
-		n.heartbeatTimer = time.NewTimer(time.Duration(500) * time.Millisecond)
-	} else {
-		n.heartbeatTimer.Reset(time.Duration(500) * time.Millisecond)
-	}
-	go func() {
-		<-n.heartbeatTimer.C
-		n.sendHeartbeat()
-		n.startHeartbeat()
-	}()
-}
-
-// sendHeartbeat
-func (n *Node) sendHeartbeat() {
-	if n.statemachine.current != LEADER {
-		panic("setHeatbeat should only be called on a LEADER")
-	}
-	n.log("-> Heartbeat")
-
-	rpcIfs := n.cluster.GetFollowers(n.id)
-	var wg sync.WaitGroup
-	result := make([]bool, len(rpcIfs))
-	wg.Add(len(rpcIfs))
-	for i, rpcIf := range rpcIfs {
-		go func(w *sync.WaitGroup, i int, nodeRPC NodeRPC) {
-			term, ok := nodeRPC.AppendEntries(n.currentTerm, n.id, 0, 0, nil, 0)
-			if term > n.currentTerm {
-				// todo
-			}
-			result[i] = ok
-			w.Done()
-		}(&wg, i, rpcIf)
-	}
-	wg.Wait() // wait until all nodes have voted
-
-	n.log("<- Heartbeat")
-}
-
-// electionTimeout happens when a node receives no heartbeat in a given time period.
+// ElectionTimeout happens when a node receives no heartbeat in a given time period.
 func (n *Node) electionTimeout() {
 	n.log(fmt.Sprintf("Election timout."))
 	if n.statemachine.current == LEADER {
@@ -112,7 +80,7 @@ func (n *Node) electionTimeout() {
 	n.startElectionProcess()
 }
 
-// startElectionProcess sends a RequestVote request to other members in the cluster.
+// StartElectionProcess sends a RequestVote request to other members in the cluster.
 // if successful - we get are the new leader in a new term.
 func (n *Node) startElectionProcess() {
 	n.statemachine.Next(CANDIDATE)
@@ -129,7 +97,7 @@ func (n *Node) startElectionProcess() {
 	}
 }
 
-// executeElection executes a leader election by sending RequestVote to other nodes.
+// ExecuteElection executes a leader election by sending RequestVote to other nodes.
 // for all other nodes in the cluster RequestVote is sent
 func (n *Node) executeElection() bool {
 	n.log("-> Election")
@@ -162,6 +130,7 @@ func (n *Node) executeElection() bool {
 	return electionWon
 }
 
+// SwitchToLeader does the state change from CANDIDATE to LEADER.
 func (n *Node) switchToLeader() {
 	n.statemachine.Next(LEADER)
 	n.electionTimer.Stop()
@@ -169,12 +138,80 @@ func (n *Node) switchToLeader() {
 	n.startHeartbeat()
 }
 
-// NodeRPC server implementation
+// ---------------------
+// Leader only functions
+// ---------------------
 
-// AppendEntries implementation is used as heardbeat and log replication.
+// StartHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
+func (n *Node) startHeartbeat() {
+	if n.statemachine.Current() != LEADER {
+		panic("startHeartbeat should only run in LEADER state!")
+	}
+	if n.heartbeatTimer == nil {
+		n.heartbeatTimer = time.NewTimer(time.Duration(500) * time.Millisecond)
+	} else {
+		n.heartbeatTimer.Reset(time.Duration(500) * time.Millisecond)
+	}
+	go func() {
+		<-n.heartbeatTimer.C
+		n.sendHeartbeat()
+		n.startHeartbeat()
+	}()
+}
+
+// SendHeartbeat sends the heartbeat to all other nodes in the cluster parallel.
+func (n *Node) sendHeartbeat() {
+	if n.statemachine.current != LEADER {
+		panic("sendHeartbeat should only run in LEADER state!")
+	}
+	n.log("-> Heartbeat")
+
+	rpcIfs := n.cluster.GetFollowers(n.id)
+	var wg sync.WaitGroup
+	result := make([]bool, len(rpcIfs))
+	wg.Add(len(rpcIfs))
+	for i, rpcIf := range rpcIfs {
+		go func(w *sync.WaitGroup, i int, nodeRPC NodeRPC) {
+			term, ok := nodeRPC.AppendEntries(n.currentTerm, n.id, 0, 0, nil, 0)
+			// See §5.1
+			if term > n.currentTerm {
+				n.switchToFollower()
+			}
+			result[i] = ok
+			w.Done()
+		}(&wg, i, rpcIf)
+	}
+	wg.Wait() // wait until all nodes have voted
+
+	n.log("<- Heartbeat")
+}
+
+// SwitchToFollower switches a LEADER or CANDIDATE to the follower state
+func (n *Node) switchToFollower() {
+	if n.statemachine.Current() == LEADER {
+		n.heartbeatTimer.Stop()
+		n.heartbeatTimer = nil
+		n.statemachine.Next(FOLLOWER)
+	} else if n.statemachine.Current() == CANDIDATE {
+		n.electionTimer.Stop()
+		n.electionTimer = nil
+		n.statemachine.Next(FOLLOWER)
+	}
+}
+
+// -------------------------------------
+// Follower RPC - Heartbeat & Replicaton
+// -------------------------------------
+
+// AppendEntries implementation is used as heartbeat and log replication.
 func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, entries []string, leaderCommit int) (currentTerm int, success bool) {
 	if term < n.currentTerm {
 		return n.currentTerm, false // §5.1
+	}
+
+	// see  §5.1 - If one servers term is smaller than the others, then it updates its current term to the larger value.
+	if term > n.currentTerm {
+		n.currentTerm = term
 	}
 
 	// heartbeat received in FOLLOWER -> reset election timer!
@@ -190,6 +227,10 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 	return n.currentTerm, true
 }
 
+// -------------------------------------
+// Follower RPC - Leader Election
+// -------------------------------------
+
 // RequestVote is called by candidates to gather votes.
 // It returns the current term to update the candidate
 // It returns true when the candidate received vote.
@@ -202,15 +243,18 @@ func (n *Node) RequestVote(term, candidateID, lastLogIndex, lastLogTerm int) (in
 	if n.votedFor != nil {
 		return n.currentTerm, false
 	}
+	// see 5.1 - If one servers term is smaller than the others, then it updates its current term to the larger value.
+	if term > n.currentTerm {
+		n.currentTerm = term
+		if n.statemachine.Current() == CANDIDATE {
+			n.switchToFollower()
+			return n.currentTerm, false
+		}
+	}
 
-	n.currentTerm = term // ok: we join the master term
 	n.votedFor = &candidateID
 
 	n.log(fmt.Sprintf("RequestVote received from Candidate %v. Vote OK.", candidateID))
 
 	return n.currentTerm, true
-}
-
-func (n *Node) log(msg string) {
-	log.Printf("[%v] [%v] [%v] : %v", n.id, n.statemachine.Current(), n.currentTerm, msg)
 }
