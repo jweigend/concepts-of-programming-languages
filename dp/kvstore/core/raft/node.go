@@ -9,7 +9,7 @@ import (
 )
 
 // Node is a node in a Raft consensus cluster. It is called "server" in the original Raft paper.
-// Node seems to be more accurate because for testing purposes we can run multiple nodes in a single server process.
+// Node seems to be more accurate because we can run multiple nodes in a single server process.
 type Node struct {
 	id             int
 	statemachine   *Statemachine
@@ -21,7 +21,7 @@ type Node struct {
 	cluster        *Cluster
 }
 
-// NewNode constructs a node.
+// NewNode constructor. Id starts with 0 for the first node and should be +1 for the next node.
 func NewNode(id int) *Node {
 	node := new(Node)
 	node.id = id
@@ -32,30 +32,31 @@ func NewNode(id int) *Node {
 	return node
 }
 
-// Start setup timers for heartbeat and election.
+// Start initializes the election timer.
 func (n *Node) Start(cluster *Cluster) {
 	n.cluster = cluster
 	n.resetElectionTimer()
 }
 
-// Stop stops timers.
+// Stop stops all running timers.
 func (n *Node) Stop() {
-	if n.electionTimer != nil {
-		n.electionTimer.Stop()
-	}
-	if n.heartbeatTimer != nil {
-		n.heartbeatTimer.Stop()
+	if n.statemachine.Current() == LEADER {
+		if n.heartbeatTimer != nil {
+			n.heartbeatTimer.Stop()
+		}
+	} else {
+		if n.electionTimer != nil {
+			n.electionTimer.Stop()
+		}
 	}
 }
 
 // resetElectionTimer initializes or restarts a random timer.
 func (n *Node) resetElectionTimer() {
-	if n.electionTimer == nil {
-		n.electionTimer = time.NewTimer(time.Duration(5000+rand.Intn(3000)) * time.Millisecond)
-	} else {
+	if n.electionTimer != nil {
 		n.electionTimer.Stop()
-		n.electionTimer = time.NewTimer(time.Duration(5000+rand.Intn(3000)) * time.Millisecond)
 	}
+	n.electionTimer = time.NewTimer(time.Duration(1000+rand.Intn(2000)) * time.Millisecond)
 	go func() {
 		<-n.electionTimer.C
 		n.electionTimeout()
@@ -65,9 +66,9 @@ func (n *Node) resetElectionTimer() {
 // startHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
 func (n *Node) startHeartbeat() {
 	if n.heartbeatTimer == nil {
-		n.heartbeatTimer = time.NewTimer(time.Duration(500+rand.Intn(1000)) * time.Millisecond)
+		n.heartbeatTimer = time.NewTimer(time.Duration(500) * time.Millisecond)
 	} else {
-		n.heartbeatTimer.Reset(time.Duration(500+rand.Intn(1000)) * time.Millisecond)
+		n.heartbeatTimer.Reset(time.Duration(500) * time.Millisecond)
 	}
 	go func() {
 		<-n.heartbeatTimer.C
@@ -79,10 +80,9 @@ func (n *Node) startHeartbeat() {
 // sendHeartbeat
 func (n *Node) sendHeartbeat() {
 	if n.statemachine.current != LEADER {
-		panic("setHeatbeat should only run on LEADER")
+		panic("setHeatbeat should only be called on a LEADER")
 	}
-
-	n.log("SendingHeartbeat to followers ...")
+	n.log("-> Heartbeat")
 
 	rpcIfs := n.cluster.GetFollowers(n.id)
 	var wg sync.WaitGroup
@@ -100,7 +100,7 @@ func (n *Node) sendHeartbeat() {
 	}
 	wg.Wait() // wait until all nodes have voted
 
-	n.log("SendingHeartbeat - Done.")
+	n.log("<- Heartbeat")
 }
 
 // electionTimeout happens when a node receives no heartbeat in a given time period.
@@ -120,8 +120,8 @@ func (n *Node) startElectionProcess() {
 	n.votedFor = nil
 	electionWon := n.executeElection()
 	if electionWon {
-		n.log(fmt.Sprintf("Election won. Starting as leader."))
-		n.startLeader()
+		n.log(fmt.Sprintf("Election won. Now acting as leader."))
+		n.switchToLeader()
 	} else {
 		n.log(fmt.Sprintf("Election was not won. Stopping election timer"))
 		n.statemachine.Next(FOLLOWER)
@@ -132,6 +132,7 @@ func (n *Node) startElectionProcess() {
 // executeElection executes a leader election by sending RequestVote to other nodes.
 // for all other nodes in the cluster RequestVote is sent
 func (n *Node) executeElection() bool {
+	n.log("-> Election")
 	rpcIfs := n.cluster.GetFollowers(n.id)
 	var wg sync.WaitGroup
 	votes := make([]bool, len(rpcIfs))
@@ -156,10 +157,12 @@ func (n *Node) executeElection() bool {
 		}
 	}
 	// If more than 50% respond with true - The election was won!
-	return (nbrOfVotes > len(rpcIfs)/2)
+	electionWon := nbrOfVotes > len(rpcIfs)/2
+	n.log(fmt.Sprintf("<- Election: %v", electionWon))
+	return electionWon
 }
 
-func (n *Node) startLeader() {
+func (n *Node) switchToLeader() {
 	n.statemachine.Next(LEADER)
 	n.electionTimer.Stop()
 	n.electionTimer = nil
