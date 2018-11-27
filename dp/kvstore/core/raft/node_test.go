@@ -20,8 +20,9 @@ func TestHeartbeat(t *testing.T) {
 	n1.statemachine.Next(LEADER)
 	n1.startHeartbeat()
 
-	// wait one second --> check console output
-	time.Sleep(1000 * time.Millisecond)
+	// wait two second --> check console output
+	time.Sleep(2000 * time.Millisecond)
+	n1.Stop()
 }
 
 func TestElection(t *testing.T) {
@@ -38,6 +39,60 @@ func TestElection(t *testing.T) {
 	n3.Start(cluster)
 
 	time.Sleep(3000 * time.Millisecond)
+
+	n1.Stop()
+	n2.Stop()
+	n3.Stop()
+}
+
+func TestFailover(t *testing.T) {
+
+	n1 := NewNode(0)
+	n2 := NewNode(1)
+	n3 := NewNode(2)
+
+	nodes := []NodeRPC{n1, n2, n3}
+	cluster := NewCluster(nodes)
+
+	n1.Start(cluster)
+	n2.Start(cluster)
+	n3.Start(cluster)
+
+	time.Sleep(3000 * time.Millisecond)
+
+	if n1.isLeader() {
+		n1.Stop()
+	}
+
+	time.Sleep(3000 * time.Millisecond)
+
+	n2.Stop()
+	n3.Stop()
+}
+
+func TestFailoverResume(t *testing.T) {
+
+	n1 := NewNode(0)
+	n2 := NewNode(1)
+	n3 := NewNode(2)
+
+	nodes := []NodeRPC{n1, n2, n3}
+	cluster := NewCluster(nodes)
+
+	n1.Start(cluster)
+	n2.Start(cluster)
+	n3.Start(cluster)
+
+	time.Sleep(3000 * time.Millisecond)
+
+	if n1.isLeader() {
+		n1.Stop()
+	}
+
+	time.Sleep(3000 * time.Millisecond)
+	n1.Start(cluster)
+
+	time.Sleep(2000 * time.Millisecond)
 
 	n1.Stop()
 	n2.Stop()

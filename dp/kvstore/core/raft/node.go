@@ -23,6 +23,8 @@ type Node struct {
 	currentTerm    int
 	votedFor       *int
 	cluster        *Cluster
+	//mutex          sync.Mutex
+	stopped bool // helper to simulate stopped nodes
 }
 
 // NewNode constructor. Id starts with 0 for the first node and should be +1 for the next node.
@@ -38,21 +40,22 @@ func NewNode(id int) *Node {
 
 // Start initializes the election timer.
 func (n *Node) Start(cluster *Cluster) {
+	n.stopped = false
 	n.cluster = cluster
 	n.resetElectionTimer()
 }
 
 // Stop stops all running timers.
 func (n *Node) Stop() {
-	if n.statemachine.Current() == LEADER {
-		if n.heartbeatTimer != nil {
-			n.heartbeatTimer.Stop()
-		}
-	} else {
-		if n.electionTimer != nil {
-			n.electionTimer.Stop()
-		}
+	if n.heartbeatTimer != nil {
+		n.heartbeatTimer.Stop()
 	}
+	if n.electionTimer != nil {
+		n.electionTimer.Stop()
+	}
+	n.stopped = true
+	go func() { time.Sleep(100 * time.Millisecond) }()
+
 }
 
 //
@@ -74,7 +77,7 @@ func (n *Node) resetElectionTimer() {
 // ElectionTimeout happens when a node receives no heartbeat in a given time period.
 func (n *Node) electionTimeout() {
 	n.log(fmt.Sprintf("Election timout."))
-	if n.statemachine.current == LEADER {
+	if n.isLeader() {
 		panic("The election timeout should not happen, when a node is LEADER.")
 	}
 	n.startElectionProcess()
@@ -101,6 +104,7 @@ func (n *Node) startElectionProcess() {
 // for all other nodes in the cluster RequestVote is sent
 func (n *Node) executeElection() bool {
 	n.log("-> Election")
+	n.votedFor = &n.id // vote for ourself
 	rpcIfs := n.cluster.GetFollowers(n.id)
 	var wg sync.WaitGroup
 	votes := make([]bool, len(rpcIfs))
@@ -125,7 +129,7 @@ func (n *Node) executeElection() bool {
 		}
 	}
 	// If more than 50% respond with true - The election was won!
-	electionWon := nbrOfVotes > len(rpcIfs)/2
+	electionWon := nbrOfVotes >= len(n.cluster.allNodes)/2
 	n.log(fmt.Sprintf("<- Election: %v", electionWon))
 	return electionWon
 }
@@ -144,11 +148,11 @@ func (n *Node) switchToLeader() {
 
 // StartHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
 func (n *Node) startHeartbeat() {
-	if n.statemachine.Current() != LEADER {
+	if n.isNotLeader() {
 		panic("startHeartbeat should only run in LEADER state!")
 	}
 	if n.heartbeatTimer == nil {
-		n.heartbeatTimer = time.NewTimer(time.Duration(500) * time.Millisecond)
+		n.heartbeatTimer = time.NewTimer(time.Duration(1000) * time.Millisecond)
 	} else {
 		n.heartbeatTimer.Reset(time.Duration(500) * time.Millisecond)
 	}
@@ -161,7 +165,7 @@ func (n *Node) startHeartbeat() {
 
 // SendHeartbeat sends the heartbeat to all other nodes in the cluster parallel.
 func (n *Node) sendHeartbeat() {
-	if n.statemachine.current != LEADER {
+	if n.isNotLeader() {
 		panic("sendHeartbeat should only run in LEADER state!")
 	}
 	n.log("-> Heartbeat")
@@ -188,11 +192,11 @@ func (n *Node) sendHeartbeat() {
 
 // SwitchToFollower switches a LEADER or CANDIDATE to the follower state
 func (n *Node) switchToFollower() {
-	if n.statemachine.Current() == LEADER {
+	if n.isLeader() {
 		n.heartbeatTimer.Stop()
 		n.heartbeatTimer = nil
 		n.statemachine.Next(FOLLOWER)
-	} else if n.statemachine.Current() == CANDIDATE {
+	} else if n.isCandidate() {
 		n.electionTimer.Stop()
 		n.electionTimer = nil
 		n.statemachine.Next(FOLLOWER)
@@ -205,13 +209,21 @@ func (n *Node) switchToFollower() {
 
 // AppendEntries implementation is used as heartbeat and log replication.
 func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, entries []string, leaderCommit int) (currentTerm int, success bool) {
+	if n.stopped {
+		return n.currentTerm, false // stopped node
+	}
+
 	if term < n.currentTerm {
 		return n.currentTerm, false // §5.1
 	}
 
-	// see  §5.1 - If one servers term is smaller than the others, then it updates its current term to the larger value.
+	// see 5.1 - If one servers term is smaller than the others, then it updates its current term to the larger value.
 	if term > n.currentTerm {
 		n.currentTerm = term
+		if n.isLeader() || n.isCandidate() {
+			n.switchToFollower()
+			return n.currentTerm, false
+		}
 	}
 
 	// heartbeat received in FOLLOWER -> reset election timer!
@@ -235,20 +247,26 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 // It returns the current term to update the candidate
 // It returns true when the candidate received vote.
 func (n *Node) RequestVote(term, candidateID, lastLogIndex, lastLogTerm int) (int, bool) {
+	defer n.resetElectionTimer()
+
+	// stopped nodes do not vote
+	if n.stopped {
+		return n.currentTerm, false // stopped node
+	}
+
 	// see RequestVoteRPC receiver implementation 1
 	if term < n.currentTerm {
 		return n.currentTerm, false
 	}
 	// see RequestVoteRPC receiver implementation 2
-	if n.votedFor != nil {
+	if n.votedFor != nil && term == n.currentTerm {
 		return n.currentTerm, false
 	}
 	// see 5.1 - If one servers term is smaller than the others, then it updates its current term to the larger value.
 	if term > n.currentTerm {
 		n.currentTerm = term
-		if n.statemachine.Current() == CANDIDATE {
+		if n.isCandidate() || n.isLeader() {
 			n.switchToFollower()
-			return n.currentTerm, false
 		}
 	}
 
