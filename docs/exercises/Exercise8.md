@@ -12,10 +12,13 @@ You will need this code for the next exercises.
 ## Exercise 7.1 - ID Generator (Local Implementation and Client)
 Build an interface and a implementation for generating unique numbers. 
 Build a test client which generates 10 IDs by accessing the interface.
+Use the slides of lecture 8 as starting point.
 
 ## Exercise 7.2 - ID Generator (gRPC Protocol Definition)
 Build a GRPC protocol definition and compile it with the Google protocol compiler protoc.
+Use the slides of lecture 8 as starting point.
 
 ## Exercise 7.3 - Build a Proxy which encapsulates the gRPC client logic and a Stub which encapsulates the GRPC server logic.
 Use the gRPC Greetings sample as starting point.
+Use the slides of lecture 8 as starting point.
 
