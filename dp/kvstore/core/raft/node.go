@@ -47,15 +47,13 @@ func (n *Node) Start(cluster *Cluster) {
 
 // Stop stops all running timers.
 func (n *Node) Stop() {
+	n.stopped = true
 	if n.heartbeatTimer != nil {
 		n.heartbeatTimer.Stop()
 	}
 	if n.electionTimer != nil {
 		n.electionTimer.Stop()
 	}
-	n.stopped = true
-	go func() { time.Sleep(100 * time.Millisecond) }()
-
 }
 
 //
@@ -70,7 +68,9 @@ func (n *Node) resetElectionTimer() {
 	n.electionTimer = time.NewTimer(time.Duration(1000+rand.Intn(2000)) * time.Millisecond)
 	go func() {
 		<-n.electionTimer.C
-		n.electionTimeout()
+		if !n.stopped {
+			n.electionTimeout()
+		}
 	}()
 }
 
@@ -78,7 +78,7 @@ func (n *Node) resetElectionTimer() {
 func (n *Node) electionTimeout() {
 	n.log(fmt.Sprintf("Election timout."))
 	if n.isLeader() {
-		panic("The election timeout should not happen, when a node is LEADER.")
+		//panic("The election timeout should not happen, when a node is LEADER.")
 	}
 	n.startElectionProcess()
 }
