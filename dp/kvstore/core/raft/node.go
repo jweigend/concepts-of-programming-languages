@@ -22,9 +22,8 @@ type Node struct {
 	heartbeatTimer *time.Timer // runs only if the node is in LEADER state
 	currentTerm    int
 	votedFor       *int
-	cluster        []NodeRPC
-	//mutex          sync.Mutex
-	stopped bool // helper to simulate stopped nodes
+	cluster        []NodeRPC // remote interfaces of all other nodes in the cluster.
+	stopped        bool      // helper to simulate stopped nodes
 }
 
 // NewNode constructor. Id starts with 0 for the first node and should be +1 for the next node.
@@ -38,7 +37,7 @@ func NewNode(id int) *Node {
 	return node
 }
 
-// Start initializes the election timer.
+// Start starts the node and the election timer. The cluster are the remote interfaces of all other nodes.
 func (n *Node) Start(cluster []NodeRPC) {
 	n.stopped = false
 	n.cluster = cluster
@@ -57,9 +56,9 @@ func (n *Node) Stop() {
 	n.statemachine.Next(FOLLOWER)
 }
 
-//
+// =====================================================================================================================
 // Election
-//
+// =====================================================================================================================
 
 // ResetElectionTimer initializes or restarts a random timer.
 func (n *Node) resetElectionTimer() {
@@ -143,9 +142,9 @@ func (n *Node) switchToLeader() {
 	n.startHeartbeat()
 }
 
-// ---------------------
+// =====================================================================================================================
 // Leader only functions
-// ---------------------
+// =====================================================================================================================
 
 // StartHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
 func (n *Node) startHeartbeat() {
@@ -203,9 +202,9 @@ func (n *Node) switchToFollower() {
 	}
 }
 
-// -------------------------------------
-// Follower RPC - Heartbeat & Replicaton
-// -------------------------------------
+// =====================================================================================================================
+// Follower RPC - Heartbeat & Replication
+// =====================================================================================================================
 
 // AppendEntries implementation is used as heartbeat and log replication.
 func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, entries []string, leaderCommit int) (currentTerm int, success bool) {
@@ -239,9 +238,9 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 	return n.currentTerm, true
 }
 
-// -------------------------------------
+// =====================================================================================================================
 // Follower RPC - Leader Election
-// -------------------------------------
+// =====================================================================================================================
 
 // RequestVote is called by candidates to gather votes.
 // It returns the current term to update the candidate
