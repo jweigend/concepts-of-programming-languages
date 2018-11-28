@@ -18,6 +18,7 @@ const (
 	LEADER
 )
 
+// Stringer interface.
 func (s State) String() string {
 	switch s {
 	case FOLLOWER:
@@ -42,7 +43,7 @@ func NewStatemachine() *Statemachine {
 	s := new(Statemachine)
 	s.current = FOLLOWER
 	s.validTransitions = map[State][]State{
-		FOLLOWER:  []State{CANDIDATE},
+		FOLLOWER:  []State{FOLLOWER, CANDIDATE},
 		CANDIDATE: []State{FOLLOWER, CANDIDATE, LEADER},
 		LEADER:    []State{FOLLOWER},
 	}

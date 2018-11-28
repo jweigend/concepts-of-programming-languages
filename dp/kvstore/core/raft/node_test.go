@@ -13,7 +13,7 @@ func TestHeartbeat(t *testing.T) {
 	// single node cluster
 	n1 := NewNode(0)
 	nodes := []NodeRPC{n1}
-	n1.cluster = NewCluster(nodes)
+	n1.cluster = nodes
 
 	// startHeartbeat is only allowed in leader state
 	n1.statemachine.Next(CANDIDATE)
@@ -31,18 +31,20 @@ func TestElection(t *testing.T) {
 	n2 := NewNode(1)
 	n3 := NewNode(2)
 
-	nodes := []NodeRPC{n1, n2, n3}
+	nodes := []*Node{n1, n2, n3}
 	cluster := NewCluster(nodes)
+	defer cluster.StopAll()
 
-	n1.Start(cluster)
-	n2.Start(cluster)
-	n3.Start(cluster)
+	cluster.StartAll()
 
 	time.Sleep(3000 * time.Millisecond)
 
-	n1.Stop()
-	n2.Stop()
-	n3.Stop()
+	ok, err := cluster.Check()
+	if !ok {
+		t.Error(err)
+	}
+
+	cluster.StopAll()
 }
 
 func TestFailover(t *testing.T) {
@@ -51,23 +53,22 @@ func TestFailover(t *testing.T) {
 	n2 := NewNode(1)
 	n3 := NewNode(2)
 
-	nodes := []NodeRPC{n1, n2, n3}
+	nodes := []*Node{n1, n2, n3}
 	cluster := NewCluster(nodes)
 
-	n1.Start(cluster)
-	n2.Start(cluster)
-	n3.Start(cluster)
+	cluster.StartAll()
+	defer cluster.StopAll()
 
 	time.Sleep(3000 * time.Millisecond)
 
-	if n1.isLeader() {
-		n1.Stop()
+	cluster.StopLeader()
+
+	time.Sleep(3000 * time.Millisecond)
+
+	ok, err := cluster.Check()
+	if !ok {
+		t.Error(err)
 	}
-
-	time.Sleep(3000 * time.Millisecond)
-
-	n2.Stop()
-	n3.Stop()
 }
 
 func TestFailoverResume(t *testing.T) {
@@ -76,25 +77,50 @@ func TestFailoverResume(t *testing.T) {
 	n2 := NewNode(1)
 	n3 := NewNode(2)
 
-	nodes := []NodeRPC{n1, n2, n3}
+	nodes := []*Node{n1, n2, n3}
+
 	cluster := NewCluster(nodes)
 
-	n1.Start(cluster)
-	n2.Start(cluster)
-	n3.Start(cluster)
+	cluster.StartAll()
+	defer cluster.StopAll()
 
 	time.Sleep(3000 * time.Millisecond)
 
-	if n1.isLeader() {
-		n1.Stop()
-	}
+	// stop leader
+	ns := cluster.StopLeader()
 
 	time.Sleep(3000 * time.Millisecond)
-	n1.Start(cluster)
+
+	// resume old leader -> get follower
+	ns.Start(cluster.GetRemoteFollowers(n1.id))
 
 	time.Sleep(2000 * time.Millisecond)
 
-	n1.Stop()
-	n2.Stop()
-	n3.Stop()
+	ok, err := cluster.Check()
+	if !ok {
+		t.Error(err)
+	}
+}
+
+func TestBigCluster(t *testing.T) {
+
+	n1 := NewNode(0)
+	n2 := NewNode(1)
+	n3 := NewNode(2)
+	n4 := NewNode(3)
+	n5 := NewNode(4)
+
+	nodes := []*Node{n1, n2, n3, n4, n5}
+
+	cluster := NewCluster(nodes)
+
+	cluster.StartAll()
+	defer cluster.StopAll()
+
+	time.Sleep(3000 * time.Millisecond)
+
+	ok, err := cluster.Check()
+	if !ok {
+		t.Error(err)
+	}
 }

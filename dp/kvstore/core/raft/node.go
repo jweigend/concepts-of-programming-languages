@@ -22,7 +22,7 @@ type Node struct {
 	heartbeatTimer *time.Timer // runs only if the node is in LEADER state
 	currentTerm    int
 	votedFor       *int
-	cluster        *Cluster
+	cluster        []NodeRPC
 	//mutex          sync.Mutex
 	stopped bool // helper to simulate stopped nodes
 }
@@ -39,13 +39,13 @@ func NewNode(id int) *Node {
 }
 
 // Start initializes the election timer.
-func (n *Node) Start(cluster *Cluster) {
+func (n *Node) Start(cluster []NodeRPC) {
 	n.stopped = false
 	n.cluster = cluster
 	n.resetElectionTimer()
 }
 
-// Stop stops all running timers.
+// Stop stops all running timers and switch to follower state.
 func (n *Node) Stop() {
 	n.stopped = true
 	if n.heartbeatTimer != nil {
@@ -54,6 +54,7 @@ func (n *Node) Stop() {
 	if n.electionTimer != nil {
 		n.electionTimer.Stop()
 	}
+	n.statemachine.Next(FOLLOWER)
 }
 
 //
@@ -78,7 +79,7 @@ func (n *Node) resetElectionTimer() {
 func (n *Node) electionTimeout() {
 	n.log(fmt.Sprintf("Election timout."))
 	if n.isLeader() {
-		//panic("The election timeout should not happen, when a node is LEADER.")
+		panic("The election timeout should not happen, when a node is LEADER.")
 	}
 	n.startElectionProcess()
 }
@@ -105,11 +106,11 @@ func (n *Node) startElectionProcess() {
 func (n *Node) executeElection() bool {
 	n.log("-> Election")
 	n.votedFor = &n.id // vote for ourself
-	rpcIfs := n.cluster.GetFollowers(n.id)
+
 	var wg sync.WaitGroup
-	votes := make([]bool, len(rpcIfs))
-	wg.Add(len(rpcIfs))
-	for i, rpcIf := range rpcIfs {
+	votes := make([]bool, len(n.cluster))
+	wg.Add(len(n.cluster))
+	for i, rpcIf := range n.cluster {
 		go func(w *sync.WaitGroup, i int, rpcIf NodeRPC) {
 			term, ok := rpcIf.RequestVote(n.currentTerm, n.id, 0, 0)
 			if term > n.currentTerm {
@@ -129,7 +130,7 @@ func (n *Node) executeElection() bool {
 		}
 	}
 	// If more than 50% respond with true - The election was won!
-	electionWon := nbrOfVotes >= len(n.cluster.allNodes)/2
+	electionWon := nbrOfVotes >= len(n.cluster)/2
 	n.log(fmt.Sprintf("<- Election: %v", electionWon))
 	return electionWon
 }
@@ -170,11 +171,10 @@ func (n *Node) sendHeartbeat() {
 	}
 	n.log("-> Heartbeat")
 
-	rpcIfs := n.cluster.GetFollowers(n.id)
 	var wg sync.WaitGroup
-	result := make([]bool, len(rpcIfs))
-	wg.Add(len(rpcIfs))
-	for i, rpcIf := range rpcIfs {
+	result := make([]bool, len(n.cluster))
+	wg.Add(len(n.cluster))
+	for i, rpcIf := range n.cluster {
 		go func(w *sync.WaitGroup, i int, nodeRPC NodeRPC) {
 			term, ok := nodeRPC.AppendEntries(n.currentTerm, n.id, 0, 0, nil, 0)
 			// See §5.1
