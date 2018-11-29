@@ -1,0 +1,42 @@
+Distributed Programming with Go
+Concepts of Programming Languages
+22 Nov 2018
+Tags: go, programming, network, concurrent, grpc, raft
+
+Johannes Weigend (QAware GmbH)
+University of Applied Sciences Rosenheim
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* What is Raft?
+- Raft is an Algorithm for Distributed Consensus and Replication
+- Raft is designed to be easy understandable
+- Raft predecessor Paxos was highly complex
+- Most Paxos implementations are buggy or academic 
+- Raft was developed 2014 in a phd thesis at Stanford University
+- Zookeeper ZAB is an alternative solution but more complex
+.link https://raft.github.io/raft.pdf The Raft Paper
+
+* Who uses Raft?
+- ectd - The Cloud Native key value store
+- Based 
+
+* What is Distributed Consensus?
+- How to make sure each distributed node has the same data?
+
+
+
+* The CAP Theorem
+
+* Who uses Raft?
+
+* The Raft Algorithm
+
+* The Raft State Model
+- There is only one Leader which is responsible for consistency and replication
+- There could
+
+* Implementing Raft with Go
+- The most prominent implementation is ETCD (Kubernetes)
+- The 
