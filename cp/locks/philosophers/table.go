@@ -41,6 +41,7 @@ func NewTable(nbrOfSeats int) *Table {
 	return table
 }
 
+// GetManager returns the resource manager.
 func (t *Table) GetManager() *resourcemanager.ResourceManager {
 	return t.manager
 }

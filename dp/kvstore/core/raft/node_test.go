@@ -12,13 +12,13 @@ import (
 func TestHeartbeat(t *testing.T) {
 	// single node cluster
 	n1 := NewNode(0)
-	nodes := []NodeRPC{n1}
-	n1.cluster = nodes
+	nodes := []*Node{n1}
+	n1.cluster = NewCluster(nodes)
 
 	// startHeartbeat is only allowed in leader state
 	n1.statemachine.Next(CANDIDATE)
 	n1.statemachine.Next(LEADER)
-	n1.startHeartbeat()
+	n1.heartbeatTimer.resetC <- true
 
 	// wait two second --> check console output
 	time.Sleep(2000 * time.Millisecond)
@@ -37,7 +37,7 @@ func TestElection(t *testing.T) {
 
 	cluster.StartAll()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(5000 * time.Millisecond)
 
 	ok, err := cluster.Check()
 	if !ok {
@@ -59,11 +59,11 @@ func TestFailover(t *testing.T) {
 	cluster.StartAll()
 	defer cluster.StopAll()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(5000 * time.Millisecond)
 
 	cluster.StopLeader()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(10000 * time.Millisecond)
 
 	ok, err := cluster.Check()
 	if !ok {
@@ -84,15 +84,15 @@ func TestFailoverResume(t *testing.T) {
 	cluster.StartAll()
 	defer cluster.StopAll()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(8000 * time.Millisecond)
 
 	// stop leader
 	ns := cluster.StopLeader()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(6000 * time.Millisecond)
 
 	// resume old leader -> get follower
-	ns.Start(cluster.GetRemoteFollowers(n1.id))
+	ns.Start(cluster)
 
 	time.Sleep(2000 * time.Millisecond)
 
@@ -115,12 +115,14 @@ func TestBigCluster(t *testing.T) {
 	cluster := NewCluster(nodes)
 
 	cluster.StartAll()
-	defer cluster.StopAll()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(10000 * time.Millisecond)
 
 	ok, err := cluster.Check()
 	if !ok {
 		t.Error(err)
 	}
+
+	cluster.StopAll()
+	time.Sleep(1000 * time.Millisecond) // wait for grace shutdown
 }

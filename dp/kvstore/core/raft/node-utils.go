@@ -6,6 +6,7 @@ package raft
 
 import (
 	"log"
+	"time"
 )
 
 func (n *Node) log(msg string) {
@@ -26,4 +27,37 @@ func (n *Node) isCandidate() bool {
 
 func (n *Node) isNotLeader() bool {
 	return n.isFollower() || n.isCandidate()
+}
+
+type timercontrol struct {
+	stopC  chan bool
+	resetC chan bool
+}
+
+func createPeriodicTimer(d func() time.Duration, timeout func()) timercontrol {
+	stopC := make(chan bool)
+	resetC := make(chan bool)
+	go func() {
+		timer := time.NewTimer(d())
+		timer.Stop() // Timer must be started explicit by using the reset channel
+		for {
+			select {
+			case <-stopC:
+				// log.Println("Timer Stopped")
+				timer.Stop()
+				break
+			case <-timer.C:
+				// log.Println("Timer Timeout")
+				timer.Stop()
+				timer.Reset(d())
+				go timeout()
+				break
+			case <-resetC:
+				// log.Println("Timer Reset")
+				timer.Stop()
+				timer.Reset(d())
+			}
+		}
+	}()
+	return timercontrol{stopC, resetC}
 }

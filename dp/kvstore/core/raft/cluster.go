@@ -18,7 +18,7 @@ func NewCluster(allNodes []*Node) *Cluster {
 	return &Cluster{allNodes}
 }
 
-// GetRemoteNodes return the NodeRPC If of all nodes.
+// GetRemoteFollowers return the NodeRPC If of all nodes.
 func (c *Cluster) GetRemoteFollowers(leaderID int) []NodeRPC {
 	buf := make([]NodeRPC, len(c.allNodes)-1)
 	j := 0
@@ -32,10 +32,10 @@ func (c *Cluster) GetRemoteFollowers(leaderID int) []NodeRPC {
 	return buf
 }
 
-// StopAll stops all nodes in the cluster.
+// StartAll stops all nodes in the cluster.
 func (c *Cluster) StartAll() {
 	for _, n := range c.allNodes {
-		n.Start(c.GetRemoteFollowers(n.id))
+		n.Start(c)
 	}
 }
 

@@ -18,12 +18,13 @@ type Node struct {
 	id             int
 	statemachine   *Statemachine
 	replicatedLog  *ReplicatedLog
-	electionTimer  *time.Timer // runs only if the node is FOLLOWER or CANDIDATE
-	heartbeatTimer *time.Timer // runs only if the node is in LEADER state
+	electionTimer  timercontrol // runs only if the node is FOLLOWER or CANDIDATE
+	heartbeatTimer timercontrol // runs only if the node is in LEADER state
 	currentTerm    int
 	votedFor       *int
-	cluster        []NodeRPC // remote interfaces of all other nodes in the cluster.
-	stopped        bool      // helper to simulate stopped nodes
+	cluster        *Cluster // our cluster
+	stopped        bool     // helper to simulate stopped nodes
+	mutex          sync.Mutex
 }
 
 // NewNode constructor. Id starts with 0 for the first node and should be +1 for the next node.
@@ -34,25 +35,39 @@ func NewNode(id int) *Node {
 	node.votedFor = nil
 	node.statemachine = NewStatemachine()
 	node.replicatedLog = NewReplicatedLog()
+
+	node.electionTimer = createPeriodicTimer(
+		func() time.Duration {
+			return time.Duration(2000+rand.Intn(1000)) * time.Millisecond
+		},
+		func() { node.electionTimeout() })
+
+	node.heartbeatTimer = createPeriodicTimer(
+		func() time.Duration {
+			return time.Duration(1000) * time.Millisecond
+		},
+		func() { node.heatbeatTimeout() })
 	return node
 }
 
 // Start starts the node and the election timer. The cluster are the remote interfaces of all other nodes.
-func (n *Node) Start(cluster []NodeRPC) {
+func (n *Node) Start(cluster *Cluster) {
+	n.mutex.Lock()
+	defer n.mutex.Unlock()
+
 	n.stopped = false
 	n.cluster = cluster
-	n.resetElectionTimer()
+	n.electionTimer.resetC <- true
 }
 
 // Stop stops all running timers and switch to follower state.
 func (n *Node) Stop() {
+	n.mutex.Lock()
+	defer n.mutex.Unlock()
+
 	n.stopped = true
-	if n.heartbeatTimer != nil {
-		n.heartbeatTimer.Stop()
-	}
-	if n.electionTimer != nil {
-		n.electionTimer.Stop()
-	}
+	n.heartbeatTimer.stopC <- true
+	n.electionTimer.stopC <- true
 	n.statemachine.Next(FOLLOWER)
 }
 
@@ -60,22 +75,16 @@ func (n *Node) Stop() {
 // Election
 // =====================================================================================================================
 
-// ResetElectionTimer initializes or restarts a random timer.
-func (n *Node) resetElectionTimer() {
-	if n.electionTimer != nil {
-		n.electionTimer.Stop()
-	}
-	n.electionTimer = time.NewTimer(time.Duration(1000+rand.Intn(2000)) * time.Millisecond)
-	go func() {
-		<-n.electionTimer.C
-		if !n.stopped {
-			n.electionTimeout()
-		}
-	}()
-}
-
 // ElectionTimeout happens when a node receives no heartbeat in a given time period.
 func (n *Node) electionTimeout() {
+	n.mutex.Lock()
+	defer n.mutex.Unlock()
+
+	// make shutdown safe
+	if n.stopped {
+		return
+	}
+
 	n.log(fmt.Sprintf("Election timout."))
 	if n.isLeader() {
 		panic("The election timeout should not happen, when a node is LEADER.")
@@ -94,9 +103,9 @@ func (n *Node) startElectionProcess() {
 		n.log(fmt.Sprintf("Election won. Now acting as leader."))
 		n.switchToLeader()
 	} else {
-		n.log(fmt.Sprintf("Election was not won. Stopping election timer"))
+		n.log(fmt.Sprintf("Election was not won. Reset election timer"))
 		n.statemachine.Next(FOLLOWER)
-		n.resetElectionTimer() // try again, split vote or cluster down
+		n.electionTimer.resetC <- true // try again, split vote or cluster down
 	}
 }
 
@@ -107,9 +116,10 @@ func (n *Node) executeElection() bool {
 	n.votedFor = &n.id // vote for ourself
 
 	var wg sync.WaitGroup
-	votes := make([]bool, len(n.cluster))
-	wg.Add(len(n.cluster))
-	for i, rpcIf := range n.cluster {
+	nodes := n.cluster.GetRemoteFollowers(n.id)
+	votes := make([]bool, len(nodes))
+	wg.Add(len(nodes))
+	for i, rpcIf := range nodes {
 		go func(w *sync.WaitGroup, i int, rpcIf NodeRPC) {
 			term, ok := rpcIf.RequestVote(n.currentTerm, n.id, 0, 0)
 			if term > n.currentTerm {
@@ -129,7 +139,7 @@ func (n *Node) executeElection() bool {
 		}
 	}
 	// If more than 50% respond with true - The election was won!
-	electionWon := nbrOfVotes >= len(n.cluster)/2
+	electionWon := nbrOfVotes >= len(n.cluster.allNodes)/2
 	n.log(fmt.Sprintf("<- Election: %v", electionWon))
 	return electionWon
 }
@@ -137,44 +147,38 @@ func (n *Node) executeElection() bool {
 // SwitchToLeader does the state change from CANDIDATE to LEADER.
 func (n *Node) switchToLeader() {
 	n.statemachine.Next(LEADER)
-	n.electionTimer.Stop()
-	n.electionTimer = nil
-	n.startHeartbeat()
+	n.heartbeatTimer.resetC <- true
+	n.electionTimer.stopC <- true
 }
 
 // =====================================================================================================================
 // Leader only functions
 // =====================================================================================================================
 
-// StartHeartbeat starts an heartbeat and runs forever until the timer ist stopped.
-func (n *Node) startHeartbeat() {
-	if n.isNotLeader() {
-		panic("startHeartbeat should only run in LEADER state!")
-	}
-	if n.heartbeatTimer == nil {
-		n.heartbeatTimer = time.NewTimer(time.Duration(1000) * time.Millisecond)
-	} else {
-		n.heartbeatTimer.Reset(time.Duration(500) * time.Millisecond)
-	}
-	go func() {
-		<-n.heartbeatTimer.C
-		n.sendHeartbeat()
-		n.startHeartbeat()
-	}()
-}
+// heatbeatTimeout sends the heartbeat to all other nodes in the cluster parallel.
+func (n *Node) heatbeatTimeout() {
+	n.mutex.Lock()
+	defer n.mutex.Unlock()
 
-// SendHeartbeat sends the heartbeat to all other nodes in the cluster parallel.
-func (n *Node) sendHeartbeat() {
+	// make shutdown safe
+	if n.stopped {
+		return
+	}
+
 	if n.isNotLeader() {
 		panic("sendHeartbeat should only run in LEADER state!")
 	}
+
 	n.log("-> Heartbeat")
 
 	var wg sync.WaitGroup
-	result := make([]bool, len(n.cluster))
-	wg.Add(len(n.cluster))
-	for i, rpcIf := range n.cluster {
-		go func(w *sync.WaitGroup, i int, nodeRPC NodeRPC) {
+
+	nodes := n.cluster.GetRemoteFollowers(n.id)
+
+	result := make([]bool, len(nodes))
+	wg.Add(len(nodes))
+	for i, rpcIf := range nodes {
+		func(w *sync.WaitGroup, i int, nodeRPC NodeRPC) {
 			term, ok := nodeRPC.AppendEntries(n.currentTerm, n.id, 0, 0, nil, 0)
 			// See §5.1
 			if term > n.currentTerm {
@@ -192,12 +196,9 @@ func (n *Node) sendHeartbeat() {
 // SwitchToFollower switches a LEADER or CANDIDATE to the follower state
 func (n *Node) switchToFollower() {
 	if n.isLeader() {
-		n.heartbeatTimer.Stop()
-		n.heartbeatTimer = nil
+		n.heartbeatTimer.stopC <- true
 		n.statemachine.Next(FOLLOWER)
 	} else if n.isCandidate() {
-		n.electionTimer.Stop()
-		n.electionTimer = nil
 		n.statemachine.Next(FOLLOWER)
 	}
 }
@@ -208,6 +209,9 @@ func (n *Node) switchToFollower() {
 
 // AppendEntries implementation is used as heartbeat and log replication.
 func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, entries []string, leaderCommit int) (currentTerm int, success bool) {
+	n.mutex.Lock()
+	defer n.mutex.Unlock()
+
 	if n.stopped {
 		return n.currentTerm, false // stopped node
 	}
@@ -228,7 +232,7 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 	// heartbeat received in FOLLOWER -> reset election timer!
 	if entries == nil || len(entries) == 0 {
 		n.log("Heartbeat received. Reset election timer.")
-		n.resetElectionTimer()
+		n.electionTimer.resetC <- true
 	} else {
 		// todo: replicate logs
 		log.Printf("[%v] AppendEntries replicate logs on Node: %v", n.statemachine.Current(), n.id)
@@ -246,12 +250,15 @@ func (n *Node) AppendEntries(term, leaderID, prevLogIndex, prevLogTermin int, en
 // It returns the current term to update the candidate
 // It returns true when the candidate received vote.
 func (n *Node) RequestVote(term, candidateID, lastLogIndex, lastLogTerm int) (int, bool) {
-	defer n.resetElectionTimer()
+	n.mutex.Lock()
+	defer n.mutex.Unlock()
 
 	// stopped nodes do not vote
 	if n.stopped {
 		return n.currentTerm, false // stopped node
 	}
+
+	n.electionTimer.resetC <- true
 
 	// see RequestVoteRPC receiver implementation 1
 	if term < n.currentTerm {
