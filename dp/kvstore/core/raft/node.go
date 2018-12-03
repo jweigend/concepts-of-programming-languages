@@ -132,14 +132,14 @@ func (n *Node) executeElection() bool {
 	wg.Wait() // wait until all nodes have voted
 
 	// Count votes
-	nbrOfVotes := 0
+	nbrOfVotes := 1 // master votes for itself!
 	for _, vote := range votes {
 		if vote {
 			nbrOfVotes++
 		}
 	}
 	// If more than 50% respond with true - The election was won!
-	electionWon := nbrOfVotes >= len(n.cluster.allNodes)/2
+	electionWon := nbrOfVotes >= len(n.cluster.allNodes)/2+1
 	n.log(fmt.Sprintf("<- Election: %v", electionWon))
 	return electionWon
 }
