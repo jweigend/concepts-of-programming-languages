@@ -101,6 +101,7 @@ Requirements and Decisions
 - We want to stay as close a possible on the original specification
 - We want to make a Raft cluster local testable (as single process)
 - We want to use gRPC as middleware
+.link https://github.com/jweigend/concepts-of-programming-languages/tree/master/dp/kvstore/core/raft
 
 * Step I - Defining a KV Store API 
 .code ../dp/kvstore/kvstore-api.go
