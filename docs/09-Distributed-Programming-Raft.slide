@@ -125,10 +125,10 @@ Requirements and Decisions
 
 * Be Creative!
 - Write your own Raft Implementation!
-.link https://youtu.be/vYp4LYbnnW8?t=4 More information
+.link https://www.youtube.com/watch?v=YbZ3zDzDnrw More information
 
 * Summary 
-- Go is an excellent choice to implement an algorithm like Raft
-- You can implement the Raft specification with less than 1000 Loc 
+- Go is an excellent choice to implement an distributed protocol like Raft
+- You can implement the Raft specification with ca 1000-2000 Loc 
 - You can learn from the Etcd implementation, which is on Github
-- Building a production safe implementation is anyway hard in any language 
+- Building a production safe implementation is hard in any language anyway!

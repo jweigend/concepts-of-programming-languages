@@ -1,4 +1,4 @@
-Modules in Go
+Webservices in Go
 Concepts of Programming Languages
 22 Nov 2018
 Tags: go, programming, grpc, network, sockets
@@ -9,11 +9,5 @@ johannes.weigend@qaware.de
 http://www.qaware.de
 @johannesweigend
 
-- What are Modules?
 
-- The Go Module System
-
-- Visibility
-
-- Versioning
 
