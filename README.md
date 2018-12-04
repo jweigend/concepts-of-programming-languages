@@ -1,5 +1,5 @@
 # Concepts of Programming Languages
-Master Course: Concepts of Programming Languages - University of Applied Sciences Rosenheim
+Master Course: Concepts of Programming Languages - University of Applied Sciences Rosenheim (TH Rosenheim)
 
 <img src="docs/img/go.png" width="10%">
 
