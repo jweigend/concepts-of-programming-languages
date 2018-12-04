@@ -91,3 +91,12 @@ We will release the results here.
 [Slides](docs/08-Distributed-Programming.pdf)
 
 [Exercises](docs/exercises/Exercise8.md)
+
+## Lesson 9 - Distributed Programming - The Raft Protocol
+- Introduction into Consensus Protocols
+- Raft
+- Implementing Raft with Go 
+
+[Slides](docs/09-Distributed-Programming-Raft.pdf)
+
+[Exercises](docs/exercises/Exercise9.md)
