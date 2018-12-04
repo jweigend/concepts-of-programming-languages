@@ -28,6 +28,7 @@ Hint: A complete implementation is about 2k LoC. You need at least 2 weeks for a
 
 ## Exercise 9.3 - Compare your implementation with others
 Compare your implementation with Etcd and Hashicorp Raft. 
+
 https://github.com/etcd-io/etcd/tree/master/raft
 
 https://github.com/hashicorp/raft
