@@ -2,7 +2,7 @@
 
 If you do not finish during the lecture period, please finish it as homework.
 
-### Excercise 9.1 - Read the Raft specification
+### Exercise 9.1 - Read the Raft specification
 Read the Raft specification carefully. 
 https://raft.github.io/raft.pdf
 
@@ -34,7 +34,7 @@ https://github.com/etcd-io/etcd/tree/master/raft
 https://github.com/hashicorp/raft
 
 Answer the following questions:
-- How do the implementations differ from the origial specification?
+- How do the implementations differ from the original specification?
 - How do these implementations use Go channels and locks?
 
 
