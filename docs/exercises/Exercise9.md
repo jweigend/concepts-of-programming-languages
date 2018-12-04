@@ -17,7 +17,7 @@ https://raft.github.io/raft.pdf
 - What is the purpose of the attribute "votedFor" in a Raft cluster?
 - Describe how data is written to the log. When gets the data visible?
 
-## Exercise 9.3 - Implement Raft in Go (or your preferred language)
+## Exercise 9.3 - Implement Raft in Go (optional in your preferred language)
 Implement Raft with the following additional requirements:
 - A Raft cluster should be local testable with a single unit test
 - A Raft cluster should be remote testable in multiple, distributed processes
