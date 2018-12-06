@@ -1,0 +1,39 @@
+Modules in Go
+Concepts of Programming Languages
+22 Nov 2018
+Tags: go, programming, grpc, network, sockets
+
+Johannes Weigend (QAware GmbH)
+University of Applied Sciences Rosenheim
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* What is a Module?
+- A module is a unit of Programming, Distribution, Versioning and Visibility
+- Languages emphasis different of these aspects
+- 
+
+* Module System in Java
+- Java knows Modules since Java SE 9 (Project Jigsaw)
+- Java Modules focus on Distribution, Visibility but not on Versioning
+- Java need 3rd party tools to implement versionized dependencies (Maven, Gradle ...)
+
+* The Go Module System
+- There is an evolution in the Go module systems
+- Before 1.11: Go dep was the tool of choice to implement safe, versionized dependencies
+- Since 1.11: vgo is the concept for the future
+
+.link https://www.youtube.com/watch?v=F8nrpe0XWRg
+
+* Go dep
+
+
+* vgo
+
+
+
+* Visibility
+
+* Versioning
+
