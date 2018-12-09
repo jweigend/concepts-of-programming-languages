@@ -6,8 +6,8 @@ import (
 	"log"
 
 	"github.com/jweigend/concepts-of-programming-languages/dp/idserv"
+	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/core"
 	"github.com/jweigend/concepts-of-programming-languages/dp/idserv/remote/proxy"
-	"github.com/qaware/programmieren-mit-go/04_distributed-programming/idserv/server/impl"
 )
 
 // GenerateIds calls n-times NewUUID() in a loop and returns the result as slice.
@@ -23,7 +23,7 @@ func main() {
 	var service idserv.IDService
 
 	// Local
-	service = impl.NewIDServiceImpl()
+	service = core.NewIDServiceImpl()
 	result := GenerateIds(10, service)
 
 	log.Printf("Got Id: %v", result)
