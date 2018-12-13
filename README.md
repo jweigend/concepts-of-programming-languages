@@ -100,3 +100,11 @@ We will release the results here.
 [Slides](docs/09-Distributed-Programming-Raft.pdf)
 
 [Exercises](docs/exercises/Exercise9.md)
+
+## Lesson 10 - Modules and Versioning
+- Introduction into Go 1.11 Modules
+- Implementing Modules
+
+[Slides](docs/10-Modules.pdf)
+
+[Exercises](docs/exercises/Exercise10.md)
