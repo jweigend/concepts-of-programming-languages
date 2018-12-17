@@ -47,7 +47,7 @@ func run() {
 func child() {
 	log.Printf("Running %v \n", os.Args[1:])
 
-	cg()
+	//cg()
 
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
 	cmd.Stdin = os.Stdin
