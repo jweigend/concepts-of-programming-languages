@@ -1,11 +1,14 @@
 // Copyright Liz Rice.
 
-// Simple Docker implementation by Liz Rice.
+// Simple "Docker"/Container implementation by Liz Rice.
+
+// +build linux
+
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -26,7 +29,7 @@ func main() {
 }
 
 func run() {
-	fmt.Printf("Running %v \n", os.Args[2:])
+	log.Printf("Running %v \n", os.Args[1:])
 
 	cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
 	cmd.Stdin = os.Stdin
@@ -42,7 +45,7 @@ func run() {
 }
 
 func child() {
-	fmt.Printf("Running %v \n", os.Args[2:])
+	log.Printf("Running %v \n", os.Args[1:])
 
 	cg()
 
@@ -53,15 +56,13 @@ func child() {
 
 	// Does not compile on OSX
 	must(syscall.Sethostname([]byte("container")))
-	must(syscall.Chroot("/home/liz/ubuntufs"))
+	must(syscall.Chroot("/opt/alpinefs")) // local fs
 	must(os.Chdir("/"))
 	must(syscall.Mount("proc", "proc", "proc", 0, ""))
-	must(syscall.Mount("thing", "mytemp", "tmpfs", 0, ""))
 
 	must(cmd.Run())
 
 	must(syscall.Unmount("proc", 0))
-	must(syscall.Unmount("thing", 0))
 }
 
 func cg() {
