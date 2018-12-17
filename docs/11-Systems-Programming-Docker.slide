@@ -1,7 +1,7 @@
 Systems Programming
 Concepts of Programming Languages
-13 Dec 2018
-Tags: go, programming, modules
+20 Dec 2018
+Tags: go, programming, docker, system programming
 
 Johannes Weigend (QAware GmbH)
 University of Applied Sciences Rosenheim
@@ -119,12 +119,19 @@ Package runtime contains operations that interact with Go's runtime system, such
 
 * What is a Container?
 
+* What is a Container?
+- Containers let you isolate an application so that it’s under the impression it’s running on its own private machine. In that sense, a container is similar to a virtual machine (VM), but it uses the operating system kernel on the host rather than having its own.
+
+- Container start from container images. A image packs the application with the required libraries. 
+- In many cases a full unix filesystem is packed inside the image. 
+- An image for a Go application could be empty, since go has static linking. The required code is inside the generated binary.  
+
 * Change Root (chroot)
 A chroot on Unix operating systems is an operation that changes the apparent root directory for the current running process and its children. A program that is run in such a modified environment cannot name (and therefore normally cannot access) files outside the designated directory tree. The term "chroot" may refer to the chroot(2) system call or the chroot(8) wrapper program. The modified environment is called a chroot jail.\
 
     # chroot new_root [command]
     # mkdir -p /home/user/jail
-    # chroot /home/user/jail
+    # chroot /home/user/jail /bin/bash
       => chroot: failed to run command ‘/bin/bash’: No such file or directory
 
 Change Root can not start because there is no /bin/bash inside the new root!
@@ -133,7 +140,7 @@ The solution is to copy bash inclusive dependent libraries inside the directory 
     $ mkdir /home/user/jail/bin
     $ cp /bin/bash /home/user/jail/bin
 
-* Change Root programms Need Dependent Libraries
+* Many Applications need Dependent Libraries to Run
 
 List dependent libraries for /bin/bash
 
@@ -151,7 +158,7 @@ Copy libraries to jail root
 
 Start /bin/bash with new root 
 
-    # chroot /home/oracle/jail
+    # chroot /home/user/jail
     # pwd => /
     # ls => /bin, /lib64
 
@@ -159,8 +166,124 @@ The bash shell can only access the jail file system!
 
 * CGroups
 
-* How to build Docker in Go
+- Control cgroups, usually referred to as cgroups, are a Linux kernel feature which allow processes to be organized into hierarchical groups whose usage of various types of resources can then be limited and monitored.  The kernel's cgroup interface is provided through a pseudo-filesystem called cgroupfs.  
+- Grouping is implemented in the core cgroup kernel code, while resource tracking and limits are implemented in a set of per-resource-type subsystems (memory, CPU, and so on).
 
+* CGroups Features
+
+*Resource* *limiting*
+groups can be set to not exceed a configured memory limit, which also includes the file system cache
+
+*Prioritization*
+some groups may get a larger share of CPU utilization or disk I/O throughput
+
+*Accounting*
+measures a group's resource usage, which may be used, for example, for billing purposes
+
+*Control*
+freezing groups of processes, their checkpointing and restarting
+
+* Linux Namespaces
+Namespaces are a feature of the Linux kernel that partitions kernel resources such that one set of processes sees one set of resources while another set of processes sees a different set of resources. The feature works by having the same name space for these resources in the various sets of processes, but those names referring to distinct resources. Examples of resource names that can exist in multiple spaces, so that the named resources are partitioned, are process IDs, hostnames, user IDs, file names, and some names associated with network access, and interprocess communication.
+
+* How to build a Container in Go
+The code shows the main functionality of the "docker run" command: 
+
+    // go run main.go run <cmd> <args>
+    func main() {
+        switch os.Args[1] {
+        case "run":
+            run()
+        case "child":
+            child()
+        default:
+            panic("help")
+        }
+    }
+
+* How to build a Container in Go 
+The run() function starts a new process (a clone) with a unique namespace
+The child() function function is called in the new process and configures the new namespace (setHostname ...)
+
+
+    func run() {
+        log.Printf("Running %v \n", os.Args[1:])
+
+        cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
+        cmd.Stdin = os.Stdin
+        cmd.Stdout = os.Stdout
+        cmd.Stderr = os.Stderr
+        cmd.SysProcAttr = &syscall.SysProcAttr{
+            // Does not compile on OSX
+            Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+            Unshareflags: syscall.CLONE_NEWNS,
+        }
+
+        must(cmd.Run())
+    }
+
+* Clone flags
+- CLONE_NEWNS (since Linux 2.4.19)
+    If CLONE_NEWNS is set, the cloned child is started in a new
+    mount namespace, initialized with a copy of the namespace of
+    the parent.  If CLONE_NEWNS is not set, the child lives in the
+    same mount namespace as the parent.
+- CLONE_NEWUTS (since Linux 2.6.19)
+    If CLONE_NEWUTS is set, then create the process in a new UTS
+    namespace, whose identifiers are initialized by duplicating
+    the identifiers from the UTS namespace of the calling process.
+    If this flag is not set, then (as with fork(2)) the process is
+    created in the same UTS namespace as the calling process.
+    This flag is intended for the implementation of containers.
+- CLONE_NEWPID (since Linux 2.6.24)
+    If CLONE_NEWPID is set, then create the process in a new PID
+    namespace.  If this flag is not set, then (as with fork(2))
+    the process is created in the same PID namespace as the
+    calling process.  This flag is intended for the implementation of containers.
+
+* The Child Process Initializer 
+
+    func child() {
+        log.Printf("Running %v \n", os.Args[1:])
+
+        cg() // Initialize CGroup limits
+
+        cmd := exec.Command(os.Args[2], os.Args[3:]...)
+        cmd.Stdin = os.Stdin
+        cmd.Stdout = os.Stdout
+        cmd.Stderr = os.Stderr
+
+        // We are in an independent clone -> Setting hostname is safe!
+        must(syscall.Sethostname([]byte("container")))
+        must(syscall.Chroot("/opt/alpinefs")) // container local file system (alpine linux)
+        
+        must(os.Chdir("/"))
+        must(syscall.Mount("proc", "proc", "proc", 0, "")) // support for the ps command
+        must(cmd.Run())
+
+        must(syscall.Unmount("proc", 0))
+    }
+
+* CGroup Initialization limits Resource Consumption of Container
+
+    func cg() {
+        cgroups := "/sys/fs/cgroup/"
+        pids := filepath.Join(cgroups, "pids")
+        os.Mkdir(filepath.Join(pids, "container"), 0755)
+        must(ioutil.WriteFile(filepath.Join(pids, "container/pids.max"), []byte("20"), 0700))
+        // Removes the new cgroup in place after the container exits
+        must(ioutil.WriteFile(filepath.Join(pids, "container/notify_on_release"), []byte("1"), 0700))
+        must(ioutil.WriteFile(filepath.Join(pids, "container/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+        ...
+    }
+
+
+* See also the Video of Liz Rice
 .link https://www.youtube.com/watch?v=Utf-A4rODH8
 
-
+* Summary 
+- Go is an excellent language for system programming
+- The cgo C interface is easy to use and does not require separate tooling
+- You can implement the main functionality of a Linux container in less than 50 lines 
+- The os, runtime packages enable platform independent programming (like in Java)
+- The syscall and x/sys/. packages enable platform dependent programming (to access platform specific functionality)

@@ -52,7 +52,7 @@ func child() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	// Does not compile on OSX
+	// Does not compile on OSX or Windows
 	must(syscall.Sethostname([]byte("container")))
 	must(syscall.Chroot("/opt/alpinefs")) // local fs
 	must(os.Chdir("/"))
@@ -66,11 +66,11 @@ func child() {
 func cg() {
 	cgroups := "/sys/fs/cgroup/"
 	pids := filepath.Join(cgroups, "pids")
-	os.Mkdir(filepath.Join(pids, "liz"), 0755)
-	must(ioutil.WriteFile(filepath.Join(pids, "liz/pids.max"), []byte("20"), 0700))
+	os.Mkdir(filepath.Join(pids, "container"), 0755)
+	must(ioutil.WriteFile(filepath.Join(pids, "container/pids.max"), []byte("20"), 0700))
 	// Removes the new cgroup in place after the container exits
-	must(ioutil.WriteFile(filepath.Join(pids, "liz/notify_on_release"), []byte("1"), 0700))
-	must(ioutil.WriteFile(filepath.Join(pids, "liz/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+	must(ioutil.WriteFile(filepath.Join(pids, "container/notify_on_release"), []byte("1"), 0700))
+	must(ioutil.WriteFile(filepath.Join(pids, "container/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
 }
 
 func must(err error) {
