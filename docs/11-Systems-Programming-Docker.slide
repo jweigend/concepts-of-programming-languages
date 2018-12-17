@@ -1,13 +1,163 @@
-Systems Programming in Go
+Systems Programming
 Concepts of Programming Languages
-22 Nov 2018
-Tags: C, Go
+13 Dec 2018
+Tags: go, programming, modules
 
 Johannes Weigend (QAware GmbH)
 University of Applied Sciences Rosenheim
 johannes.weigend@qaware.de
 http://www.qaware.de
 @johannesweigend
+
+* What is System Programming - Definition
+"System programming involves designing and writing computer programs that allow the computer hardware to interface with the programmer and the user, 
+leading to the effective execution of application software on the computer system. 
+
+Typical system programs include the operating system and firmware, programming tools such as compilers, assemblers, I/O routines, interpreters, scheduler, loaders and linkers as well as the runtime libraries of the computer programming languages."
+
+* System Programming Today
+Todays OSs are built on a kernel of Assembler and C-Code (Linux Kernel, OSX/Darwin, Windows (Kernel, Driver, Graphics, Hal))
+The higher layers are built in languages with good support to call C or Assembler code (C, C++, Objective C)
+Tools and Low Level Application on top are typically written in languages like Python, Perl, C++, Go
+.image https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Priv_rings.svg/2560px-Priv_rings.svg.png 300 400
+ 
+* Calling C Code from Go with cgo
+
+* Calling C Code from Go with cgo
+Import the pseudo package C in your Go source and include the corresponding C header files (comment) to call a C function.  
+    
+    package rand
+
+    //
+    // #include <stdlib.h>
+    //
+    import "C"
+    func Random() int {
+        var r C.long = C.random() // calls "int rand(void)" from the C std library
+        return int(r)
+    }
+
+    func Seed(i int) {
+        C.srandom(C.uint(i))
+    }
+
+To build cgo packages, just use go build or go install as usual. The go tool recognizes the special "C" import and automatically uses cgo for those files.
+
+* Controlling Linking with Build Flags
+Build flags for the cgo command can be set in the Go source file as comments:
+
+    // #cgo CFLAGS: -DPNG_DEBUG=1
+    // #cgo amd64 386 CFLAGS: -DX86=1
+    // #cgo LDFLAGS: -lpng
+    // #include <png.h>
+    import "C"
+
+When calling functions from a library outside libc, the Go programm must be linked with that library (here: png.lib/png.so).
+
+This can be done by adding cgo build flags to the comment section.
+
+* Mapping the C namespace to Go
+- Everything declared in the C code is available in the C pseudo-package
+- Fundamental C data types have their counterpart, e.g. int → C.int, unsigned short → C.ushort, etc.
+- The Go equivalent to void * is unsafe.Pointer
+- typedefs are available under their own name
+- structs are available with a struct_ prefix, e.g. struct foo → C.struct_foo, same goes for unions and enums
+
+* Conversion between C and Go strings
+The C package contains conversion functions to convert Go to C strings and vice versa
+Also: opaque data (behind void *) to []byte
+    // Go string to C string; result must be freed with C.free
+    func C.CString(string) *C.char
+
+    // C string to Go string
+    func C.GoString(*C.char) string
+
+    // C string, length to Go string
+    func C.GoStringN(*C.char, C.int) string
+
+    // C pointer, length to Go []byte
+    func C.GoBytes(unsafe.Pointer, C.int) []byte
+
+.link https://golang.org/cmd/cgo/ 
+
+* Platform/OS Programming with Go 
+
+* Platform independent programming with Go 
+The packages os and runtime encapsulate platform dependent APIs
+
+.play ../sp/samples/os/pid.go
+
+* The OS Package
+- Access to the standard I/O streams 
+    os.Stdin
+    os.Stdout
+    os.Stderr
+- Functions for executing processes (os/exec)
+    cmd := exec.Command(path, args)
+- Access to the environment 
+    os.Getenv("FOO")
+    os.Setenv("FOO", "1")
+- Access to files, directories, pipes, ...
+    f, err := os.Open("/tmp/dat") // f.Read() / f.Write() / f.Seek()
+.link https://golang.org/pkg/os/
+
+* The Runtime Package
+Package runtime contains operations that interact with Go's runtime system, such as functions to control goroutines. It also includes the low-level type information used by the reflect package
+
+.link https://golang.org/pkg/runtime/
+
+* Platform dependent programming with Go 
+- The Go syscall package has platform dependent functionality which is different per OS
+- Go has a wrapper package to use the C syscall function (#include<sys/syscall>)  
+
+.play ../sp/samples/syscall/pid.go
+
+.link https://golang.org/pkg/syscall/
+.link https://godoc.org/golang.org/x/sys
+
+* Building a Container from the Scratch
+
+* What is a Container?
+
+* Change Root (chroot)
+A chroot on Unix operating systems is an operation that changes the apparent root directory for the current running process and its children. A program that is run in such a modified environment cannot name (and therefore normally cannot access) files outside the designated directory tree. The term "chroot" may refer to the chroot(2) system call or the chroot(8) wrapper program. The modified environment is called a chroot jail.\
+
+    # chroot new_root [command]
+    # mkdir -p /home/user/jail
+    # chroot /home/user/jail
+      => chroot: failed to run command ‘/bin/bash’: No such file or directory
+
+Change Root can not start because there is no /bin/bash inside the new root!
+The solution is to copy bash inclusive dependent libraries inside the directory jail tree
+
+    $ mkdir /home/user/jail/bin
+    $ cp /bin/bash /home/user/jail/bin
+
+* Change Root programms Need Dependent Libraries
+
+List dependent libraries for /bin/bash
+
+    ldd /bin/bash
+	linux-vdso.so.1 =>  (0x00007fff11bff000)
+	libtinfo.so.5 => /lib64/libtinfo.so.5 (0x0000003728800000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x0000003d56400000)
+	libc.so.6 => /lib64/libc.so.6 (0x0000003d56800000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000003d56000000)
+
+Copy libraries to jail root
+
+    mkdir /home/user/jail/lib64
+    $ cp /lib64/{libtinfo.so.5,libdl.so.2,libc.so.6,ld-linux-x86-64.so.2} /home/user/jail/lib64
+
+Start /bin/bash with new root 
+
+    # chroot /home/oracle/jail
+    # pwd => /
+    # ls => /bin, /lib64
+
+The bash shell can only access the jail file system!
+
+* CGroups
 
 * How to build Docker in Go
 
