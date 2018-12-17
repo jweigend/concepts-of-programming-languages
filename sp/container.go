@@ -1,8 +1,6 @@
-// Copyright Liz Rice.
+// +build linux
 
 // Simple "Docker"/Container implementation by Liz Rice.
-
-// +build linux
 
 package main
 
