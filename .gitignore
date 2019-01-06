@@ -1,7 +1,8 @@
-docs/.DS_Store
-coverage.out
+**/coverage.out
 docs/exercises/StudyWork.xlsx
-.idea
-concepts-of-programming-languages.iml
-.vscode
+.idea/
+*.iml
+.vscode/
+**/.DS_Store
+
 
