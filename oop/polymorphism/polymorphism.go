@@ -7,7 +7,7 @@ import (
 // Point is a two dimensional point in a cartesian coordinate system.
 type Point struct{ x, y int }
 
-// String implements the fmt.Stringer interface.
+// Point implements the fmt.Stringer interface.
 func (p Point) String() string {
 	return fmt.Sprintf("x=%v,y=%v", p.x, p.y)
 }
@@ -18,7 +18,7 @@ type ColorPoint struct {
 	c     int
 }
 
-// String implements the fmt.Stringer interface.
+// ColorPoint implements the fmt.Stringer interface.
 func (p ColorPoint) String() string {
 	return fmt.Sprintf("x=%v,y=%v,c=%v", p.x, p.y, p.c)
 	// OR: return fmt.Sprintf("%v,c=%v", p.Point, p.c)  // Delegate to Point.String()
