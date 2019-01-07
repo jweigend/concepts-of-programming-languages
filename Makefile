@@ -1,7 +1,7 @@
 # 
-# Standard Makefile. Usage: make <target>.
+# Standard Makefile. Usage: make <target>. Exclude raft package (slow tests!)
 # 
-PKGS := $(shell go list ./... | grep -v /vendor)
+PKGS := $(shell go list ./... | grep -v /raft)
 
 .PHONY: test all build test install clean slideshow help coverage
 
