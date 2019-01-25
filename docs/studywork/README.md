@@ -1,4 +1,4 @@
-### ACHTUNG - Die Arbeiten sind nicht bearbeitet und es hat keine QS stattgefunden. Die Aussagen in den Artikeln sind teilweise falsch bzw. unvollständig!
+### DANGER ZONE - This are the results of the study work 2019 at the Technical University Rosenheim. Now QS has happend. The content could be error prone, missleading or simply wrong. Nevertheless it is a great source of unconventional languages in comparison to Golang.   
 
 # Comparing Go
 
