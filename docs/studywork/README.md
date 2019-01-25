@@ -2,6 +2,7 @@
 
 ### These are the results of the study work 2019 at the Technical University Rosenheim. This is unedited student work. The content could be error prone, missleading or simply wrong. Nevertheless it is a great source of unconventional languages in comparison to Golang.   
 
+
 # Comparison of Go with serveral languages
 
 Comparison of Go with other Languages. Study work at the University of Applied Science Rosenheim / Germany.
