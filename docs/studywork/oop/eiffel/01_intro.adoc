@@ -1,0 +1,91 @@
+== Introduction
+
+=== Go programming language
+
+Go is a compilable programming language that supports concurrency and has automatic garbage collection. Go was initially designed by Robert Griesemer, Rob Pike and Ken Thompson and is developed by employees of Google Inc.
+
+Go was developed out of dissatisfaction with existing software development languages such as C, C\++ or Java in the context of today's computer systems, especially with regard to scalable network services, cluster and cloud computing. Go has far fewer keywords than ANSI C (25 in Go vs. 32 in C). One of the problems Go wants to solve is very long compile times in large C++ projects.
+
+==== Key characteristics
+
+- Very fast compilation times
+- UTF-8 only strings
+- Pointer arithmetics
+- Garbage collection
+- Static type system with runtime support
+- Static linking
+- Package system
+- Designed for concurrency with goroutines and channels
+
+==== Hello World
+
+[source,go,indent=0]
+----
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World")
+}
+----
+
+=== Eiffel programming language
+
+Eiffel is a compilable, universal and object oriented programming language designed by Dr. Bertrand Meyer and his company Interactive Software Engineering Inc. as alternative to C++.
+// Originally it was only intended for use by its own company.
+It was originally conceived in 1985 only for use by it´s own company, but after attracting considerable public attention in early 1986, it was released in late 1986 as a commercial product.
+
+Eiffel is based on a set of principles as design by contract, the uniform access principle, command–query separation, the don't repeat yourself principle, the open/closed principle, and option–operand separation.
+Many concepts introduced in Eiffel by Dr.
+Bertrand Meyer later found their way into Java, C# and other popular programming languages.
+
+==== Key characteristics
+
+- Design by contract tightly integrated with other language constructs
+- Garbage collection
+- Inheritance, including multiple inheritance, renaming, redefinition and other mechanisms intended to make inheritance safe
+- All types, including basic types such as INTEGER, are class based
+- Static type system
+- Void safety against calls on null references through the attached-types mechanism
+- Once routines for object sharing and decentralized initialization
+
+==== Hello World
+
+[source,eiffel,indent=0]
+----
+class
+    HELLO_WORLD
+create
+    make
+feature
+    make
+        do
+            print ("Hello, world!%N")
+        end
+end
+----
+
+//=== Go and Eiffel comparison overview
+//
+//.General
+//[width="80%",frame="topbot",options="header"]
+//|======================
+//| | Go | Eiffel
+//| **Multiple return values** | yes | no
+//| **Pointer** | yes | no
+//| **Exceptions** | yes | yes
+//| **Garbage collection** | yes | yes
+//| **Static linking** | yes | yes
+//| **Reflection** | yes | yes
+//|======================
+
+//.Object oriented programming
+//[width="80%",frame="topbot",options="header"]
+//|======================
+//| | Go | Eiffel
+//| **Classes encapsulate data and routines** | no | yes
+//| **Generic programming** | interface{} | Base class, ANY
+//| **Inheritance** | Embedding (multiple) | yes (multiple)
+//| **Polymorphism** | Interfaces | Classes, Interfaces
+//|======================

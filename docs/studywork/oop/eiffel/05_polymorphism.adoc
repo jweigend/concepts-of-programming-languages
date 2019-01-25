@@ -1,0 +1,301 @@
+== Polymorphism
+
+The polymorphism of object-oriented programming is a property that always occurs in connection with inheritance and interfaces.
+A routine is polymorphic if it has the same signature in different classes but is re-implemented.
+
+This chapter uses a class point and a class circle as an example to demonstrate the needed steps to implement polymorphism in the particular programming language.
+The circle class inherits all properties from the point class and adds only the required radius.
+In addition, we would like to check the radius at the time of object construction.
+
+.UML representation of polymorphism
+image::img/polymorphism.svg[]
+
+.Output of example code
+----
+Point:	x = 0	y = 0
+Circle:	x = 0	y = 0	r = 0
+Point:	x = 10	y = 15
+Circle:	x = 20	y = 25	r = 5
+Circle:	x = 30	y = 35	r = 10
+Circle:	x = 20	y = 25	r = 35
+----
+
+=== Go programming language
+
+==== Non default object construction
+To support checks at "object" construction time for arguments or the construction of objects apart from their default initialized values, it's required to explicit define constructors for our user defined data type.
+Because Go uses struct's for their "data classes", it’s not possible to prohibit the "object" construction without a defined constructor.
+
+==== Polymorphic operations
+For polymorphic operations on different data types, generic methods for the polymorphic operations must be defined via an interface.
+It's not possible that we create a circle object on a point variable as in other object-oriented programming languages.
+We have to use a user defined interface type as variable which can hold all types which implements this specific interface.
+
+.point.go
+[source,go,indent=0]
+----
+package main
+
+import "fmt"
+
+type Point struct {
+	x, y int
+}
+
+type IPoint interface { <1>
+	String() string
+	GetX() int
+	GetY() int
+}
+
+func (p *Point) String() string { <2>
+	return fmt.Sprintf("Point:\tx = %d\ty = %d", p.x, p.y)
+}
+
+func (p *Point) GetX() int { <2>
+	return p.x
+}
+
+func (p *Point) GetY() int { <2>
+	return p.y
+}
+
+func NewPoint(x, y int) *Point { <3>
+	return &Point{x, y}
+}
+
+func NewPointOrigin() *Point { <3>
+	return &Point{}
+}
+----
+<1> Generic interface which declares the needed methods that must be implemented for a data type to be compatible with the **IPoint** interface
+<2> Needed method to cope with the **IPoint** interface requirements
+<3> Very simple constructor that is only implemented for demonstration
+
+.circle.go
+[source,go,indent=0]
+----
+package main
+
+import "fmt"
+
+type Circle struct {
+	Point
+	r int
+}
+
+type ICircle interface {
+	IPoint <1>
+	GetR() int <2>
+}
+
+func (c *Circle) String() string { <3>
+	return fmt.Sprintf("Circle:\tx = %d\ty = %d\tr = %d", c.x, c.y, c.r)
+}
+
+func (c *Circle) GetR() int { <4>
+	return c.r
+}
+
+func NewCircle(x, y, r int) *Circle { <5>
+	if r < 0 {
+		panic("Negative radius for circle not allowed")
+	}
+	return &Circle{Point{x, y}, r}
+}
+
+func NewCircleOrigin() *Circle {
+	return &Circle{}
+}
+
+func NewCircleFromPoint(g *IPoint, r int) *Circle { <6>
+	if r < 0 {
+		panic("Negative radius for circle not allowed")
+	}
+	return &Circle{Point{(*g).GetX(), (*g).GetY()}, r}
+}
+----
+<1> Inherit all interface requirements from **IPoint**
+<2> Extend **IPoint** interface requirements for **ICircle**
+<3> Override String() method from "class" **Point**
+<4> Needed method to cope with the **ICircle** interface requirements
+<5> Very simple constructor that checks the radius argument
+<6> Constructor that creates a **Circle** "object" from a "object" that implements the **IPoint** interface
+
+.main.go
+[source,go,indent=0]
+----
+package main
+
+import "fmt"
+
+func main() {
+	var myPoint IPoint
+	var myCircle ICircle
+
+	myPoint = NewPointOrigin() <1>
+	fmt.Println(myPoint)
+
+	myPoint = NewCircleOrigin() <2>
+	fmt.Println(myPoint)
+
+	myPoint = NewPoint(10, 15) <3>
+	fmt.Println(myPoint)
+
+	myPoint = NewCircle(20, 25, 5) <4>
+	fmt.Println(myPoint)
+
+	myCircle = NewCircle(30, 35, 10) <5>
+	fmt.Println(myCircle)
+
+	myCircle = NewCircleFromPoint(&myPoint, 35) <6>
+	fmt.Println(myCircle)
+}
+----
+<1> Create a Point "object" on a IPoint variable with constructor "NewPointOrigin"
+<2> Create a Circle "object" on a IPoint variable with constructor "NewCircleOrigin"
+<3> Create a Point "object" on a IPoint variable with constructor "NewPoint"
+<4> Create a Circle "object" on a IPoint variable with constructor "NewCircle"
+<5> Create a Circle "object" on a ICircle variable with constructor "NewCircle"
+<6> Create a Circle "object" on a ICircle variable with constructor "NewCircleFromPoint" and last IPoint "object" which is a Circle as argument
+
+=== Eiffel programming language
+
+Eiffel supports the most popular object-oriented programming principles very well and therefore is the implementation of polymorphism a breeze without any restrictions.
+We can use a generic interface that is inherited from every class on which the polymorphic operation should be executed, or just a common base class.
+
+.point.e
+[source,eiffel,indent=0]
+----
+class
+	POINT
+inherit
+	ANY
+		redefine
+			out
+		end
+create
+	make, make_origin
+feature {NONE}
+	make (a_x, a_y: INTEGER)
+		do
+			set_x (a_x)
+			set_y (a_y)
+		end
+	make_origin
+		do <1>
+		end
+feature
+	x: INTEGER assign set_x
+	y: INTEGER assign set_y
+	set_x (a_x: INTEGER)
+		do
+			x := a_x
+		end
+	set_y (a_y: INTEGER)
+		do
+			y := a_y
+		end
+	out: STRING
+		do
+			Result := "Point:%Tx = " + x.out + "%Ty = " + y.out
+		end
+end
+----
+<1> Nothing to do because INTEGER is automatically initialized with zero
+
+.circle.e
+[source,eiffel,indent=0]
+----
+class
+	CIRCLE
+inherit
+	POINT
+		rename <1>
+			make as point_make
+		redefine <2>
+			make_origin,
+			out
+		end
+create
+	make, make_origin, make_from_point
+feature {NONE}
+	make (a_x, a_y, a_r: INTEGER)
+		require
+			non_negative_radius_argument: a_r >= 0 <3>
+		do
+			point_make (a_x, a_y) <4>
+			set_r (a_r)
+		end
+	make_origin
+		do
+		end
+	make_from_point (a_p: POINT; a_r: INTEGER)
+		require
+			non_negative_radius_argument: a_r >= 0
+		do
+			set_x (a_p.x)
+			set_y (a_p.y)
+			set_r (a_r)
+		end
+feature
+	r: INTEGER assign set_r
+	set_r (a_r: INTEGER)
+		require
+			non_negative_radius_argument: a_r >= 0
+		do
+			r := a_r
+		end
+	out: STRING
+		do
+			Result := "Circle:%Tx = " + x.out + "%Ty = " + y.out + "%Tr = " + r.out
+		end
+invariant
+	non_negative_radius: r >= 0 <5>
+end
+----
+<1> Rename inherited class routines **make** as we define it new in class **CIRCLE** and want to use the inherited routine internally in the new class
+<2> Announce that we override the inherited class routines **make_origin** and **out** in our new class **CIRCLE**
+<3> Ensure that attribute **radius** becomes never a negative number (routine local assertion)
+<4> Use renamed constructor **make** of class **POINT** in constructor **make** of class **CIRCLE**
+<5> Ensure that attribute **radius** becomes never a negative number (class global assertion)
+
+.application.e
+[source,eiffel,indent=0]
+----
+class
+	APPLICATION
+create
+	make
+feature {NONE}
+	make
+		local
+			my_point: POINT
+			my_circle: CIRCLE
+		do
+			create my_point.make_origin <1>
+			print (my_point.out + "%N")
+
+			create {CIRCLE} my_point.make_origin <2>
+			print (my_point.out + "%N")
+
+			create my_point.make (10, 15) <3>
+			print (my_point.out + "%N")
+
+			create {CIRCLE} my_point.make (20, 25, 5) <4>
+			print (my_point.out + "%N")
+
+			create my_circle.make (30, 35, 10) <5>
+			print (my_circle.out + "%N")
+
+			create my_circle.make_from_point (my_point, 35) <6>
+			print (my_circle.out + "%N")
+		end
+end
+----
+<1> Create a POINT object on a POINT variable with constructor "make_origin"
+<2> Create a CIRCLE object on a POINT variable with constructor "make_origin"
+<3> Create a POINT object on a POINT variable with constructor "make"
+<4> Create a CIRCLE object on a POINT variable with constructor "make"
+<5> Create a CIRCLE object on a CIRCLE variable with constructor "make"
+<6> Create a CIRCLE object on a CIRCLE variable with constructor "make_from_point" and last POINT object which is a CIRCLE as argument

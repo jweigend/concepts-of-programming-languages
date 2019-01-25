@@ -1,0 +1,234 @@
+= Compare Functional Programming in Go with JavaScript
+:toc:
+
+== Introduction
+
+As part of the course concepts of programming languages of the master studies computer science, is a compare of a selected programming language with Go programming language to do. 
+In follow refers this work concrete on a compare of functional programming of JavaScript with Go.
+First of all should be pointed out the basics of functional programming and in connection the functionality as well in JavaScript as in Go. 
+The biggest part should be a comparison of both languages constructs with showing some special features such as advantages and disadvantages.
+As result of this work should be a overview of both programming languages produced.
+
+== JavaScript
+
+In general, JavaScript is one of the scripting languages. These are programming languages ​​that are primarily intended for small programs and are usually executed via an interpreter. They often forego language elements whose usefulness comes into play only when working on more complex tasks. In scripting languages, for example, the compulsory declaration of variables is usually dispensed with - advantageous for the quick creation of small programs, but disadvantageous for large ones, for example because of the missing possibility of checking typing errors in variable names. From an architectural point of view, scripting languages are often used to connect or invoke existing components and application programs. The components themselves are developed in a more complex programming language.
+
+JavaScript is a programming language that is integrated into web pages as an additional technique. The JavaScript programs, also called scripts, are interpreted by the web browser. That is, they are translated and executed in process instructions. Since JavaScript is executed on the web server's computer, it is spoken by a client-side programming language to distinguish it from programs that run on the web server, such as PHP or Perl scripts.
+Java scripts have access to the browser window and the HTML document displayed therein. Their most important task is to respond to user input in the document (for example, by clicking the user on a particular item or typing in a form field). Java scripts can then make changes in the current HTML document. These changes take place only in the browser, more specifically in the main memory of the computer, while the document remains untouched on the web server.
+
+JavaScript can be used to change both the contents and representations of a document. In this way, a document can be made interactive and dynamic. This means it can respond to user input and change without having to retrieve a new document from the web server. For example, additional information can be displayed as soon as the user clicks on a specific HTML element with the mouse.
+
+=== JavaScript Syntax
+In simple terms, a JavaScript program consists of a sequence of instructions. When executing the JavaScripts, the statements are first processed one after the other. We'll get to know language components that make the JavaScript interpreter jump between instructions. As a result, the instructions are no longer processed strictly from top to bottom. For example, statements are executed multiple times until a condition is met.
+JavaScript uses the keyword var to declare variables. Because JavaScript is a weakly typed or dynamic programming language, data types are not explicitly declared on a variable, and each variable can be described (overwritten) with values of each type.
+
+A short example:
+[source,JavaScript]
+var test = 10; 		// test is a number
+var test = "word"; 	// test is a string
+var test = true;	// test is a boolean
+
+As the code snippet shows, all three variables were declared with var, but they do have different data types. Basically JavaScript delivers according to the current ECMAScript standard seven data types:
+
+* Six primitive data types:
+** boolean
+** null
+** undefined
+** number
+** string
+** symbol
+* and Object
+
+For branching, JavaScript provides a conditional statement, also known as an if statement. For loops, there are the following options:
+
+* for statement
+* do...while statement
+* while statement
+* label statement
+* break statement
+
+Furthermore there are as in other programming languages arrays available.
+The syntax for a new array is like:
+
+var array_name = [item1, item2, ...];
+
+Example:
+[source,JavaScript]
+var cars = ["Audi", "Mercedes Benz", "BMW"];
+
+Example Function:
+[source,JavaScript]
+var x = myFunction(4, 3);   // Function is called, return value will end up in x
+
+[source,JavaScript]
+function myFunction(a, b) {
+  return a * b;             // Function returns the product of a and b
+}
+
+The principle behind is fundamental similar to other programming languages.
+
+== Go
+Google released the programming language Go in 2009. Go is a compilable programming language that has concurrency and automatic garbage collection. A concurrency, or parallelism, is the ability of a system to perform multiple calculations, instructions, or commands simultaneously in computer science. It can be a completely independent statement, to the joint processing of a task. You can also interact with each other (for example, to exchange intermediate results). 
+
+Go was developed out of dissatisfaction with existing software development languages such as C ++ or Java in the context of today's computer systems, especially with regard to scalable network services, cluster and cloud computing.
+Go has far fewer keywords than C ++. One of the problems Go wants to solve is compiler inefficiency in C and C ++. Key development goals included supporting concurrency with native language elements and facilitating software development with large developer teams and large codebases. Go offers closures and reflection as well as type safety. A closure or a function exclusion is a concept from functional programming. It describes a function that contains access to its creation context. When called, the function then accesses this creation context. This context (memory area, state) is not referenced outside the function, i. H. not visible. In terms of reflection or introspection, in programming means that a program knows its own structure and can possibly modify it. Type safety is a term used in computer science, especially in the area of programming languages, and refers to the state (of a program execution) in which data types are used according to their definitions in the programming language used and no type violations occur.
+
+=== Go Syntax
+Go provides following data types:
+
+* bool
+* int (machine-dependent)
+* int8, int16, int32, int64 (machine-independent, with a fix length in bit)
+* float
+* complex64, complex128 (for complex numbers)
+* byte
+* rune
+* string
+* uintptr (type of a pointer)
+* error (a built-in typ for error-handling)
+
+Pointer:
+
+A pointer is a variable that contains a reference to another variable. In the example above, b is a pointer to the variable a. To declare the pointer type and to dereference (evaluate the object pointed to by a pointer), use the * operator. The address of a variable is obtained with the & operator.
+
+[source,Go]
+var a int
+var b *int 	// pointer on int
+a = 15
+b = &a  	// b is pointer on a
+*b = 20 	// a is now 20
+
+Although Go has pointers, but no pointer arithmetic; It is therefore not possible to obtain a pointer to other objects by arithmetic operations.
+
+Example:
+[source,Go]
+func foo() {
+    x := new(int)	// pointer on anonym int
+    *x = 23
+} 			// int will be threw a garbage collector deleted
+
+The built-in new () function creates a new, anonymous object of the specified type and returns a pointer to it. There is no variable name for this object, it is only accessible via the pointer. Unlike e.g. in C ++ objects can not be explicitly deleted. A Go program automatically detects when there is no reference to an object; the object is then deleted by garbage collection.
+
+A pointer in Go can thus either be null or point to a valid object. The dereferencing of a null pointer results in a runtime error message.
+
+The syntax of Go is basically similar to the C programming language. There are fewer loops, fewer variable declarations, and no semicolons.
+
+
+Example:
+
+[source,golang]
+package main
+import "fmt"
+func add(a, b int) int {
+	return a + b
+}
+func main (){
+	fmt.Println(add(1,2))
+}
+
+
+A Go program consists of packages that group together related functions and variables. A package usually corresponds to a directory of the same name. Good package names can greatly improve the code. The package name should provide an appropriate context for its content, so that users can understand it more easily. Also the developers of a package can more easily decide during its development, what belongs in the package and what not. Typically, lower case nouns are used.
+
+== Functional Programming
+Functional Programming is based on the functional concept of mathematics. In this case, a function forms input values, that is to say elements from the domain of definition, unambiguously on output values, that is to say elements from the value range. A functional program is ultimately a set of function definitions.
+
+The definition of a function takes place in following form:
+
+DEF f x1 . . . xn = e .
+
+Here is a function named f introduced. The names x1, ..., xn are parameters and the expression e is called the body. One or more of the parameters x1 may also be tuples (x1, ..., x1n).
+
+However, there is always the question of what constitutes functional programming. The following table should give an overview:
+[options="header"]
+|=======================
+|property|imperative|functional
+|programming style|perform step-by-step tasks and manage changes in state|Define what the problem is and what data transformations are needed to achieve the solution
+|state changes|Important|Non-existent
+|order of execution|Important|Not as important
+|primary flow control|Loops, conditionals, and function calls|Function calls and recursion
+|primary manipulation unit|Structures and class objects|Functions as first-class objects and data sets
+|=======================
+
+== Lambda-Notation
+In addition to the functional definition shown above, which is reminiscent of mathematical equations, functional languages ​​usually also allow the so-called λ-notation. The source of this notation is Church's λ-calculus, which can be considered as the theoretical basis of functional languages.
+
+The function definition in λ-notation takes place in the form
+
+DEF f = λx1,. , , , xn • e
+
+By the fragment λx1,. , , , xn the variables x1, ..., xn are bound in the expression e. The entire expression λx1,. , , , xn • e is called λ-term or as λ-term.
+
+In general, λ functions are anonymous functions and have disappeared after execution in the program. The advantage here is also that these functions can be written in one line and thus reduce the programming effort and sometimes achieve a small performance improvement.
+
+== Advantages
+Functional programming makes programs simpler and clearer, which in particular makes debugging, testing and maintenance much easier. The following example shows a function that transforms a two-dimensional array into a one-dimensional array. This was implemented with an imperative approach.
+
+[source, JavaScript]
+function merge2dArrayIntoOne(array){
+	var count = arrays.length;
+	var merged = new Array(count);
+	var c = 0;
+	for (var i = 0; i < count; ++i){
+		for (var j = 0, glen = arrays[i].length; j < glen; ++j){
+		merged[c++] = arrays[i][j];
+		}
+	}
+	return merged
+}
+
+The following code snippet shows the implementation of the example above with functional programming:
+
+[source, JavaScript]
+varmerge2dArrayIntoOne2 = function(arrays){
+	return arrays.reduce(function(pin){
+	return p.concat(n);
+	)};
+};
+
+Both functions have the same input und deliver the same output but the functional approach is much more clearer.
+
+== Comparison
+=== Advantages JavaScript
+Since JavaScript can be used both in the front and backend, it saves a lot of time and learning in development. The advantage here is clearly in the training. JavaScript can use the same programming language for the front and back end, which can simplify development in general. If JavaScript is used in the backend, Node.JS is required. Node.JS is a programming framework based on JavaScript. It is mainly used for web server programming, but can also be used for other types of applications (console applications, server services).
+
+Another advantage is the time spent on development, which shows a clear strength of JavaScript. Especially when setting up a Node server only a few lines of code are needed. Additionally, JavaScript is much more common than Go at the moment. The advantage of this is that even developers can be found much easier for projects of this programming language. Compared to Go, this is a clear advantage, because Go is not that widespread yet and therefore there are fewer developers available on the market. Accordingly, there is less documentation and literature available.
+
+Since JavaScript is a dynamically typed programming language, it has the advantage of saving time debugging the syntax and semantic errors. In addition, this also grants more tolerance for changes. The extent to which dynamic typing offers an advantage also depends on the specific application and must therefore be considered in a fundamentally differentiated way.
+
+=== Advantages Go
+The benefits of Go are clear in performance. That's also why Go was designed to increase performance over existing programming languages. In general, Go has similar performance properties as C or C ++. This is not least due to the proximity to these programming languages.
+
+An important advantage of Go over JavaScript lies in the parallelization. Multithreading or parallelism refers to the ability to perform multiple calculations simultaneously. Most modern programming languages ​​(like Java, Python, etc.) support it. But the real problem lies in concurrent execution with special issues like threading locking, race conditions and deadlocks. These things make it difficult to create a multithreaded application for the languages.
+
+In Go, however, thousands of routines can run simultaneously and even on a single processor without any problems.
+Go uses the concept of channels, which provides a relatively abstract way of synchronous or asynchronous communication between go routines. A channel is an abstracted way of communication that provides a queue channel or interface.
+
+Only data of a fixed type can be transmitted via this way. It is generated by calling the command "make". Then go-routines can write in the channel, read from it and close it again.
+
+If the performance is considered, there are slight advantages for Go. Since Go is an executable programming language and JavsScript is an interpreted programming language, there are slight performance benefits to Go. In general, the performance difference is not significant, so no major differences can be detected.
+
+== Conclusion
+In general, there are no major differences between JavaScript and Go in terms of functional programming. The theoretical concept of functional programming is in principle applied the same way in both languages. However, differences are noticeable in the syntax and origin of both programming languages. Both programming languages ​​have an object system and are not pure functional programming languages ​​such as Haskell. Specifically, this means that the functions do not behave like mathematical functions, and they do not just depend on definition and input and do not always give the same result for a particular input. Both JavaScript and Go therefore behave depending on the surrounding context and the previously executed program parts. Since both programming languages ​​are not purely functional programming languages, it is somewhat difficult to compare them in terms of functional programming. However, each language offers peculiarities due to its origin which, depending on the purpose of use, must be taken into account in individual cases and may possibly have advantages and disadvantages.
+It will certainly be interesting in the future, too, as Go gains more and more awareness of the extent to which the programming language will prevail.
+Currently, JavaScript still has an advantage in its reputation and more developers with skills are available.
+
+== Bibliography
+=== Web
+https://www.yuhiro.de/vorteile-und-nachteile-von-golang-go-die-google-programmiersprache/
+https://medium.com/codezillas/want-to-be-a-best-web-developer-learn-golang-not-node-js-69b4166d1449
+https://molily.de/js/aufgaben.html
+https://www.w3schools.com/js/js_functions.asp
+https://hackernoon.com/statically-typed-vs-dynamically-typed-languages-e4778e1ca55
+https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/schleifen_und_iterationen
+
+=== Books
+Funktionale Programmierung, Petter, Peter; Hofstedt, Petra (2006)
+
+=== Lecture
+Johannes Weigend (TH Rosenheim)
+
+by Florian Krois
+
+
+
+

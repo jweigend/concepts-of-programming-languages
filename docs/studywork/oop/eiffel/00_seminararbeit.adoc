@@ -1,0 +1,21 @@
+= Compare Object Oriented Programming in Go with Eiffel - Concepts of Programming Languages WS 18/19
+===========
+:Author: Johann Neuhauser
+:Email: johann.neuhauser@stud.fh-rosenheim.de
+:Date: 2019-01-05
+:Revision: v1.0
+:toc:
+
+include::01_intro.adoc[]
+
+include::02_classes.adoc[]
+
+include::03_composition.adoc[]
+
+include::04_inheritance.adoc[]
+
+include::05_polymorphism.adoc[]
+
+include::06_conclusion.adoc[]
+
+include::07_bibliography.adoc[]

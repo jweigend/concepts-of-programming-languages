@@ -1,0 +1,10 @@
+[bibliography]
+== References
+
+- [[[edo]]] https://www.eiffel.org/documentation (2019-01-05)
+- [[[gdo]]] https://golang.org/doc (2019-01-05)
+- [[[spe]]] Simon Parker. Eiffel for beginners. 1999. https://www.maths.tcd.ie/~odunlain/eiffel/eiffel_course/eforb.htm (2019-01-05)
+- [[[gpi]]] http://www.golangpatterns.info (2019-01-05)
+- [[[rcw]]] http://rosettacode.org/wiki (2019-01-05)
+- [[[wpe]]] https://en.wikipedia.org/wiki/Eiffel_(programming_language) (2019-01-05)
+- [[[wpg]]] https://en.wikipedia.org/wiki/Go_(programming_language) (2019-01-05)

@@ -1,0 +1,195 @@
+= Parallel Programming: Go vs Erlang
+by Fabian Dick
+
+== Introduction
+This seminar paper has been written in terms of the Master Course - Concepts of Programming Languages at the Technical University of Applied Sciences Rosenheim. This paper is a comparison of Erlang and Go in the field of concurrency. Therefore Erlang is going to be shown and compared to Go. Features of the Go Programming Languages will be regarded as being known. 
+
+The programming language Erlang was invented by Joe Armstrong, Robert Virding and Mike Williams in 1986. It was developed a proprietary language within Ericsson a Swedish multinational networking and telecommunications company. That is where Erlang got its name from. It is short for Ericsson language. But it is also said that it is named after the Danish mathematician Agner Krarup Erlang. The developers have never revealed which one is true and which one is false, so both roots of the name can be seen as the right one. In the year 1998 Erlang/OTP was released Open Source. OTP short for Open Telecom Platform is a collection of middleware, libraries and tools written in the Erlang programming language. 
+
+The functional, dynamically typed programming language Erlang is using immutable data and pattern matching. It was designed for creating applications such as telephone switches that must run nonstop. That requires the code to be hot-swappable, distributed, and robust in the face of errors. 
+
+The idea of parallel programming in Go and in Erlang is pretty similar. Erlang works like:
+----
+Parallel executions are called processes. 
+These processes are strongly isolated. 
+Process creation and destruction are lightweight operations.
+Passing messages is the only way for processes to interact.
+Processes share no resources.
+The processes have unique names and if you know the name of a process you can send it a message.
+----
+Rob Pike one of the inventors of Go said about concurrent programming:
+----
+Don't communicate by sharing memory; share memory by communicating.
+----
+So the Go creators may have orientated by the idea of communication via messages like in Erlang.
+
+== Runtime Environment
+
+=== Erlang VM Beam
+One of the reasons Erlang was and is that powerful for the development of concurrent and distributed systems is the Erlang VM Beam short Beam. It provides interfaces to Ports, Native Implemented Functions short NIFs and Build In Functions short BIFs. It provides lightweight numerous concurrency, asynchronous communication, process isolation, error handling, soft real-time. 
+To realize that the Beam has its own schedulers, processes, memory management, message passing and multi-core management.
+
+The use of NIFs is a simpler and more efficient way of calling C-code than using port drivers. They appear as any other functions to the callers. They belong to a module and are called like any other Erlang functions. The NIFs of a module are compiled and linked into a dynamic loadable, shared library (SO in UNIX, DLL in Windows). The NIF library must be loaded in runtime by the Erlang code of the module.
+As a NIF library is dynamically linked into the emulator process, this is the fastest way of calling C-code from Erlang alongside port drivers. Calling NIFs requires no context switches. But it is also the least safe, because a crash in a NIF brings the emulator down too.
+
+By default the Beam runs one VM thread per core and one scheduler per VM thread. To run the jobs every scheduler has its own run queue. The balancing works like that once every period of a defined number of reductions a new master scheduler is chosen. The master optimizes the workloads on the other schedulers. Processes suspend when they are waiting for messages. When a message for a suspended process arrives it gets put on the run-queue again.
+
+The Beam provides 4 separate memory types: process heaps, Erlang Term Storage short ETS, Atom table and a large binary space. All atoms are safed in a global atom table, which offers fast equality comparison. But atoms are never deleted and the atom table has a fixed size, so the System crashes when it is full. The large binary space is used for binaries greater than 64 bytes and stored in a separate area. It helps for a fast message passing by only passing a pointer. But the large binary space can grow and crash the system too because it can have a long delay before it gets reclaimed by the Garbage Collector. The ETS tables can store large amounts of data. When accessing the elements get copied to or from the process heaps. But the match/select commands allow more complex selection without copying. Each process has a separate heap and all the data is local to the process. If you are sending messages means copying data. The copying of the data helps the garbage collector and makes it more efficient. Also the copying makes synchronization unnecessary.
+
+There can also be a async thread pool provided by the Beam. Linked-in port drivers can use them and async thread get used to do i/o operations, so the scheduler thread has no longer to wait for file i/o.
+
+The ways to crash the BEAM come along with an unproper usage of the explained memory types before. So you have to take care with creating atoms, the binary space, errors in NIFs, errors in linked-in port drivers and uncontrolled process heap growth. Extraordinary heap growth can be caused by infinite recursion, very long message queues and too much data.
+
+=== Go Runtime Library
+
+Go's runtime does not include a virtual machine, such as is provided by the Erlang VM Beam. Go programs are compiled to native machine code. Every Go program contains an extensive library, called the runtime. The runtime library implements garbage collection, concurrency, stack management, and other critical features of the Go language.
+
+=== Comparison
+
+Both Languages implement the concept of green threads. The Beam provides green processes in terms these do not share state like threads do. Green threads/processes are threads/processes that are scheduled by a runtime library like in Go or a virtual machine like the Erlang VM Beam instead of natively by the underlying operating system. Green threads emulate multithreaded environments without relying on any native OS capabilities, and they are managed in user space instead of kernel space, enabling them to work in environments that do not have native thread support.
+
+== Concept of Concurrency
+
+=== The Actor Model
+When it comes to concurrent programming Erlang is using a mathematical theory of computation the Actor Model.
+
+The Actor Model, which was first proposed by Carl Hewitt in 1973 and was improved by Gul Agha and many others. This model takes a different approach to concurrency, which should avoid the problems caused by threading and locking.
+
+In the actor model, each object is an actor. This is an entity that embodies computation, state and communication. In Therms of communication an actor has a mailbox. Messages can be exchanged between actors, which will be buffered in the mailbox. Upon receiving a message, the behavior of the actor is executed, upon which the actor can: send a number of messages to other actors, create a number of actors and assume new behavior for the next message to be received.
+
+Of importance in this model is that all communications are performed asynchronously. This implies that the sender does not wait for a message to be received upon sending it, it immediately continues its execution. There are no guarantees in which order messages will be received by the recipient, but they will eventually be delivered. The only way to get the address of the communication partner is during creation or receiving addresses in communication. 
+
+A second important property is that all communications happen by means of messages, there is no shared state between actors. If an actor wishes to obtain information about the internal state of another actor, it will have to use messages to request this information. This allows actors to control access to their state, avoiding problems like the lost-update problem. Manipulation of the internal state also happens through messages.
+
+Each actor runs concurrently with other actors, it can be seen as a small independently running process.
+
+==== The Actor Model in Erlang
+When programming Erlang first of all object is an actor like in the actor model said. A process is an independent actor. It doesn't care about the outside world. It's like a prisoner churning over its own thing and wait for something to be passed into its prison's door, or more specifically, mailbox. So the process which is called when any programm is started is the first actor. Which should create other actors using the *spawn(Module, Name, Args)* operation. This operation returns the unique identifier of the process.
+
+.sampleactor.erl
+[source, erlang]
+----
+-module(sampleactor).
+-export([create_hello_world_actor/0,hello_world/0]).
+
+create_hello_world_actor() ->                       % 1
+    Actor_Id = spawn(sampleactor,hello_world,[]),   % 2
+    io:format("Actor_Id~p~n",[Actor_Id]).           % 4
+
+hello_world() ->                                    % 3
+    io:format("hello world~n").                     
+----
+
+In the shown sample program sampleactor.erl there is the function create_hello_actor() like it shown at position 1. This functions creates a new process/actor with the spawn function shown at position 2. The new created process calls the function hello_world() shown at position 3, that prints hello world. At position 4 there is the print of the process identifier shown, which has been created before.
+
+Erlang implements the communication of sending messages between actors with the *!* operator and the receiving of messages with die *receive* operator. The receive operator takes the first out of the message queue and compares it top down via Pattern Matching with the given patterns. If this matches, the message is removed from the queue and the actions corresponding to the pattern are executed. If *receive* is called and there is no element in the queue or no pattern matching the process is suspended until another message is sent to the process.
+
+.echo.erl
+[source, erlang]
+----
+-module(echo).
+-export([go/0, loop/0]).
+
+go() ->                                         %  1
+	Pid2 = spawn(echo, loop, []),               %  2
+	Pid2 ! {self(), hello},                     %  5
+	receive                                     %  6
+		{Pid2, Msg} ->                          % 11 
+			io:format("P1 ~w~n",[Msg])          % 12
+	end,
+	Pid2 ! stop.                                % 13
+
+loop() ->                                       %  3
+	receive                                     %  4 % 10 
+		{From, Msg} ->                          %  7
+			From ! {self(), Msg},               %  8
+			loop();                             %  9
+		stop ->                                 % 14
+			true                                % 15
+	end,
+----
+
+In the following explanations of source codes of example programs the positions, which are numbers in the commentaries, are written like this (number).
+The above shown program echo.erl shows a simple echo implementation with the main process that calls the go() function (1). Within the go() function a second process is created (2) that executes the loop() function (3). The loop() function executes the receive operation (4). Now the second process is suspended until it receives messages from another process. Process 1 sends Process 2 a message with its id and the phrase hello (5). Process 2 gets into execution and the first pattern in the receive block gets matched (7). Process 2 sends process 1 via the received process id the received phrase back (8). After that process 2 executes loop() again (9) and suspends waiting for other messages (10). Process 1 gets the message at (6) and prints the received phrase (12) because the pattern got matched (11). After that process 1 sends process 2 stop (13), so process 2 gets back into execution because the stop gets matched (14) and finishes with true (15).
+
+=== Concurrancy in Go
+
+In Go there are two ways to implement concurrency. Either to do it the low level way creating threads and locks or by sharing memory by communication. The way of sharing memory by communication is fulfilled via channels. Channels should be used to send messages from one threid to another. To implement the asynchronous functions the go routines are an easy approach. Go routines are lightweight asynchronous functions scheduled and executed by the Go routine library. They are the executing part of the green threading implementation in Go.
+
+The following program echo.go is an equivalent to the echo.erl program shown above. It should not be the best solution for an echo program but it is helpful to show the differences of both languages.
+
+.echo.go
+[source, go]
+----
+package main
+
+import (
+	"fmt"
+)
+
+func main() {                                                       //  1
+	channel1 := make(chan string, 10000)				            //  2
+	channel2 := make(chan string, 10000)				            //  3
+	go loop(channel1, channel2)          				            //  4
+	channel1 <- "hello"                  				            //  7
+	msg := <-channel2						                        // 11
+	fmt.Println(msg)						                        // 12
+	close(channel2)							                        // 13
+	close(channel1)							                        // 17
+}
+
+func loop(inputchannel chan string, outputchannel chan string) { 	//  5
+	for {
+		msg, ok := <-inputchannel 				                    //  6 //  8 // 14
+		if !ok {						                            //  9 // 15
+			break						                            // 16
+		}
+		outputchannel <- msg					                    // 10
+	}
+}
+----
+
+The above shown programm echo.go shows a simple echo implementation with the main process that calls the main() function (1). Within the main() function two channels get created (2,3). The channels accept strings and have a capacity of 10000 strings. The capacity is fictive to simulate a very large non blocking message box. After that the Go routine loop(inputchannel chan string, outputchannel chan string) (5) gets called (4). There the Go routine suspends (6) because the inputchannel is empty. At position 7 of the main() function in the main thread the string hello is put into the inputchannel of the Go routine (7). Then the Go routine continous execution (8) and checks if the channel got closed(9). The check was negative so the incoming string gets put into the outputchannel (10) and the main thread continous to read the string from the channel (11). The message gets printed (12) and then the channels get closed (13,17). So the Go routine continues and gets the variable ok gets false (14) so the check (15) is positive and the Go routine gets stopped (16).
+
+At this little code example it's easy to that channels can only be used in one direction and also have to be known to the Go routine using it like the other process names in Erlang.
+
+=== Comparison
+
+In that chapter the Go and Erlang operations get compared side by side.
+
+==== Go routines vs Erlang processes
+
+Go routines like Erlang processes implement the above described green threading properties. The creation of Go routines with *go anyfkt()* and Erlang processes with *spawn(Module, Name, Args)* is pretty similar in case of calling a function and executing it concurrently.
+
+The great differences are that Go routines routines have access to variables outside the Go routine. Erlang process can't access variables outside the process like a system process. The next difference is that Go routines are anonymous so they can't get accessed from outside. By the design of messaging in Erlang this is not possible of all because you need the identifier of a process to send it a message.
+
+==== Go channels vs Erlang messaging
+
+Erlang does not have an intermediary like Go channel.
+A process's mailbox can act in a way to a Go channel. But the great difference is, that it is not shared. So there is no possibility like in Go that more than concurrent activity pulls messages out of the channel. The next great difference is that Go channels have a specific type of the within stored data and by access the data is taken out of the channel. Erlang processes can get multiple types of data. If the data get matched it gets taken out of the process's mailbox and processed, if not it rests in the process's mailbox until it gets matched in the future.
+
+==== Go select vs Erlang receive
+
+To select message from different Go channels in an specific priority or specific message types in an specific priority out of a process's mailbox both languages offer operators to solve the problem. With the *select* statement in Go the programmer can prioritize which channel should get read first when it is filled with data. In Erlang this happens by the sequence of the pattern within the *receive* statement.
+It can be said the Erlang's *receive* is omnitalented because it does the job of Go's *receive* and *<-* operators.
+
+== Conclusion
+
+This chapter is the reader's personal conclusion of the comparison of both languages in case of parallel programming.
+The great difference when comparing Go and Erlang comes to the type of programming. Go is an imperative language where you mostly program to change states. In declarative programming like in Erlang the programmer can express nearly without caring about the control flow. This is possible because each function does not have side effects or changes the state outside of it.
+The biggest advantage of the actor model and its implementation in Erlang is that it never has to care about data race or syncing because each process can never access anything external.
+The pattern-matching technique of Erlang is also an advantage because *=* in Erlang means bind versus *:=* means assign to in Go. So you can match the left-hand shape of data with the right-hand one in Erlang.
+One difference to note is Go is a statically-typed, compiled language while Erlang is a dynamically-typed, bytecode-compiled language. Go would of course be more superior in arithmetic computation such as image processing than Erlang. And being compiled to executable Go program is more portable than Erlang without the need of a virtual machine.
+
+The most impressive thing of Erlang is that Erlang and its Runtime provided parallel computing and distributed computing long before most of the devices had a multicore CPUs like it is today. Erlang uses a concept of concurrent programming that is still powerful and in use today.
+
+== Sources
+
+- https://www.erlang.org/course/concurrent-programming
+- http://erlang.org/download/erlang-book-part1.pdf
+- https://www.guug.de/veranstaltungen/ffg2003/papers/ffg2003-armstrong.pdf
+- https://www.javaworld.com/article/2077999/java-concurrency/understanding-actor-concurrency--part-1--actors-in-erlang.html
+- https://softwareengineering.stackexchange.com/questions/277464/is-erlang-really-an-actor-model-language
+- http://erlang.org/download/armstrong_thesis_2003.pdf
+- https://medium.com/@alex_karaberov/everything-you-always-wanted-to-know-about-the-actor-model-but-were-afraid-to-ask-b6eee8722953
+- https://rocketeer.be/articles/concurrency-in-erlang-scala/
