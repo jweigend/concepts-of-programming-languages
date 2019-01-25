@@ -6,10 +6,11 @@
 
 Comparison of Go with other Languages. Study work at the University of Applied Science Rosenheim / Germany.
 The students should focus on the following aspects:
+
 - Functional Programming
 - Object Oriented Programming
 - Concurrent / Parallel Programming
-- Distributed / Systems Programming
+- Distributed Programming
 
 ## Functional Programming	
   - [Haskell](fp/haskell.adoc) - [Slides](fp/haskell-slides.pptx)
@@ -34,7 +35,7 @@ The students should focus on the following aspects:
  - [Scala](pp/scala.adoc) - [Slides](pp/scala-slides.pdf)
  - [Rust](pp/rust.adoc) - [Slides](pp/rust-slides.pdf)
 	
-## Distributed / Systems Programming	
+## Distributed Programming	
  - [Python](dp/python/python.adoc) - [Slides](dp/python/python-slides.pptx)
  - [Scala](dp/scala.adoc) - [Slides](dp/scala-slides.pptx)
  - [C](dp/c.adoc) - [Slides](dp/c-slides.pdf)
