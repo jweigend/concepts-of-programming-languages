@@ -116,5 +116,5 @@ We will release the results here.
 
 [Slides](docs/11-Systems-Programming-Docker.pdf)
 
-## [Study Work](docs/studywork/README.md)
+## [Study Work - Winter 2018/2019](docs/studywork/README.md)
 
