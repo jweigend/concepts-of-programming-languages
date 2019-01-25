@@ -1,6 +1,6 @@
 # DANGER ZONE
 
-### These are the results of the study work 2019 at the Technical University Rosenheim. There is no QS on the work. The content could be error prone, missleading or simply wrong. Nevertheless it is a great source of unconventional languages in comparison to Golang.   
+### These are the results of the study work 2019 at the Technical University Rosenheim. This is unedited student work. The content could be error prone, missleading or simply wrong. Nevertheless it is a great source of unconventional languages in comparison to Golang.   
 
 # Comparing Go
 
