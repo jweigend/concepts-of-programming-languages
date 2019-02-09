@@ -20,7 +20,7 @@ memory layout.
 Another approach is to include as little runtime as possible.
 In terms of performance Rust is comparable to C++.
 The syntax is very similar to C++ but with far less keywords. 
-It supports funtional and imperative programming styles.
+It supports functional and imperative programming styles.
 The design approach on memory safety is realised through prohibition of null 
 pointers, a lifetime system to recognize dangling pointers and an ownership 
 system, which prevents race conditions.
@@ -32,7 +32,7 @@ Violations against the rules of the lifetime and ownership system are checked at
 compile time, to ensure memory safety.
 
 Rust is delivered with an entire toolchain, which includes a compiler, 
-a dependency management system and other helpfull features like a code formatter.
+a dependency management system and other helpful features like a code formatter.
 
 == Rust threads versus Goroutines
 There are different ways to achieve multithreading.
@@ -50,7 +50,7 @@ rather than the kernel. With independently executing functions multiplexed on
 a set of system threads, a blocking function can be simply exchanged with 
 another function. Those program threads are called goroutines in go. 
 According to the link:https://golang.org/doc/faq#goroutines[Go FAQ on Goroutines]
-it is viable to have hundreds of thousends of goruotines at the same time.
+it is viable to have hundreds of thousands of goruotines at the same time.
 Goroutines are considered very cheap, nevertheless they come with a slight
 overhead of few kilobytes besides memory for the stack and an average of three
 cheap instructions per function call. Their initialisation is cheaper than that 
@@ -65,18 +65,18 @@ former possibility of having a system thread per thread created in the program.
 In this context it has to be mentioned, that the Go approach in general can also be realised
 in Rust.
 
-== Similarities of parallel programing in Go and Rust
-The most common concepts parallel programmin in both languages will be 
+== Similarities of parallel programming in Go and Rust
+The most common concepts parallel programming in both languages will be 
 discussed below and compared in usage, characteristics and syntax.
 Furthermore all other concepts for parallel programming will be named in a short overview.
 
-=== Strating and awaiting termination of threads in comparison
+=== Starting and awaiting termination of threads in comparison
 Starting a goroutine is easy, has minimal syntax and looks like this: 
 [source, go]
 ----
 go function()
 ----
-This call will run the funtion call asynchronous in a goroutine.
+This call will run the function call asynchronous in a goroutine.
 There is no need to import additional parts of the standard library.
 
 As opposed to go you have to import std::thread in Rust and the call looks like this:
@@ -91,8 +91,8 @@ Life time in general ends if the variable runs out of scope,
 which happens for example when the owning function ends or the lifetime of the 
 owning data structure ends.
 The created thread possibly exists longer than the calling function, 
-and thus you have to prevent the variable's lifetime from ending befor the thread is finished using it.
-This happens by transfering ownership to the calling closure with the move keyword.
+and thus you have to prevent the variable's lifetime from ending before the thread is finished using it.
+This happens by transferring ownership to the calling closure with the move keyword.
 As a side effect the moved variable can afterwards not be accessed from
 anything than the closure, which prevents race conditions.
 
@@ -106,7 +106,7 @@ The function call to thread::spawn returns a handle on which you can call the me
 This blocks the calling thread until the thread associated with the handle has finished.
 The call ".unwrap()" on the result of join comes from a type that forces the 
 programmer to deal with error handling. Unwrap simply returns the result or 
-causes a panic if an error occured, which is fine as we don't care for errors for now.
+causes a panic if an error occurred, which is fine as we don't care for errors for now.
 
 Go on the other hand has no construct as join in the language. 
 To await termination of one or more threads, so called WaitGroups are used.
@@ -127,7 +127,7 @@ wg.Wait()
 As shown above the WaitGroup has to be created first, 
 then, before starting the goroutine, one is added to the WaitGroup for every goroutine to be started.
 It is very important to combine the call ".Done()" with the keyword defer,
-else, if someting goes wrong during the execution of the goroutine, 
+else, if something goes wrong during the execution of the goroutine, 
 you might wait for ever for the WaitGroup to signal the termination of all threads.
 Finally the call to ".Wait()" makes the program block and wait for all functions of the wait group to finish.
 
@@ -139,7 +139,7 @@ threads in a secure way.
 Below is a comparison of the concepts of channel and mutex, that are present in both languages.
 
 ==== Channels
-In the link:https://golang.org/doc/effective_go.html#concurrency[go documentation] ist stated:
+In the link:https://golang.org/doc/effective_go.html#concurrency[go documentation] is stated:
 "Do not communicate by sharing memory; instead, share memory by communicating."
 Which is named as the main reason, why channels are the best way to exchange data in goroutines.
 Rust also quotes the statement in the book's chapter about link:https://doc.rust-lang.org/book/ch16-02-message-passing.html#using-message-passing-to-transfer-data-between-threads[message passing]
@@ -182,7 +182,7 @@ The second block starts two go routines executing the function sum with half of 
 The third block shows blocking reading from the channel into the variables x and y and finally the results are printed.
 Note that both goroutines take the same channel.
 
-The Rust version has a similar in legth but is slightly different.
+The Rust version has a similar length but is slightly different.
 [source, rust]
 ----
 use std::sync::mpsc;
@@ -213,28 +213,28 @@ fn main() {
 The function sum operates in the same way as in the above version but takes only the sender part of a channel as parameter.
 The first block is initialisation of the array and the channel.
 A difference is, that creating a channel returns not a channel as such, 
-but a touple of a sender and a receiver. 
+but a tuple of a sender and a receiver. 
 Both structures are generic and are of the type to transfer.
 The next step is unique to Rust and involves cloning the sender.
 This is a result of the fact mentioned above, 
 that we take ownership of captured variables in closures.
 When the first thread is spawned and tx1 is handed to the sum function, the main function loses ownership of tx1.
 As a result we can't pass tx1 to the second call of sum.
-With clonig the sender we make it possible that each closure can own the sender.
+With cloning the sender we make it possible that each closure can own the sender.
 In the third block we also read two times blocking from the channel or accordingly from the receiver part of the channel.
 
 Overall the go version is a bit shorter and easier to read and to write as you don't have to think about ownership.
-In both languages it is possible to create buffered channels aswell.
+In both languages it is possible to create buffered channels as well.
 
 ==== Mutex
 Mutual exclusions, or short mutexes exist in both languages.
 The concept of mutual exclusions is to allow access when the mutex is unlocked.
 Whoever uses the value must lock the mutex before using it 
-and unlock it when he does not need acces to the value anymore.
+and unlock it when he does not need access to the value anymore.
 In go a mutex is very basic.
-The programmer has to lock and unlock it manualy before and after the usage of the ressource.
+The programmer has to lock and unlock it manually before and after the usage of the resource.
 It is intended, that low level locks are hardly used in go, as channels should be the standard way to communicate between threads.
-In Rust mutex is more advanced and ellegant tu use, but still the programmer needs to take care of the constraints of the ownership system.
+In Rust mutex is more advanced and elegant tu use, but still the programmer needs to take care of the constraints of the ownership system.
 A mutex is a generic type in Rust and stores data it protects inside its own structure.
 [source, rust]
 ----
@@ -260,7 +260,7 @@ First a new mutex, which stores an integer, is created and stored inside an atom
 This type is a reference counting pointer, that is safe to use in an asynchronous context.
 In the loop a copy of the pointer is created for every thread started.
 What seems odd is, that in the closure the mutex is only locked and never unlocked.
-This procedure is correct though, because when the lifetime of locked value ends, the mutex is  unlocked automaticly.
+This procedure is correct though, because when the lifetime of locked value ends, the mutex is  unlocked automatically.
 
 ==== Other concepts for thread safe information exchange
 Go and Rust both allow simple atomic operations on selected data types.
@@ -275,11 +275,11 @@ Also occurring in both languages is the concept of a type that executes one acti
 This type is called "Once" in both languages.
 
 In Go exist some concepts that are not realised in Rust.
-There is, for instance, a thread safe map allready implemented in Go, which allows a couple of thread safe operations on the data structure.
+There is, for instance, a thread safe map already implemented in Go, which allows a couple of thread safe operations on the data structure.
 Furthermore there is a type called pool, that is a set of temporary objects that may be individually saved and retrieved.
-In Go it is possible to wait for a message on different channels simultaniously. 
+In Go it is possible to wait for a message on different channels simultaneously. 
 This is realised with the select key word and the channels can be prioritised by 
-ordering in case two chanels receive a message at the same time.
+ordering in case two channels receive a message at the same time.
 
 Rust on the other hand has barriers, which are sometimes mistaken for an equivalent of Go's WaitGroups.
 Barriers, however, are called inside the thread and are used to synchronise execution of the task.
@@ -288,14 +288,14 @@ Another concept that is only implemented in Rust is atomically reference countin
 As Rust enforces memory safety by design and reference counting pointers are a 
 very important construct of the language, especially in connection with the 
 ownership system, it is necessary to provide those smart pointers also in a thread safe context.
-The thread safe version uses atomic operations to count references, and can not be accesed mutably by default.
+The thread safe version uses atomic operations to count references, and can not be accessed mutably by default.
 This only works in connection with a mutex.
 
 == Conclusion
-Rust and Go are both very young programing languages. 
+Rust and Go are both very young programming languages. 
 Go's Version 1.0 was published in 2012, while Rust's Version 1.0 was released in 2015.
 This is one main reason why they have a lot of concepts in common, as they represent the current state of knowledge.
-Both languages are under steady developement and both had their latest version released in the middle of december of 2018.
+Both languages are under steady development and both had their latest version released in the middle of December of 2018.
 Also both languages don't need a lot of code to produce concurrent programs.
 The two languages are both created as modern system programming languages, as alternative to the use of C++.
 Accordingly they have a lot in common.
