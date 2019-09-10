@@ -1,5 +1,5 @@
 # Concepts of Programming Languages
-Master Course: Concepts of Programming Languages - University of Applied Sciences Rosenheim (TH Rosenheim) - 2019/2020
+Master Course: Concepts of Programming Languages - University of Applied Sciences Rosenheim (TH Rosenheim)
 
 <img src="docs/img/go.png" width="10%">
 
@@ -22,25 +22,46 @@ We will release the results here.
 - Overview of Programming Languages, Why Go?, Comparison to C/C++/Java/Python/Ruby/Scala/JS
 - Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries 
 
+[Slides](docs/01-Introduction%20to%20Golang.pdf)
+
+[Exercises](docs/exercises/Exercise1.md)
+
 ## Lesson 2 - Basics in Go Programming, OOP Part I
 
 - Pointer, Arrays, Maps, Object Oriented Programming
 - Reasons for Go https://www.youtube.com/watch?v=5kj5ApnhPAE
 - Swap, Index, Rational Numbers, Containers
 
+[Slides](docs/02-Go-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise2.md)
+
 ## Lesson 3 - Object Oriented Programming in Go
 
 - Structs, Interfaces, Embedding, Polymorphism
+
+[Slides](docs/03-Go-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise3.md)
 
 ## Lesson 4 - Functional Programming and the Lambda Calculus
 - Functional Programming
 - Lambda Calculus
 - Streams in Go
 
+[Slides](docs/04-Functional-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise4.md)
+
 ## Lesson 5 - Functional Parsers
 - What is a Parser?
 - Functional Parsers and Parser Combinators
 - Building a Parser in Go
+
+[Slides](docs/05-Parser-Combinators.pdf)
+
+[Exercises](docs/exercises/Exercise5.md)
+
 
 ## Lesson 6 - Concurrent Programming
 - Why concurrent programming matters!
@@ -48,10 +69,18 @@ We will release the results here.
 - Go concurrency patterns
 - The dining philosophers problem
 
+[Slides](docs/06-Concurrent-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise6.md)
+
 ## Lesson 7 - Concurrent Programming - Part II
 - Deadlocks and Detection
 - The Resource Access Graph
 - Building a Resource Manager
+
+[Slides](docs/07-Concurrent-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise7.md)
 
 ## Lesson 8 - Distributed Programming
 - Introduction
@@ -59,17 +88,33 @@ We will release the results here.
 - RPC and GRPC
 - ID generator with GRPC 
 
+[Slides](docs/08-Distributed-Programming.pdf)
+
+[Exercises](docs/exercises/Exercise8.md)
+
 ## Lesson 9 - Distributed Programming - The Raft Protocol
 - Introduction into Consensus Protocols
 - Raft
 - Implementing Raft with Go 
 
+[Slides](docs/09-Distributed-Programming-Raft.pdf)
+
+[Exercises](docs/exercises/Exercise9.md)
+
 ## Lesson 10 - Modules and Versioning
 - Introduction into Go 1.11 Modules
 - Implementing Modules
+
+[Slides](docs/10-Modules.pdf)
+
+[Exercises](docs/exercises/Exercise10.md)
 
 ## Lesson 11 - System Programming
 - What is System Programming?
 - Calling C
 - Implementing Docker
+
+[Slides](docs/11-Systems-Programming-Docker.pdf)
+
+## [Comparison of Go with other Languages - Study Work](docs/studywork/README.md)
 
