@@ -1,6 +1,0 @@
-== Conclusion
-
-In summary, it can be said that object-oriented programming is also possible in Go, but due to the lack of many concepts that improve the robustness of a program, it is more suitable for experienced programmers.
-On the other hand, Eiffel is a nice programming language to build safe and robust programs.
-But you quickly realize that a lot of training is needed here.
-In addition, the compile time already suffers from the complexity of the language even with simple programs.
