@@ -1,0 +1,116 @@
+Concepts of Programming Languages
+Master Course - Rosenheim Technical University - WS 2019/2020
+10 Oct 2019
+Tags: go, programming, master
+
+Johannes Weigend
+QAware GmbH
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* There are so many Languages ...
+.image ./img/00-programming-languages.jpeg 550 1000
+
+* Course Requirements
+- The course is designed as a master course. 
+- Solid programming skills in Java/C/C++ are required. 
+- It is assumed that students have some skills in Scala, Python or Ruby.
+- For all code examples, we will use Go (Golang) as language.
+
+* Goal of the Course
+
+.image img/go.png
+- Learn how Go differs from other languages conceptually 
+- Gain skills to pick the right language for a given problem
+- Knowledge about the concepts of existing programming languages
+- Learn how to write professional code with Golang
+
+* Lessons
+
+Lesson 1 - *Introduction*
+Why Go? History, Concepts, Comparison to C/C++/Java/Python/Ruby/Scala/JS
+
+Lesson 2 - *Basic* *Language* *Overview*
+
+Lesson 3 - *OOP* *with* *Go*
+
+Lesson 4 - *Functional* *Programming*
+
+Lesson 5 - *Fuctional* *Parsers*
+
+Lesson 6 - *Parallel* *Programming* - Part I
+
+Lesson 7 - *Parallel* *Programming* - Part II
+
+Lesson 8 - *Distributed* *Programming* - Part I
+
+Lesson 9 - *Distributed* *Programming* - Part II
+
+Lesson 10 - *Microservices*
+
+* Lessons
+
+Lesson 11 - *System* *Programming*
+
+Lesson 12 - *Summary*
+
+
+* Structure of this course
+- Recap - 15 min 
+- Lecture - 30 min
+- Online Tutorials (Video) - 45 min
+- Student Discussions - 30 min
+- Introduction to Exercises -  15 min
+- Exercises - 45 min (+ Homework)
+
+* Material
+Learning Campus: PDFs only
+.link https://learning-campus.fh-rosenheim.de/course/view.php?id=1412
+
+Github: PDFs, Sources, Slides (Go Present Tool)
+.link https://github.com/jweigend/concepts-of-programming-languages
+
+
+* Semester Work
+15 Minutes presentation + 5-10 pages Asciidoc document (written in English)
+
+- Compare *PP* (Procedural Programming) in Go with:
+    C
+    Modula 
+    Ada 
+
+- Compare *OOP* (Object Oriented Programming) in Go with:
+    Smalltalk 
+    C++ 
+    Eiffel 
+    Objective C 
+
+- Compare *FP* (Functional Programming) in Go with:
+    Haskell 
+    Clojure 
+    F# 
+
+* Semester Work
+
+- Compare Go *Concurrency* with:
+    Erlang 
+    Scala Actors 
+    D 
+    Occam 
+
+- Compare *Go* with:
+    Rust 
+    Swift 
+    JavaScript 
+    Ruby 
+    Python 
+    Kotlin 
+ 
+
+* Books
+Donovan, Kernigham: The Go Programming Language 
+.image https://d3by36x8sj6cra.cloudfront.net/assets/images/book/large/9780/1341/9780134190440.jpg 200 200
+
+Sebesta: Concepts of Programming Languages 
+.image https://img.yumpu.com/59461192/1/358x441/concepts-of-programming-languages-robert-w-sebesta.jpg?quality=85 200 200

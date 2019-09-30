@@ -1,0 +1,52 @@
+Introduction to Golang
+Concepts of Programming Languages
+04 Oct 2018
+Tags: go, programming, master
+
+Johannes Weigend
+QAware GmbH
+johannes.weigend@qaware.de
+http://www.qaware.de
+@johannesweigend
+
+* Gopher
+.image https://talks.golang.org/2012/10things/gopher.jpg
+
+* Why Go?
+- Go is the major language behind the Cloud Native Stack
+.link https://www.cncf.io/
+.image ./img/01-cncf-projects.png 100 1024
+- The most important components are written in Go: Docker, Kubernetes, etcd, Prometheus, Grafana, ...
+- Go is Open Source and maintained by Google
+- Go is a distributed, parallel language designed for systems programming at Google to solve the problems of C++ code.
+
+* Hello World
+.play ../basics/hello/main.go
+
+* Palindrome
+.code ../basics/palindrome/palindrome.go /IsPalindrome/,/END1 OMIT/
+.code ../basics/palindrome/palindrome_test.go /START OMIT/,/END OMIT/
+
+* Introduction to Golang
+Rob Pike @ Google 2009 (60 Min)
+.link https://www.youtube.com/watch?v=rKnDgT73v8s
+.image img/01-go-programming-Language.png 450 700
+
+* Some Questions 
+- What makes Go different to other Languages? 
+- What makes Go similar to other Languages?
+- Discuss your personal opinions in a group of students!
+
+* Exercise 1
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise1.md
+.image img/01-exercise.png 500 700
+
+* See also
+
+.link https://github.com/jweigend/concepts-of-programming-languages
+.link https://golang.org/
+.link https://golang.org/doc/
+
+
+
+
