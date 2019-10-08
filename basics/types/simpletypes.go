@@ -24,6 +24,13 @@ type Int struct {
 
 var m = 400
 
+// Automatic increment per line with iota
+const (
+	zero = iota
+	one
+	two
+)
+
 func id(x *int) *int { return x }
 func add500()        { m += 500 }
 func inc(x *int)     { *x++ }
