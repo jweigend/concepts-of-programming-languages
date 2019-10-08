@@ -19,7 +19,7 @@ type Integer = int
 
 // Int is struct containing an int value.
 type Int struct {
-	value int
+	value Integer
 }
 
 var m = 400

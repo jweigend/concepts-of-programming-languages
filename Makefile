@@ -32,6 +32,7 @@ install:
 
 clean:
 	go clean -testcache -cache $(PKGS)
+	rm *.out 
 
 all: build test install
 
