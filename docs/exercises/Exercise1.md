@@ -7,7 +7,10 @@ If you do not finish during the lecture period, please finish it as homework.
 
 - Install Go from http://golang.org inside a virtual disk 
   (.vhdx on Windows or .sparseimage on Mac) in a /software/go subdirectory.
-- Create a Go workspace on the disk in the /codebase/gopath directory (https://www.youtube.com/watch?v=XCsL89YtqCs)
+  https://www.windowscentral.com/how-create-and-set-vhdx-or-vhd-windows-10
+  https://support.apple.com/de-de/guide/disk-utility/dskutl11888/mac
+
+- Create a Go workspace on the disk in the <<DISK>>/codebase/gopath directory (https://www.youtube.com/watch?v=XCsL89YtqCs)
 - Create a shell script (.sh / .cmd) to make your changes to the GOPATH and PATH environment variables persistent.
 - Create a Github project with your personal account containing a HelloWorld.go programm
 - Use go get github.com/\<\<YOUR REPO\>\> to copy the repository into your local GOPATH.
