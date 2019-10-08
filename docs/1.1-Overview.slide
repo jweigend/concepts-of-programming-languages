@@ -1,5 +1,5 @@
-Overview
 Concepts of Programming Languages
+Overview
 04 Oct 2018
 Tags: go, programming, master
 
@@ -14,22 +14,19 @@ http://www.qaware.de
 .image img/01-Languages.png 500 1000
 
 * Types of Programming Languages
-*Imperative*: Assembler as root (Operations and Control Structures)
-*Declarative:*
-Domain Specific Languages (HTML, XML, YAML, ...) => Limited in scope. Some are not Turing Complete. 
-*Procedural* (Control Structures and Procedures)
-Fortran / Algol / Pascal / *C*
-*Object* *Oriented* (Classes and Objects)
-Smalltalk / Objective C / C++ / Eifel / *Java* / C#
-*Functional* (Lambdas + Closures): Haskell, Erlang, F# 
-*Logic*: Prolog
-*Best* *of* *Breed*: Kotlin, Scala, Rust, JS, *Go*
+- *Imperative*: Assembler as root (Operations and Control Structures)
+- *Declarative:* Domain Specific Languages (HTML, XML, YAML, ...) => Limited in scope. Some are not Turing Complete. 
+- *Procedural* (Control Structures and Procedures): Fortran / Algol / Pascal / *C*
+- *Object* *Oriented* (Classes and Objects): Smalltalk / Objective C / C++ / Eifel / *Java* / C#
+- *Functional* (Lambdas + Closures): Haskell, Erlang, F# 
+- *Logic*: Prolog
+- *Best* *of* *Breed*: Kotlin, Scala, Rust, JS, *Go*
 .link https://en.wikipedia.org/wiki/List_of_programming_languages_by_type More Languages
 
 * Areas for Programming Languages
 - Application Programming (small / large scale, web, central, cloud)
 - Systems Programming
-- Network Programming  
+- Network Programming / Distributed Systems 
 - Realtime Systems
 - User Interface Programming
 - Embedded Systems 

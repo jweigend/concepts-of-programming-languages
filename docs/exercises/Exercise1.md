@@ -1,15 +1,13 @@
-Exercise 1 - Getting Started with Go
-Concepts of Programming Languages
-10 Oct 2019
-Tags: go, programming, master
+# Exercise 1 - Getting Started with Go
+
+If you do not finish during the lecture period, please finish it as homework.
 
 
-* Setup
+## Setup
 
-- Install Go in a virtual disk (.vhdx / Windows or .sparseimage / Mac) in a /software/go subdirectory.
-.link https://golang.org/dl/ 
-- Create a Go workspace on the disk in the /codebase/gopath directory 
-.link https://www.youtube.com/watch?v=XCsL89YtqCs
+- Install Go from http://golang.org inside a virtual disk 
+  (.vhdx on Windows or .sparseimage on Mac) in a /software/go subdirectory.
+- Create a Go workspace on the disk in the /codebase/gopath directory (https://www.youtube.com/watch?v=XCsL89YtqCs)
 - Create a shell script (.sh / .cmd) to make your changes to the GOPATH and PATH environment variables persistent.
 - Create a Github project with your personal account containing a HelloWorld.go programm
 - Use go get github.com/\<\<YOUR REPO\>\> to copy the repository into your local GOPATH.
@@ -17,7 +15,7 @@ Tags: go, programming, master
 - Test the HelloWorld programm with "go run HelloWorld"
 - (Optional: Install Visual Studio Code, IntelliJ or any other Editor with Go support) on your virtual disk.
 
-* After this Exercise
+## After this Exercise
 - You should know how to compile and run Go code
 - You should know about the meaning of the GOPATH and PATH variables
 - You should have a portable Go installation inside a separate disk or directory on your computer

@@ -1,4 +1,4 @@
-Concepts of Programming Languages
+About the Course
 Master Course - Rosenheim Technical University - WS 2019/2020
 10 Oct 2019
 Tags: go, programming, master
@@ -29,7 +29,6 @@ http://www.qaware.de
 * Lessons
 
 Lesson 1 - *Introduction*
-Why Go? History, Concepts, Comparison to C/C++/Java/Python/Ruby/Scala/JS
 
 Lesson 2 - *Basic* *Language* *Overview*
 
@@ -51,7 +50,7 @@ Lesson 10 - *Microservices*
 
 * Lessons
 
-Lesson 11 - *System* *Programming*
+Lesson 11 - *Systems* *Programming*
 
 Lesson 12 - *Summary*
 
@@ -75,23 +74,28 @@ Github: PDFs, Sources, Slides (Go Present Tool)
 * Semester Work
 15 Minutes presentation + 5-10 pages Asciidoc document (written in English)
 
-- Compare *PP* (Procedural Programming) in Go with:
-    C
-    Modula 
-    Ada 
-
-- Compare *OOP* (Object Oriented Programming) in Go with:
+- Compare Go *OOP* (Object Oriented Programming) with:
     Smalltalk 
     C++ 
     Eiffel 
-    Objective C 
+    Objective C
+    Modula
+    Lua 
 
-- Compare *FP* (Functional Programming) in Go with:
+- Compare Go *FP* (Functional Programming) with:
     Haskell 
     Clojure 
     F# 
 
 * Semester Work
+
+- Compare Go *SP* (Systems Programming) with:
+    C
+    C++ 
+    Rust 
+    Ada
+    D
+    Swift
 
 - Compare Go *Concurrency* with:
     Erlang 
@@ -99,14 +103,23 @@ Github: PDFs, Sources, Slides (Go Present Tool)
     D 
     Occam 
 
+* Semester Work
+
+- Compare Go *Distributed* *Programming* with:
+    JavaScript / NodeJS
+    C++
+    Java / Quarkus
+    Python
+
 - Compare *Go* with:
-    Rust 
-    Swift 
-    JavaScript 
+    Typescript 
     Ruby 
     Python 
     Kotlin 
- 
+    Elm 
+    Elixir
+    Crystal
+
 
 * Books
 Donovan, Kernigham: The Go Programming Language 
