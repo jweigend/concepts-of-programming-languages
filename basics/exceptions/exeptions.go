@@ -34,15 +34,17 @@ func (tcf TryCatchBlock) Do() {
 	tcf.T()
 }
 
-// TryCatchFinally helper for a better syntax.
-func TryCatchFinally(t func(), c func(ex Exception), f func()) {
+// TryCatch helper for a better syntax.
+func TryCatch(t func(), c func(ex Exception), f func()) {
 	TryCatchBlock{T: t, C: c, F: f}.Do()
 }
 
 // Test exception handling.
 func main() {
+	
 	fmt.Println("Starting ...")
-	TryCatchFinally(
+	
+	TryCatch(
 		func() {
 			fmt.Println("Trying ...")
 			Throw("Some Exception") // throws an exception
