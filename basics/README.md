@@ -1,9 +1,10 @@
 # Basics
 
+- Exceptions - Java like exception handling based on panic, defer and recover
+- Flags for command line applications
 - Hello World (UTF-8)
-- Swap with Pointers
+- Inverted index with maps and strings (book index example)
 - Palindrome with strings and runes (UTF-8 safe)
-- Bookindex with maps and strings
 - Sorting of custom types
-- Flags for command line programms
+- Swap with Pointers
 - Types: Primitive types, maps, strings and slices
