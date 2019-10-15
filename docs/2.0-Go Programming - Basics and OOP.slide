@@ -26,10 +26,6 @@ http://www.qaware.de
 - Focus on fast compile times (the entire Go codebase compiles in <10 seconds)
 - Simple (less keywords like C - 25/32)
 - Object-oriented, Functional, Parallel, Modular (vgo) and Versioned
-.link https://www.youtube.com/watch?v=5kj5ApnhPAE
-
-* Gopher - The Go Mascot
-.image https://talks.golang.org/2012/10things/gopher.jpg
 
 * Hello World
 .play ../basics/hello/main.go
@@ -145,6 +141,10 @@ http://www.qaware.de
 * Exercise 2.1
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.1.md
 .image img/02-exercise.png 500 700
+
+* public static void
+- Thoughts about language design:
+.link https://www.youtube.com/watch?v=5kj5ApnhPAE
 
 * Object Oriented Programming - Custom Types
 * Go has no classes but types and functions
