@@ -8,16 +8,16 @@ import "testing"
 //START OMIT
 // palindrome_test.go
 func TestPalindrome(t *testing.T) {
-	if !IsPalindrome("") == true {
+	if !IsPalindrome("") {
 		t.Error("isPalindrome('' should be true. But is false.")
 	}
-	if !IsPalindrome("o") == true {
+	if !IsPalindrome("o") {
 		t.Error("isPalindrome('o' should be true. But is false.")
 	}
-	if !IsPalindrome("oto") == true {
+	if !IsPalindrome("oto") {
 		t.Error("isPalindrome('oto' should be true. But is false.")
 	}
-	if !IsPalindrome("ottos") == false {
+	if IsPalindrome("ottos") {
 		t.Error("isPalindrome('ottos' should be false. But is true.")
 	}
 	//END OMIT
@@ -32,19 +32,19 @@ func TestPalindrome3(t *testing.T) {
 }
 
 func testPalindromeUTF8(t *testing.T, isPalindrome func(word string) bool) {
-	if !isPalindrome("☯otto☯") == true {
+	if !isPalindrome("☯otto☯") {
 		t.Error("isPalindrome('☯otto☯' should be true. But is false.")
 	}
-	if !isPalindrome("") == true {
+	if !isPalindrome("") {
 		t.Error("isPalindrome(Empty string should be a palindrome. But is not. Method returns false.")
 	}
-	if !isPalindrome("o") == true {
+	if !isPalindrome("o") {
 		t.Error("isPalindrome('o' should be true. But is false.")
 	}
-	if !isPalindrome("oto") == true {
+	if !isPalindrome("oto") {
 		t.Error("isPalindrome('oto' should be true. But is false.")
 	}
-	if !isPalindrome("ottos") == false {
+	if isPalindrome("ottos") {
 		t.Error("isPalindrome('ottos' should be false. But is true.")
 	}
 }
