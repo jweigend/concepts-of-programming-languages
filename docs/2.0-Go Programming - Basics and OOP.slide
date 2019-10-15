@@ -142,7 +142,11 @@ http://www.qaware.de
 * Maps and Slices - Example Book Index
 .code ../basics/index/index.go /Page/,/Stringer/
 
-* Object Oriented Programming
+* Exercise 2.1
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.1.md
+.image img/02-exercise.png 500 700
+
+* Object Oriented Programming - Custom Types
 * Go has no classes but types and functions
 .code ../oop/rational/rational.go /Rational/,/END1 OMIT/
 .code ../oop/rational/rational.go /Multiply/,/Multiply OMIT/
@@ -172,6 +176,6 @@ http://www.qaware.de
 - The downcast is safe (== dynamic_cast in C ++ or cast in Java)
 - No dereference (*s) is needed to call a method
 
-* Exercise 2
-.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.md
+* Exercise 2.2
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.2.md
 .image img/02-exercise.png 500 700
