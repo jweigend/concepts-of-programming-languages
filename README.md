@@ -25,5 +25,5 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 
 - Pointer, Arrays, Maps and Object Oriented Programming
 - Reasons for Go https://www.youtube.com/watch?v=5kj5ApnhPAE
-- Exercise 2.1 <a href="docs/exercises/Exercise2.1.md">Exercise 2.1</a>
-- Exercise 2.2 <a href="docs/exercises/Exercise2.2.md">Exercise 2.2</a>
+- <a href="docs/exercises/Exercise2.1.md">Exercise 2.1</a>
+- <a href="docs/exercises/Exercise2.2.md">Exercise 2.2</a>
