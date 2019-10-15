@@ -12,11 +12,18 @@ We will look at typical styles and application areas like OOP, FP, Parallel-, Di
 2. Learn how Go differs from Java, C/C++, Scala and languages
 3. Get solid skills to pick the right language for a given problem
 
-It is somewhat unusual, that we focus on Go in all lessons. Master students are typically well skilled in Java. They
+It is somewhat unusual, that we focus on Go in all Lectures. Master students are typically well skilled in Java. They
 have some basic knowledge in C/C++, maybe JavaScript, Ruby, Python or Scala. Since Go is a multi paradigm language, the lecture uses Go to demonstrate the basic concepts of these languages and discuss features which are missing in Go. We go from concrete to the abstraction and not vice versa.
 Each student will compare Go to one of these languages as Semester Work: Modula, Ada, Smalltalk, C++, Eiffel, Objective C, Haskell, Clojure, F# , Erlang, Scala, D, Occam, Rust, Swift, JavaScript, Ruby, Python, Kotlin. We will release the results here. 
 
-## Lesson 1 - Introduction
+## Lecture 1 - Introduction
 
 - Overview of Programming Languages, Why Go?
 - Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries 
+
+## Lecture 2 - Basics in Go Programming, OOP Part I
+
+- Pointer, Arrays, Maps and Object Oriented Programming
+- Reasons for Go https://www.youtube.com/watch?v=5kj5ApnhPAE
+- Exercise 2.1 <a href="docs/exercises/Exercise2.1.md">Exercise 2.1</a>
+- Exercise 2.2 <a href="docs/exercises/Exercise2.2.md">Exercise 2.2</a>
