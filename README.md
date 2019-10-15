@@ -20,6 +20,10 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 
 - Overview of Programming Languages, Why Go?
 - Setup, HelloWorld, Swap, Basic Types and Variables, Programm Arguments, Working with Go Flags, CLI Libraries 
+- <a href="docs/1.0-About.pdf">About</a>
+- <a href="docs/1.1-Overview.pdf">Overview</a>
+- <a href="docs/1.2-Introduction to Golang.pdf">Introduction to Golang</a>
+- <a href="docs/exercises/Exercise1.md">Exercise 1</a>
 
 ## Lecture 2 - Basics in Go Programming, OOP Part I
 
