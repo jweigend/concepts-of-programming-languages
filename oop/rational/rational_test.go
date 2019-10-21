@@ -30,9 +30,9 @@ func TestRational(t *testing.T) {
 		t.Error(fmt.Sprintf("1/4 + 1/4 should be 1/2 but ist %v", r4))
 	}
 
-	s:= fmt.Sprintf("%v", r4)
-	if s != "(1/2)" {
-		t.Error(fmt.Sprintf("Expected (1/2) but got: %s", s))
+	s:= fmt.Sprintf("x%vx", r4)
+	if s != "x(1/2)x" {
+		t.Error(fmt.Sprintf("Expected x(1/2)x but got: %s", s))
 	} 
 
 }
