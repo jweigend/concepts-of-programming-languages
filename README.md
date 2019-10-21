@@ -36,6 +36,7 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 ## Lecture 3 - Object Oriented Programming in Go, OOP Part II
 
 - Structs, Interfaces, Embedding, Polymorphism
+- <a href="docs/3.0-Go-Programming-OOP.pdf">Slides</a>
 - <a href="docs/exercises/Exercise3.md">Exercise 3.1 - Interfaces, Polymorphism and Embedding</a>
 - <a href="docs/exercises/Exercise3.md">Exercise 3.2 - Mail Component and Service Locator</a>
 
