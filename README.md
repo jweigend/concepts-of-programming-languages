@@ -32,3 +32,12 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 - <a href="docs/2.0-Go Programming - Basics and OOP.pdf">Slides</a>
 - <a href="docs/exercises/Exercise2.1.md">Exercise 2.1</a>
 - <a href="docs/exercises/Exercise2.2.md">Exercise 2.2</a>
+
+## Lecture 3 - Object Oriented Programming in Go, OOP Part II
+
+- Structs, Interfaces, Embedding, Polymorphism
+- <a href="docs/exercises/Exercise3.md">Exercise 3.1 - Interfaces, Polymorphism and Embedding</a>
+- <a href="docs/exercises/Exercise3.md">Exercise 3.2 - Mail Component and Service Locator</a>
+
+## Lecture 4 - Building Parsers with Go
+- <a href="docs/exercises/Exercise3.md">Exercise 3.3 - AST - Abstract Syntax Tree</a>
