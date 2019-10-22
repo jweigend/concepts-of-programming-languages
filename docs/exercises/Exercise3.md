@@ -25,11 +25,11 @@ Implement the interface and write a client. The implementation should be provide
 a simple self made service locator registry:
 
 ```go
-    // Create an implementation for the mail.Sender interface
-	var sender = Registry.Get("mail.Sender").(mail.Sender)
+// Create an implementation for the mail.Sender interface
+var sender = Registry.Get("mail.Sender").(mail.Sender)
 
-	mailaddrs := mail.Address{Address: address}
-	sender.SendMail(mailaddrs, message)
+mailaddrs := mail.Address{Address:"test@test.com"}
+sender.SendMail(mailaddrs, message)
 ```
 Interface, client and implementation should be in seperate packages. 
 
