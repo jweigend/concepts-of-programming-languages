@@ -1,4 +1,4 @@
-# Exercise 2.1 - Basic OOP
+# Exercise 2.2 - Basic OOP
 
 If you do not finish during the lecture period, please finish it as homework.
 
