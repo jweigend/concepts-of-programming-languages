@@ -6,6 +6,7 @@ package parser
 
 import (
 	"fmt"
+	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/lexer"
 )
 
 //  ---------------------------------------------------------
@@ -25,11 +26,11 @@ import (
 type Parser struct {
 	rootNode node
 	token    string // ll(1)
-	lexer    *Lexer
+	lexer    *lexer.Lexer
 }
 
 // NewParser constructs a recursive descent parser and compiles the input of the lexer.
-func NewParser(lexer *Lexer) *Parser {
+func NewParser(lexer *lexer.Lexer) *Parser {
 	b := Parser{lexer: lexer}
 	b.parse()
 	return &b
@@ -51,7 +52,6 @@ func (p *Parser) String() string {
 
 // Abstract syntax tree (AST) node types: and, or, not, value.
 type node interface {
-
 	// Eval evaluates the AST. The variables of the expression are set to true or false in the vars map.
 	// Missing vars (there are no key in the map) are evaluated to false.
 	Eval(vars map[string]bool) bool

@@ -5,12 +5,13 @@ package parser
 
 import (
 	"fmt"
+	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/lexer"
 	"testing"
 )
 
 func TestParser_Eval(t *testing.T) {
 	// create parser
-	p := NewParser(NewLexer("a & b & !c"))
+	p := NewParser(lexer.NewLexer("a & b & !c"))
 
 	// set vars
 	vars := map[string]bool{
@@ -42,7 +43,7 @@ func TestParser_Eval(t *testing.T) {
 		t.Error(fmt.Sprintf("Wrong result detected"))
 	}
 
-	p = NewParser(NewLexer("a & (b | c & b) & d"))
+	p = NewParser(lexer.NewLexer("a & (b | c & b) & d"))
 
 	// set vars
 	vars = map[string]bool{
