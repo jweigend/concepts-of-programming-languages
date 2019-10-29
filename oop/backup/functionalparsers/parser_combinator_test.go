@@ -1,6 +1,6 @@
 // (c) Armin Heller 2018
 
-package boolparser
+package functionalparsers
 
 import (
 	"container/list"
