@@ -1,0 +1,185 @@
+Go Programming - Parsers in Go
+Concepts of Programming Languages
+31 Oct 2019
+Tags: go, programming, master
+
+Dr.-Ing. Florian Lautenschlager
+Rosenheim Technical University
+(florian.lautenschlager|johannes.weigend)@qaware.de
+http://www.qaware.de
+
+
+
+* Focus of todays lecture: Practice your GO-Skills
+- on something new what is called _parsers_ (high level perspective 🐣)
+- Happy Hacking.
+.image img/04-parsers/01-practice-go.gif 400 _
+
+
+
+* New things you will learn today and which you should remember! 
+.image img/04-parsers/02-parsers-for-what.png _ 900
+- Could you describe or name the things? How are these things connected?
+
+
+
+* What we want to achieve: Evaluating boolean expressions with GO
+.image img/04-parsers/03-parsers-overview.png _ 1000
+
+
+
+* Three building blocks: Grammar
+- Grammar: Defines _Lexer_ and _Parser_ rules
+    expression ::= <term> {<or> <term>}
+    term ::= <factor> {<and> <factor>}
+    factor ::= <var> | <not> <factor> | (expression)
+    <or> ::= ‘|’
+    <and> ::= ‘&’
+    <not> ::= ‘!’
+    <var> ::= ‘[a-zA-Z0-9]*’
+- Parser rules: Defines how the _Abstract_ _Syntax_ _Tree_ or _Parse_ _Tree_ is build
+    expression ::= <term> {<or> <term>}
+    term ::= <factor> {<and> <factor>}
+    factor ::= <var> | <not> <factor> | (expression)
+- Lexer rules: Defines how the _tokens_  are determined
+    <or> ::= ‘|’
+    <and> ::= ‘&’
+    <not> ::= ‘!’
+    <var> ::= ‘[a-zA-Z0-9]*’
+
+
+* Three building blocks: Lexer
+- Performs the Lexical Analysis and tokenize the input into *n* _tokens_
+    lexer.tokenize("A & B | !C") ->  ["A", "&", "B", "|", "!", "C" ]
+- _Tokens_ are based on the grammar and are consumed by the _parser_
+- Simple lexer example:
+.code ../oop/boolparser/lexer/lexer.go /START OMIT/,/END OMIT/
+
+
+
+* Implement a lexer for boolean expression
+- See exercise
+.background img/04-parsers/programming.png
+
+
+* Three building blocks: Parser
+- Builds an _Abstract_ _Syntax_ _Tree_ (AST) or _Parse_ _Tree_ from the tokens
+.image img/04-parsers/04-ast-vs-cst.png _ 900
+- AST represents the abstract syntactic structure (does not contain all the details)
+
+
+
+* Abstract Syntax / Parse Tree Construction and Terminology
+- A _tree_ consists of hierarchically organized _nodes_ and has a _root_ node
+- Nodes below the root are _child_ nodes
+- All nodes except the root have a unique _parent_
+- A Node that has children (1..N) and is not the root is called an _interior_ node
+- A node without children is a _leaf_ node
+.image img/04-parsers/05-tree-terms.png _ 550
+
+
+* Abstract Syntax / Parse Tree terminology
+- A _tree_ consists of hierarchically organized _nodes_ and has a _root_ node
+- Nodes below the root are _child_ nodes
+- All nodes except the root have a unique _parent_
+- A Node that has children (1..N) and is not the root is called an _interior_ node
+- A node without children is a _leaf_ node
+.image img/04-parsers/05-whaat.gif _ 550
+
+
+* 
+.background img/04-parsers/Parsers.006.png
+* 
+.background img/04-parsers/Parsers.007.png
+* 
+.background img/04-parsers/Parsers.008.png
+* 
+.background img/04-parsers/Parsers.009.png
+* 
+.background img/04-parsers/Parsers.010.png
+* 
+.background img/04-parsers/Parsers.011.png
+
+* How to implement this in Go? First Step: AST
+- Define a _Node_ which can evaluate a _map[string]bool_
+    type node interface {
+        Eval(vars map[string]bool) bool
+    }
+- Implement interior nodes: _OR_, _AND_, _NOT_
+    type or struct {
+        lhs node
+        rhs node
+    }
+    func (o *or) Eval(vars map[string]bool) bool {
+        return o.lhs.Eval(vars) || o.rhs.Eval(vars)
+    }
+- Implement leaf nodes: _var_
+    func (v *val) Eval(vars map[string]bool) bool {
+        return vars[v.name] // missing vars will be evaluated to false!
+    }
+
+
+
+* How to implement this in Go? Second Step: Parsing
+- Implement all parser rules: _expression_, _term_, _factor_
+- The rule _expression_ _::=_ _<term>_ _{<or>_ _<term>}_ as code:
+    func (p *Parser) expression() {
+        p.term() //an expression always has a term
+        for p.token == "|" { //maybe the term is followed 'or' and another term
+            lhs := p.rootNode
+            p.term()
+            rhs := p.rootNode
+            p.rootNode = &or{lhs, rhs}
+        }
+    }
+- Put everything together
+    p := NewParser(NewLexer("a & b | !c"))
+    vars := map[string]bool{"a": true,"b": true,"c": false,}
+    p.Eval(vars) // true
+- Celebrate 🥳🎉🎊
+
+
+* Implement a parser for boolean expression
+- See exercise
+.background img/04-parsers/programming.png
+
+* Mentimeter
+
+* Choose your answers... 🤔
+.image img/04-parsers/02-menti.png _ 1000
+- Duration: 10 minutes
+- You are anonymous
+- Code: 49 21 09
+.link menti.com
+
+* Let's see the results
+.iframe https://www.mentimeter.com/s/ab831a224006d69659f95a31a084b129/3154edd7165d 600 1000
+
+* And now... Antlr
+- 1: Get Antlr.
+    go get github.com/antlr/antlr4/runtime/Go/antlr
+- 2: Define Grammar
+    grammar bool;
+    expression : term | OR expression
+    term : factor | AND factor ...
+
+- 3: Generate Lexer and Parser
+    antlr4 -Dlanguage=Go MyGrammar.g4
+
+- 4: Use the generated code
+    bool_parser.go, bool_lexer.go, ...
+
+.link https://github.com/antlr/antlr4/blob/master/doc/go-target.md (Quickstart Antlr4 for GO)
+
+* Summary
+- Parsing is fun
+- Three building blocks: Grammar, Lexer, Parser
+- Use parser generators - they are more stable than your code 😜
+
+* Bibliography
+- Bücher
+.link https://www.amazon.com/gp/product/193435645X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=193435645X&linkCode=as2&tag=russblo0b-20&linkId=MP4DCXDV6DJMEJBL Language Implementation Patterns: Create Your Own Domain-Specific and General Programming Languages (Pragmatic Programmers)
+.link https://www.amazon.com/gp/product/0470177071/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0470177071&linkCode=as2&tag=russblo0b-20&linkId=UCLGQTPIYSWYKRRM Writing Compilers and Interpreters: A Software Engineering Approach
+- Blogs / Links
+.link https://ruslanspivak.com/lsbasi-part7/
+.link https://github.com/antlr/antlr4/blob/master/doc/go-target.md

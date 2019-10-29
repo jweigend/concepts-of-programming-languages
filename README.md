@@ -42,3 +42,5 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 
 ## Lecture 4 - Building Parsers with Go
 - <a href="docs/exercises/Exercise4.md">Exercise 4.1 - AST - Abstract Syntax Tree</a>
+- <a href="docs/exercises/Exercise4.md">Exercise 4.2 - Building a Lexer</a>
+- <a href="docs/exercises/Exercise4.md">Exercise 4.3 - Building a Parser</a>
