@@ -41,6 +41,10 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 - <a href="docs/exercises/Exercise3.md">Exercise 3.2 - Mail Component and Service Locator</a>
 
 ## Lecture 4 - Building Parsers with Go
-- <a href="docs/exercises/Exercise4.md">Exercise 4.1 - AST - Abstract Syntax Tree</a>
-- <a href="docs/exercises/Exercise4.md">Exercise 4.2 - Building a Lexer</a>
-- <a href="docs/exercises/Exercise4.md">Exercise 4.3 - Building a Parser</a>
+
+- Practicing Go using the example of parsers for boolean expressions
+- <a href="docs/4.0-Go-Programming-Parser.pdf">Slides</a>
+- <a href="docs/exercises/Exercise4.md">Exercise 4.1 - Lexer for boolean expressions
+- <a href="docs/exercises/Exercise4.md">Exercise 4.2.1 - Abstract Syntax Tree (AST)
+- <a href="docs/exercises/Exercise4.md">Exercise 4.2.2 Recursive Descent Parser
+- <a href="docs/exercises/Exercise4.md">Exercise 4.3 Antlr
