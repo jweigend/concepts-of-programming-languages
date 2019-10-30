@@ -10,9 +10,8 @@ http://www.qaware.de
 
 
 
-* Focus of todays lecture: Practice your GO-Skills
-- on something new what is called _parsers_ (high level perspective 🐣)
-- Happy Hacking.
+* Focus of today's lecture: Practice your GO-Skills
+- on something new what is called _parsers_ (high level perspective - i am a parser-🐣)
 .image img/04-parsers/01-practice-go.gif 400 _
 
 
@@ -29,7 +28,7 @@ http://www.qaware.de
 
 
 * Three building blocks: Grammar
-- Grammar: Defines _Lexer_ and _Parser_ rules
+- Grammar: Defines _Lexer_ and _Parser_ rules (e.g. Backus-Naur)
     expression ::= <term> {<or> <term>}
     term ::= <factor> {<and> <factor>}
     factor ::= <var> | <not> <factor> | (expression)
@@ -48,18 +47,20 @@ http://www.qaware.de
     <var> ::= ‘[a-zA-Z0-9]*’
 
 
+
 * Three building blocks: Lexer
-- Performs the Lexical Analysis and tokenize the input into *n* _tokens_
+- Performs the lexical analysis and tokenize the input into *n* _tokens_
     lexer.tokenize("A & B | !C") ->  ["A", "&", "B", "|", "!", "C" ]
 - _Tokens_ are based on the grammar and are consumed by the _parser_
-- Simple lexer example:
+- Simple lexer example: (Can you spot the extension? 👀)
 .code ../oop/boolparser/lexer/lexer.go /START OMIT/,/END OMIT/
 
 
 
-* Implement a lexer for boolean expression
-- See exercise
+* Implement a lexer for boolean expressions
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise4.md (see Exercise4.md)
 .background img/04-parsers/programming.png
+
 
 
 * Three building blocks: Parser
@@ -69,13 +70,14 @@ http://www.qaware.de
 
 
 
-* Abstract Syntax / Parse Tree Construction and Terminology
+* Abstract Syntax / Parse Tree terminology
 - A _tree_ consists of hierarchically organized _nodes_ and has a _root_ node
 - Nodes below the root are _child_ nodes
 - All nodes except the root have a unique _parent_
 - A Node that has children (1..N) and is not the root is called an _interior_ node
 - A node without children is a _leaf_ node
 .image img/04-parsers/05-tree-terms.png _ 550
+
 
 
 * Abstract Syntax / Parse Tree terminology
@@ -85,6 +87,19 @@ http://www.qaware.de
 - A Node that has children (1..N) and is not the root is called an _interior_ node
 - A node without children is a _leaf_ node
 .image img/04-parsers/05-whaat.gif _ 550
+
+
+
+* We will implement a recursive descent parser to build the AST
+- Top-Down: identity root first, move down the subtrees, until leaves are found
+- LL-Parser: Left-to-right (input); Leftmost derivation (replace left most non-terminal (leaf))
+- Usually one method for each rule of the grammar -> structure of the parser mirrors the structure of the grammar
+- Algorithm (high level):
+    1. Implement methods, one for each rule
+    2. Start from the main top rule of the grammar (_expression_)
+    3. Call rules (_term_, _factor_) as defined in the grammar until we have a _var_ token.
+    4. Step back to 3. and analyze the next token
+
 
 
 * 
@@ -99,6 +114,8 @@ http://www.qaware.de
 .background img/04-parsers/Parsers.010.png
 * 
 .background img/04-parsers/Parsers.011.png
+
+
 
 * How to implement this in Go? First Step: AST
 - Define a _Node_ which can evaluate a _map[string]bool_
@@ -139,9 +156,12 @@ http://www.qaware.de
 - Celebrate 🥳🎉🎊
 
 
-* Implement a parser for boolean expression
-- See exercise
+
+* Implement a parser for boolean expressions
 .background img/04-parsers/programming.png
+.link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise4.md (see Exercise4.md)
+
+
 
 * Mentimeter
 
@@ -152,8 +172,12 @@ http://www.qaware.de
 - Code: 49 21 09
 .link menti.com
 
+
+
 * Let's see the results
 .iframe https://www.mentimeter.com/s/ab831a224006d69659f95a31a084b129/3154edd7165d 600 1000
+
+
 
 * And now... Antlr
 - 1: Get Antlr.
@@ -171,15 +195,20 @@ http://www.qaware.de
 
 .link https://github.com/antlr/antlr4/blob/master/doc/go-target.md (Quickstart Antlr4 for GO)
 
+
+
 * Summary
 - Parsing is fun
 - Three building blocks: Grammar, Lexer, Parser
 - Use parser generators - they are more stable than your code 😜
 
+
+
 * Bibliography
-- Bücher
+- Books
 .link https://www.amazon.com/gp/product/193435645X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=193435645X&linkCode=as2&tag=russblo0b-20&linkId=MP4DCXDV6DJMEJBL Language Implementation Patterns: Create Your Own Domain-Specific and General Programming Languages (Pragmatic Programmers)
 .link https://www.amazon.com/gp/product/0470177071/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0470177071&linkCode=as2&tag=russblo0b-20&linkId=UCLGQTPIYSWYKRRM Writing Compilers and Interpreters: A Software Engineering Approach
 - Blogs / Links
 .link https://ruslanspivak.com/lsbasi-part7/
 .link https://github.com/antlr/antlr4/blob/master/doc/go-target.md
+.link https://tomassetti.me/guide-parsing-algorithms-terminology/
