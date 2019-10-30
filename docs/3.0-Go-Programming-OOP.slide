@@ -9,19 +9,25 @@ Rosenheim Technical University
 johannes.weigend@qaware.de
 http://www.qaware.de
 
-* Interfaces, Embedding and Polymorphism
-- Go supports embedding of other structs inside a struct
-- In Java this is called delegation.
+* Embedding
+- Go does not support inheritance: Go supports embedding of other structs.
+.code ../oop/polymorphism/polymorphism.go /Point/,8
+
+.code ../oop/polymorphism/polymorphism.go /ColorPoint/,19
+
+.code ../oop/polymorphism/polymorphism.go /cp.x/,35
+
+- In Java this can be done with delegation.
 - Syntactically it is similar to inheritance in Java
 - Access to embedded field is identical to a normal field inside a struct
-- Polymorphism is only supported by using interfaces  
+- Overriding of methods is supported, overloading is not!
 
-* Interfaces, Embedding and Polymorphism
+* Interfaces and Polymorphism
 .play ../oop/polymorphism/polymorphism.go /func main/,/END2 OMIT/
 
-* Send mail with Go: Interfaces and polymorphism
+* Send Mail with Go: A minimal Interface
 .code ../oop/mail/mail.go /Address/,/END OMIT/
-- A example for service-oriented components
+- A example interface for a service-oriented component
 
 * A type implements an interface when providing the required methods
 .code ../oop/mail/smtp/sender.go /Package/,/END OMIT/
@@ -34,7 +40,7 @@ http://www.qaware.de
 - Several interfaces can be put together to form an interface
 - Go does not support inheritance but type embedding (delegation without syntactic ballast)
 - Go supports polymorphism only via interfaces, not through classes
-- Interfaces with a method end with the ending "er" (Stringer, Writer, Reader...)
+- Interfaces with one method end with the ending "er" (Stringer, Writer, Reader...)
 .link https://youtu.be/Ng8m5VXsn8Q?t=414
 
 * Exercise 3
