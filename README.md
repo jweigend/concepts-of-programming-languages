@@ -40,7 +40,7 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 - <a href="docs/exercises/Exercise3.md">Exercise 3.1 - Interfaces, Polymorphism and Embedding</a>
 - <a href="docs/exercises/Exercise3.md">Exercise 3.2 - Mail Component and Service Locator</a>
 
-## Lecture 4 - Building Parsers with Go
+## Lecture 4 - Building Parsers
 
 - Practicing Go using the example of parsers for boolean expressions
 - <a href="docs/4.0-Go-Programming-Parser.pdf">Slides</a>
@@ -48,3 +48,12 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 - <a href="docs/exercises/Exercise4.md">Exercise 4.2.1 - Abstract Syntax Tree (AST)
 - <a href="docs/exercises/Exercise4.md">Exercise 4.2.2 Recursive Descent Parser
 - <a href="docs/exercises/Exercise4.md">Exercise 4.3 Antlr
+
+## Lecture 5 - Functional Programming
+- Introduction in Functional Programming, the Lambda Calculus and the implementation in Go
+- <a href="docs/5.0-Functional-Programming.pdf">Slides</a>
+- <a href="docs/exercises/Exercise5.md">Exercise 5.1 - Warm Up with functional Programming in Go
+- <a href="docs/exercises/Exercise5.md">Exercise 5.2 - Functional Composition
+- <a href="docs/exercises/Exercise5.md">Exercise 5.3 - Map, Filter, Reduce with Streams
+- <a href="docs/exercises/Exercise5.md">Exercise 5.4 - Functional Word Count
+
