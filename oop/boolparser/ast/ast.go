@@ -20,32 +20,32 @@ type Node interface {
 
 // Or is the logical OR Operator in an AST
 type Or struct {
-	Lhs Node
-	Rhs Node
+	LHS Node
+	RHS Node
 }
 
 // Eval implements the Node interface
 func (o Or) Eval(vars map[string]bool) bool {
-	return o.Lhs.Eval(vars) || o.Rhs.Eval(vars)
+	return o.LHS.Eval(vars) || o.RHS.Eval(vars)
 }
 
 func (o Or) String() string {
-	return fmt.Sprintf("|(%v,%v)", o.Lhs, o.Rhs)
+	return fmt.Sprintf("|(%v,%v)", o.LHS, o.RHS)
 }
 
 // And is the logical AND Operator in an AST
 type And struct {
-	Lhs Node
-	Rhs Node
+	LHS Node
+	RHS Node
 }
 
 // Eval implements the Node interface
 func (a And) Eval(vars map[string]bool) bool {
-	return a.Lhs.Eval(vars) && a.Rhs.Eval(vars)
+	return a.LHS.Eval(vars) && a.RHS.Eval(vars)
 }
 
 func (a And) String() string {
-	return fmt.Sprintf("&(%v,%v)", a.Lhs, a.Rhs)
+	return fmt.Sprintf("&(%v,%v)", a.LHS, a.RHS)
 }
 
 // Not is the NOT operator in the AST

@@ -5,8 +5,9 @@ package parser
 
 import (
 	"fmt"
-	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/lexer"
 	"testing"
+
+	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/lexer"
 )
 
 func TestParser_Eval(t *testing.T) {

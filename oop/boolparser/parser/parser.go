@@ -6,6 +6,8 @@ package parser
 
 import (
 	"fmt"
+
+	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/ast"
 	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/lexer"
 )
 
@@ -24,7 +26,7 @@ import (
 
 // Parser is a recursive decent parser for boolean expressions.
 type Parser struct {
-	rootNode node
+	rootNode ast.Node
 	token    string // ll(1)
 	lexer    *lexer.Lexer
 }
@@ -47,75 +49,6 @@ func (p *Parser) String() string {
 }
 
 //
-// ----------  AST  ------------
-//
-
-// Abstract syntax tree (AST) node types: and, or, not, value.
-type node interface {
-	// Eval evaluates the AST. The variables of the expression are set to true or false in the vars map.
-	// Missing vars (there are no key in the map) are evaluated to false.
-	Eval(vars map[string]bool) bool
-}
-
-// or
-type or struct {
-	lhs node
-	rhs node
-}
-
-func (o *or) Eval(vars map[string]bool) bool {
-	return o.lhs.Eval(vars) || o.rhs.Eval(vars)
-}
-
-func (o *or) String() string {
-	return fmt.Sprintf("|(%v,%v)", o.lhs, o.rhs)
-}
-
-// and
-type and struct {
-	lhs node
-	rhs node
-}
-
-func (a *and) Eval(vars map[string]bool) bool {
-	return a.lhs.Eval(vars) && a.rhs.Eval(vars)
-}
-
-func (a *and) String() string {
-	return fmt.Sprintf("&(%v,%v)", a.lhs, a.rhs)
-}
-
-// not
-type not struct {
-	ex node
-}
-
-func (n *not) Eval(vars map[string]bool) bool {
-	return !n.ex.Eval(vars)
-}
-
-func (n *not) String() string {
-	return fmt.Sprintf("!(%v)", n.ex)
-}
-
-// val
-type val struct {
-	name string
-}
-
-func newVal(name string) *val {
-	return &val{name}
-}
-
-func (v *val) Eval(vars map[string]bool) bool {
-	return vars[v.name] // missing vars will be evaluated to false!
-}
-
-func (v *val) String() string {
-	return fmt.Sprintf("'%v'", v.name)
-}
-
-//
 // ----------  PARSING  ------------
 //
 
@@ -131,7 +64,7 @@ func (p *Parser) expression() {
 		lhs := p.rootNode
 		p.term()
 		rhs := p.rootNode
-		p.rootNode = &or{lhs, rhs}
+		p.rootNode = &ast.Or{LHS: lhs, RHS: rhs}
 	}
 }
 
@@ -142,7 +75,7 @@ func (p *Parser) term() {
 		lhs := p.rootNode
 		p.factor()
 		rhs := p.rootNode
-		p.rootNode = &and{lhs, rhs}
+		p.rootNode = &ast.And{LHS: lhs, RHS: rhs}
 	}
 }
 
@@ -153,12 +86,12 @@ func (p *Parser) factor() {
 		return // end
 	} else if p.token == "!" {
 		p.factor()
-		p.rootNode = &not{p.rootNode}
+		p.rootNode = &ast.Not{Ex: p.rootNode}
 	} else if p.token == "(" {
 		p.expression()
 		p.token = p.lexer.NextToken()
 	} else if isVar(p.token) {
-		p.rootNode = newVal(p.token)
+		p.rootNode = ast.Val{Name: p.token}
 		p.token = p.lexer.NextToken()
 	} else {
 		panic(fmt.Sprintf("Unknown symbol %v", p.token))
