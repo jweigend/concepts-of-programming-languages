@@ -61,9 +61,4 @@ func TestParser_Eval(t *testing.T) {
 	if p.String() != "&(&('a',|('b',&('c','b'))),'d')" {
 		t.Error(fmt.Sprintf("Wrong string representation: %v", p.String()))
 	}
-
-	// p = NewParser(NewLexer("a &"))
-	// if p.String() == "&('a','a')" {
-	// 	t.Error(fmt.Sprintf("The string \"a &\" parses to: %s", p.String()))
-	// }
 }
