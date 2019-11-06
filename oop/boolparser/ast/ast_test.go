@@ -8,11 +8,11 @@ import (
 
 func TestAST(t *testing.T) {
 
-	// Expression: "A AND B OR !C"
+	// AST for expression: "A AND B OR !C"
 	ast := Or{And{Val{"A"}, Val{"B"}}, Not{Val{"C"}}}
 
 	// Table to test all combinations for A, B, C -> 2^3 = 8 combinations.
-	// Format of Table { Val(A), Val(B), Val(C), RESULT }
+	// Format of Table { Value for A, Value for B, Value for C, Expected Result }
 	truthTable := [][]bool{
 		{false, false, false, true},
 		{false, false, true, false},
@@ -24,6 +24,7 @@ func TestAST(t *testing.T) {
 		{true, true, true, true},
 	}
 
+	// Test all possible combinations
 	for _, tt := range truthTable {
 
 		vars := map[string]bool{"A": tt[0], "B": tt[1], "C": tt[2]}
