@@ -17,28 +17,50 @@ func main() {
 
 	// This is the key: A Recursive function definition for all functions!!!
 	type fnf func(fnf) fnf
-	
+
 	// λx.x is a function which returns itself (the ID)
 	ID := func(x fnf) fnf { return x }
 
-	// Numbers 
+	// Functional Numbers ONE
 	ONCE := func(f fnf) fnf {
 		return func(x fnf) fnf {
 			return f(x)
 		}
 	}
-	
+
+	// Functional Numbers TWO
 	TWICE := func(f fnf) fnf {
 		return func(x fnf) fnf {
 			return f(f(x))
 		}
 	}
 
+	// Function Numbers THREE
 	THRICE := func(f fnf) fnf {
 		return func(x fnf) fnf {
 			return f(f(f(x)))
 		}
 	}
+
+	// Functional Numbers SUCCESSOR(N) => λwyx.y(wyx)
+	SUCCESSOR := func(w fnf) fnf {
+		return func(y fnf) fnf {
+			return func(x fnf) fnf {
+				return y(w)(y)(x)
+			}
+		}
+	}
+
+	Printer := func(x fnf) fnf { fmt.Print("."); return x }
+	QUAD := TWICE(TWICE)
+	QUAD(Printer)(ID)
+	fmt.Println()
+
+	SUCCESSOR(TWICE)(Printer)(ID)
+	fmt.Println("SUCCESSOR(TWICE) = 3")
+
+	SUCCESSOR(THRICE)(Printer)(ID)
+	fmt.Println("SUCCESSOR(THRICE) = 4")
 
 	// Boolean TRUE as function: λx.λy.x
 	TRUE := func(x fnf) fnf {
@@ -92,19 +114,10 @@ func main() {
 	TRUE(FALSE)(TRUE)(f)(g)(ID)
 	NOT(TRUE)(f)(g)(ID)
 
-	ONCE(NOT)(TRUE) // -> false 
-	TWICE(NOT)(TRUE) // -> true
+	ONCE(NOT)(TRUE)   // -> false
+	TWICE(NOT)(TRUE)  // -> true
 	THRICE(NOT)(TRUE) // -> false
 
 	fmt.Printf("ONCE(NOT)(TRUE) = %p\n", ONCE(NOT)(TRUE))
 	fmt.Printf("TWICE(NOT)(TRUE) = %p\n", TWICE(NOT)(TRUE))
-
-	// // SUCC = λwyx.y(wyx)
-	// SUCC := func (w, y, x fnf) fnf {
-	// 	return y(w(y(x)))
-	// }
-
-	// fmt.Printf("SUCC(ONCE, NOT, TRUE) = %p\n", SUCC(ONCE, NOT, TRUE))
-	// fmt.Printf("SUCC(TWICE, NOT, TRUE) = %p\n", SUCC(TWICE, NOT, TRUE))
-
 }

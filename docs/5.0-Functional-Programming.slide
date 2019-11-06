@@ -48,7 +48,7 @@ Functional programming supports *lazy* *evaluation* like Lazy Lists, Lazy Maps, 
 - Distribution 
 Functional programming supports distributed computing
 
-* Function names can be used as values
+* Functions are Values
 
     func aBlock(i int) {
         fmt.Printf("Entering block: i=%v\n", i)
@@ -65,6 +65,24 @@ Functional programming supports distributed computing
     }
 
 .link https://play.golang.org/p/3Lg5BCPiiPA
+
+* Many Functional Languages only support Single Argument Functions 
+- Currying : Converting a function with n arguments in n functions with one argument
+
+    // ADD with 2 parameters
+    ADD := func(x, y int) int {
+        return x + y
+    }
+ 
+    ADD(1,2) -> 3
+
+	// Curried ADD
+	ADDC := func(x int) func(int) int {
+		return func(y int) int {
+			return x + y
+		}
+	}
+    ADDC(1)(2) -> 3
 
 * Functional Composition
 Functions can be composed to new functions
@@ -187,6 +205,46 @@ Hint: To understand this video you will watch it at least three times :-)
         // select and call second function g(ID)
         Not(True)(f)(g)(ID)
 
+* Functional Numbers
+
+    // Functional Numbers 1
+    ONCE := func(f fnf) fnf {
+        return func(x fnf) fnf {
+            return f(x)
+        }
+    }
+  
+    // Functional Numbers 2
+    TWICE := func(f fnf) fnf {
+        return func(x fnf) fnf {
+            return f(f(x))
+        }
+    }
+ 
+	// Function Numbers 3
+	THRICE := func(f fnf) fnf {
+		return func(x fnf) fnf {
+			return f(f(f(x)))
+ 		}
+	}
+
+* Functional Numbers
+	// Functional Numbers SUCCESSOR(N) = N + 1
+	SUCCESSOR := func(w fnf) fnf {
+		return func(y fnf) fnf {
+			return func(x fnf) fnf {
+				return y(w)(y)(x)
+			}
+		}
+	}
+
+    Printer := func(x fnf) fnf { fmt.Print("."); return x }
+
+	SUCCESSOR(TWICE)(Printer)(ID)
+	fmt.Println("SUCCESSOR(TWICE) = 3")
+
+	SUCCESSOR(THRICE)(Printer)(ID)
+	fmt.Println("SUCCESSOR(THRICE) = 4")
 
 * Lambda Calculus in JavaScript
         TRUE = a => b => a; 
