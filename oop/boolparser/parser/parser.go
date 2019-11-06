@@ -6,6 +6,7 @@ package parser
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/ast"
 	"github.com/jweigend/concepts-of-programming-languages/oop/boolparser/lexer"
@@ -86,7 +87,7 @@ func (p *Parser) factor() {
 		return // end
 	} else if p.token == "!" {
 		p.factor()
-		p.rootNode = &ast.Not{Ex: p.rootNode}
+		p.rootNode = ast.Not{Ex: p.rootNode}
 	} else if p.token == "(" {
 		p.expression()
 		p.token = p.lexer.NextToken()
@@ -103,5 +104,8 @@ func isVar(token string) bool {
 	if len(token) == 0 {
 		panic("Empty token!")
 	}
-	return token[0] >= byte('0') && token[0] <= byte('z')
+	return validVar.MatchString(token)
 }
+
+// Regex for vars.
+var validVar = regexp.MustCompile("[a-zA-Z0-9]*")

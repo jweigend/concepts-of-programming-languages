@@ -12,7 +12,7 @@ import (
 
 func TestParser_Eval(t *testing.T) {
 	// create parser
-	p := NewParser(lexer.NewLexer("a & b & !c"))
+	p := NewParser(lexer.NewLexer("a&b&!c"))
 
 	// set vars
 	vars := map[string]bool{
