@@ -48,6 +48,24 @@ Functional programming supports *lazy* *evaluation* like Lazy Lists, Lazy Maps, 
 - Distribution 
 Functional programming supports distributed computing
 
+* Function names can be used as values
+
+    func aBlock(i int) {
+        fmt.Printf("Entering block: i=%v\n", i)
+    }
+
+    func do(f func (int), loops int) {
+        for i := 0; i < loops; i++ {
+            f(i)
+        } 
+    } 
+
+    func main() {
+        do(aBlock, 5)
+    }
+
+.link https://play.golang.org/p/3Lg5BCPiiPA
+
 * Functional Composition
 Functions can be composed to new functions
     g(f(x)) -> (g ◦ f)(x) 
