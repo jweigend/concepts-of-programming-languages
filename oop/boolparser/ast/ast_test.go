@@ -3,23 +3,33 @@
 package ast
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestAST(t *testing.T) {
+
+	// A AND B OR C
 	ast := Or{And{Val{"A"}, Val{"B"}}, Val{"C"}}
 
-	vars := map[string]bool{"A": true, "B": false, "C": true}
-	result := ast.Eval(vars)
-	fmt.Printf("expression := %v\n", ast)
-	fmt.Printf("vars := %v\n", vars)
-	fmt.Printf("result := %v\n", result)
+	truthTable := [][]bool{
+		{false, false, false, false},
+		{false, false, true, true},
+		{false, true, true, true},
+		{false, true, false, false},
+		{true, false, false, false},
+		{true, true, false, true},
+		{true, false, true, true},
+		{true, true, true, true},
+	}
 
-	vars = map[string]bool{"A": true, "B": true, "C": false}
-	result = ast.Eval(vars)
-	fmt.Printf("expression := %v\n", ast)
-	fmt.Printf("vars := %v\n", vars)
-	fmt.Printf("result := %v\n", result)
-
+	for i, tt := range truthTable {
+		
+		vars := map[string]bool{"A": tt[0], "B": tt[1], "C": tt[2]}
+		result := ast.Eval(vars)
+		
+		expected := truthTable[i][3]
+		if result != expected {
+			t.Errorf("Expected %v but got %v. (Expression := %v, Vars := %v)", expected, result, ast, vars)
+		}
+	}
 }
