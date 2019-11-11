@@ -57,3 +57,11 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 - <a href="docs/exercises/Exercise5.md">Exercise 5.3 - Map, Filter, Reduce with Streams
 - <a href="docs/exercises/Exercise5.md">Exercise 5.4 - Functional Word Count
 
+## Lecture 6 - Concurrent Programming
+- Why concurrent programming matters!
+- Go routines and channels
+- Go concurrency patterns
+- The dining philosophers problem
+- <a href="docs/6.0-Concurrent-Programming.pdf">Slides</a>
+- <a href="docs/exercises/Exercise6.md">Exercise 6</a>
+
