@@ -52,10 +52,10 @@ Each student will compare Go to one of these languages as Semester Work: Modula,
 ## Lecture 5 - Functional Programming
 - Introduction in Functional Programming, the Lambda Calculus and the implementation in Go
 - <a href="docs/5.0-Functional-Programming.pdf">Slides</a>
-- <a href="docs/exercises/Exercise5.md">Exercise 5.1 - Warm Up with functional Programming in Go
-- <a href="docs/exercises/Exercise5.md">Exercise 5.2 - Functional Composition
-- <a href="docs/exercises/Exercise5.md">Exercise 5.3 - Map, Filter, Reduce with Streams
-- <a href="docs/exercises/Exercise5.md">Exercise 5.4 - Functional Word Count
+- <a href="docs/exercises/Exercise5.md">Exercise 5.1 - Warm Up with functional Programming in Go</a>
+- <a href="docs/exercises/Exercise5.md">Exercise 5.2 - Functional Composition</a>
+- <a href="docs/exercises/Exercise5.md">Exercise 5.3 - Map, Filter, Reduce with Streams</a>
+- <a href="docs/exercises/Exercise5.md">Exercise 5.4 - Functional Word Count</a>
 
 ## Lecture 6 - Concurrent Programming
 - Why concurrent programming matters!
