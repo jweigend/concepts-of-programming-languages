@@ -49,7 +49,11 @@ Like launching a function with shell's `&` notation.
 
 Goroutines are multiplexed onto OS threads as required.
 
-When a goroutine blocks, that thread blocks but no other goroutine blocks.
+When a goroutine blocks the thread will execute other goroutines
+
+IO Calls and calls calls to the Go Standard Library trigger the scheduler
+
+-> There are no thread local variables in Go
 
 * Channels
 - Go routines can use channels for safe communication
