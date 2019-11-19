@@ -125,6 +125,12 @@ Requirements and Decisions
 * Step IV - Write Tests 
 .code ../dp/kvstore/core/raft/node_test.go /TestElection/,33
 
+* Interesting Parts 
+- Testability in Unit Tests with plugable network transport (Proxy/Stub)
+- Concurrent behavoir of Election and Timeout timers
+- Separation of Raft and Server/Infrastructure APIs 
+- Synchronization between external (AppendEntries/RequestVote) and internal Calls (Timeouts)
+
 * Be Creative!
 - Write your own Raft Implementation!
 .link https://www.youtube.com/watch?v=YbZ3zDzDnrw More information
