@@ -66,14 +66,16 @@ Phases:
 - dgraph - A Scalable, Distributed, Low Latency, High Throughput Graph Database
 - tikv - A Distributed transactional key value database powered by Rust and Raft
 - swarmkit - A toolkit for orchestrating distributed systems at any scale.
-- chain core - Software for operating permissioned, multi-asset blockchain networks 
+- chain core - Software for operating permissioned, multi-asset blockchain networks
+- Elastic Search - Distributed Search engine (=document oriented database)
+- ...
 
 * The Raft Algorithm
 - Raft is based on a replicated state machine with the states: *FOLLOWER*, *CANDIDATE* and *LEADER*
 - All nodes start in the FOLLOWER state
 - The leader is responsible for sending heartbeat message to all members
 - The leader is responsible to replicate data to all other nodes (2 phase commit)
-- If a member does not receive a leader message in a random timeout interval, a election starts
+- If a member does not receive a leader message in a random timeout interval, an election starts
 - During an election a candidate sends vote messages to all cluster members
 - The election is won, if a quorum (>50% = n/2 + 1) of members respond with OK
 
@@ -93,6 +95,7 @@ This implementation is highly optimized and abstracts from the Raft paper
 Other implementations
 .link https://github.com/hashicorp/raft
 .link https://github.com/cloudflare/go-raft
+.link https://github.com/peterbourgon/raft
 .link https://raft.github.io/raft.pdf Read the Raft paper for specification
 
 * Is it possible to build your own Raft implementation?
@@ -102,17 +105,17 @@ Requirements and Decisions
 - We want to use gRPC as middleware
 .link https://github.com/jweigend/concepts-of-programming-languages/tree/master/dp/kvstore/core/raft
 
-* Step I - Defining a KV Store API 
+* Step I - Defining a KV Business API 
 .code ../dp/kvstore/kvstore-api.go
 
 - This is the business API for setting and getting data in/out or Raft cluster
 
-* Step II - The Raft RPC Interface : AppendEntries
+* Step II - The Raft Interface : AppendEntries
 .code ../dp/kvstore/core/raft/noderpc.go /type NodeRPC/
 .code ../dp/kvstore/core/raft/noderpc.go /AppendEntries/,23
 - The interface could be easily proxied with gRPC or run locally without proxy
 
-* Step II - The Raft RPC Interface : RequestVote
+* Step II - The Raft Interface : RequestVote
 .code ../dp/kvstore/core/raft/noderpc.go /type NodeRPC/
 .code ../dp/kvstore/core/raft/noderpc.go /RequestVote/,37
 

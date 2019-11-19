@@ -38,6 +38,19 @@ type Statemachine struct {
 	validTransitions map[State][]State
 }
 
+// Valid transitions:
+//                   <-- 
+//          +-----------------------+
+//          v                       |
+//   +---------------+    +------------------+    +-------------+
+//   |   Follower    + -> | Candidate        + -> |   Leader    |
+//   +---------------+    +------------------+    +-------------+
+//          ^                 ^     |                    |
+//          |                 +-----+                    |
+//          |                   <--                      |
+//          +--------------------------------------------+
+//                              <--
+
 // NewStatemachine returns a new Statemachine in the FOLLOWER State.
 func NewStatemachine() *Statemachine {
 	s := new(Statemachine)
