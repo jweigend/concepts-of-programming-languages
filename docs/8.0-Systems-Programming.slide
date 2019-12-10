@@ -8,16 +8,21 @@ Rosenheim Technical University
 johannes.weigend@qaware.de
 http://www.qaware.de
 
-* What is System Programming - Definition
-"System programming involves designing and writing computer programs that allow the computer hardware to interface with the programmer and the user, 
+* What is Systems Programming?
+
+*Definition*
+
+"Systems programming involves designing and writing computer programs that allow the computer hardware to interface with the programmer and the user, 
 leading to the effective execution of application software on the computer system. 
 
-Typical system programs include the operating system and firmware, programming tools such as compilers, assemblers, I/O routines, interpreters, scheduler, loaders and linkers as well as the runtime libraries of the computer programming languages."
+Typical programs include the operating system and firmware, programming tools such as compilers, assemblers, I/O routines, interpreters, scheduler, loaders and linkers as well as the runtime libraries of the computer programming languages."
 
-* System Programming Today
-Todays OSs are built on a kernel of Assembler and C-Code (Linux Kernel, OSX/Darwin, Windows (Kernel, Driver, Graphics, Hal))
+* Systems Programming Today
+Todays OSs are built on a kernel of Assembler and C-Code (Linux, OSX/Darwin, Win32) 
+This includes the Kernel, Drivers, Graphics Subsystem, HAL ...
 The higher layers are built in languages with good support to call C or Assembler code (C, C++, Objective C)
-Tools and Low Level Application on top are typically written in languages like Python, Perl, C++, Go
+Tools and Low Level Applications on top are typically written in languages like Python, Perl, C++, Go
+Highlevel Applications are written in any Programming Language like Java, Ruby, JS ...
 .image https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Priv_rings.svg/2560px-Priv_rings.svg.png 300 400
  
 * Calling C Code from Go with cgo
@@ -65,7 +70,7 @@ This can be done by adding cgo build flags to the comment section.
 * Conversion between C and Go strings
 The C package contains conversion functions to convert Go to C strings and vice versa
 Also: opaque data (behind void *) to []byte
-    // Go string to C string; result must be freed with C.free
+    // Go string to C string; result must be freed with C.free()
     func C.CString(string) *C.char
 
     // C string to Go string
@@ -121,9 +126,10 @@ Package runtime contains operations that interact with Go's runtime system, such
 * What is a Container?
 - Containers let you isolate an application so that it’s under the impression it’s running on its own private machine. In that sense, a container is similar to a virtual machine (VM), but it uses the operating system kernel on the host rather than having its own.
 
-- Container start from container images. A image packs the application with the required libraries. 
+- Containers are started from container images. An image packs the application together with the required libraries and tools. 
 - In many cases a full unix filesystem is packed inside the image. 
-- An image for a Go application could be empty, since go has static linking. The required code is inside the generated binary.  
+- An image for a Go application could be empty, since Go has static linking. 
+- The required dependend code is linked into the binary.  
 
 * Change Root (chroot)
 A chroot on Unix operating systems is an operation that changes the apparent root directory for the current running process and its children. A program that is run in such a modified environment cannot name (and therefore normally cannot access) files outside the designated directory tree. The term "chroot" may refer to the chroot(2) system call or the chroot(8) wrapper program. The modified environment is called a chroot jail.\
@@ -166,7 +172,7 @@ The bash shell can only access the jail file system!
 * CGroups
 
 - Control cgroups, usually referred to as cgroups, are a Linux kernel feature which allow processes to be organized into hierarchical groups whose usage of various types of resources can then be limited and monitored.  The kernel's cgroup interface is provided through a pseudo-filesystem called cgroupfs.  
-- Grouping is implemented in the core cgroup kernel code, while resource tracking and limits are implemented in a set of per-resource-type subsystems (memory, CPU, and so on).
+- Grouping is implemented in the core cgroup kernel code, while resource tracking and limits are implemented in a set of per-resource-type subsystems (Memory, CPU, and so on).
 
 * CGroups Features
 
