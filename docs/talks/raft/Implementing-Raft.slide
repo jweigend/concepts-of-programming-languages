@@ -1,0 +1,189 @@
+Implementing Raft
+Go Days 2020 Berlin
+22 Jan 2020
+Tags: golang, programming, raft, concurrency, go routines, channels
+
+Johannes Weigend
+QAware GmbH, Rosenheim Technical University
+johannes.weigend@qaware.de
+http://www.qaware.de
+
+* Preliminary note
+- Building stateful distributed systems is hard. 
+- Especially when scalability and resiliency are required (Cloud)!
+
+* About this talk: Goals
+- Get a basic understanding of the Raft algorithm 
+- Get hints how to implement the Raft algorithm using Golang
+- Learn about existing implementations (Etcd, Elastic Search)
+- Take a look at non trivial Go code
+
+* Typical problems when building distributed stateful systems
+- The system gets inconsistent or unavailable if some component crashes or goes down
+- The system gets inconsistent or unavailable if a network partition occurs
+ 
+* What is Distributed Consensus?
+Distributed consensus is the problem how to achieve consistency in distributed systems. 
+Distributed consensus protocols can be used for distributed databases which should stay consistent:
+
+- The system stays consistent even if some nodes goes down
+- The system stays consistent if a network partition occurs (but could get unavailable)
+- The system never responds with wrong or inconsistent data (different responses from nodes)
+
+* The CAP Theorem
+In a distributed system the following requirements can be met:
+
+- *Consistency*  - Data is the same across the cluster, so you can read or write from/to any node and get the same data.
+- *Availability* - The system stays available even if one or more member goes down
+- *Partition* *Tolerance* - If parts of the system loose connection to other parts, the system stays alive
+
+Pick Two: Only two requirements can be met -> CP, AP are typical (CA does not exists)
+.link https://codahale.com/you-cant-sacrifice-partition-tolerance/
+
+* Securing C and P
+- All known algorithms use the concept of a quorum to detect network partition problems
+- Only the partition with the majority of nodes stay alive to ensure consistency
+- All known algorithms use the concept of a Master or Leader node to control replication
+- All known algorithms use a replicated log and implement a two phase commit
+
+* Two Phase Commit
+Phases:
+
+- Prepare Phase - Data is persisted on all members. Data is not visible but stored.
+
+- Commit Phase - Persisted data will be loaded into memory. Data gets visible.
+
+- This is typically implemented with an append only log (transaction log) and a state machine which reads the log entries and loads them into memory.
+
+* What is Raft?
+- Raft is a protocol for distributed consensus
+- Raft is designed to be easy understandable
+- Raft predecessor Paxos was highly complex
+- Most Paxos implementations are buggy or academic 
+- Raft was developed 2014 in a phd thesis at Stanford University
+- Zookeeper ZAB is an alternative but more complex solution
+.link https://raft.github.io/raft.pdf The Raft Paper
+.link https://github.com/lshmouse/reading-papers/blob/master/distributed-system/Zab:%20High-performance%20broadcast%20for%0Aprimary-backup%20systems.pdf The ZAB paper
+.link https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf The Paxos Paper
+
+
+* Who uses Raft?
+- ectd - The Cloud Native key value store -> Part of Kubernetes!
+- Docker Swarm - Docker in cluster mode
+- dgraph - A Scalable, Distributed, Low Latency, High Throughput Graph Database
+- tikv - A Distributed transactional key value database powered by Rust and Raft
+- swarmkit - A toolkit for orchestrating distributed systems at any scale.
+- chain core - Software for operating permissioned, multi-asset blockchain networks
+- Elastic Search - Distributed Search engine (=document oriented database)
+- ...
+
+* The Raft Algorithm
+- Raft is based on a replicated state machine with the states: *FOLLOWER*, *CANDIDATE* and *LEADER*
+- All nodes start in the FOLLOWER state
+- The leader is responsible for sending heartbeat message to all members
+- The leader is responsible to replicate data to all other nodes (2 phase commit)
+- If a member does not receive a leader message in a random timeout interval, an election starts
+- During an election a candidate sends vote messages to all cluster members
+- The election is won, if a quorum (>50% = n/2 + 1) of members respond with OK
+
+* Raft in Action
+.link http://thesecretlivesofdata.com/raft/ Raft Explanation
+.link https://raft.github.io/raftscope/index.html The Raftscope Visualization
+
+* The Raft State Model
+- There is only one Leader which is responsible for consistency and replication
+.image https://3.bp.blogspot.com/-6hYgzWqZBVU/WoXoq9gg9LI/AAAAAAAAVH0/OojT-PYzg1kzYxBZ8Gqz2QUwkz-5-O_zACLcBGAs/s1600/Screen%2BShot%2B2018-02-15%2Bat%2B3.07.43%2BPM.png
+
+* Implementing Raft with Go
+The most prominent implementation is the Raft implementation of Etcd (Part of Kubernetes)
+.link https://github.com/etcd-io/etcd/tree/master/raft
+This implementation is highly optimized and abstracts from the Raft paper
+
+Other implementations
+.link https://github.com/hashicorp/raft
+.link https://github.com/cloudflare/go-raft
+.link https://github.com/peterbourgon/raft
+.link https://raft.github.io/raft.pdf Read the Raft paper for specification
+
+* Some interesting Parts to look at
+- Statemachine 
+- Behavoir and Concurrency of remote calls, election and heartbeat timers
+- Timer implementation
+- Clean Architecture - Separation of Raft and remote APIs -> Hexagonal Model
+- Clean Code: Testability
+
+* Highlights of the Etcd Raft implementation
+TODO TODO TODO
+
+
+
+
+
+
+* Is it possible to build your own Raft implementation?
+Requirements and Decisions
+- We want to stay as close a possible on the original specification
+- We want to make a Raft cluster local testable (as single process)
+- We want to use gRPC as middleware
+.link https://github.com/jweigend/concepts-of-programming-languages/tree/master/dp/kvstore/core/raft
+
+* Step I - Defining a KV Business API 
+.code ../../../dp/kvstore/kvstore-api.go
+
+- This is the business API for setting and getting data in/out or Raft cluster
+- It is only an example for a minimal database like interface 
+
+* Step II - The Raft Interface : AppendEntries
+.code ../../../dp/kvstore/core/raft/noderpc.go /type NodeRPC/
+.code ../../../dp/kvstore/core/raft/noderpc.go /AppendEntries/,23
+- The interface could be easily proxied with gRPC or run locally without proxy
+
+* Step II - The Raft Interface : RequestVote
+.code ../../../dp/kvstore/core/raft/noderpc.go /type NodeRPC/
+.code ../../../dp/kvstore/core/raft/noderpc.go /RequestVote/,37
+
+* Improve testability by implementing the Proxy Pattern
+.image ../../../img/07-proxy-pattern.png 600 1000
+
+* TODO: Building a GRPC Proxy/Stub Adapter 
+- The GRPC interface definition (Protocol Buffers (idserv.pb))
+.code ../../../dp/idserv/remote/idserv/idserv.proto /IDService/,15
+- You have to generate the idserv.pb.go file with the GRPC protoc compiler (not part of the Go installation) 
+- The .pb.go file contains types and structures to implement and call the service
+
+* TODO: The Proxy implements the API interface on the client side (1/2)
+.code ../../../dp/idserv/remote/proxy/proxy.go /Proxy/,/NewUUID/
+
+* TODO: The Proxy implements the API interface on the client side (2/2)
+.code ../../../dp/idserv/remote/proxy/proxy.go /NewUUID/,49
+
+- The generated GRPC code differs from the local function call
+- The proxy acts as adapter between the API and the GRPC interface 
+- Parameters, Return Values and Errors are different  
+- The Proxy maps all these to remote structures, errors or exceptions
+
+* TODO: The Stub implements the GRPC interface and calls the Business API
+.code ../../../dp/idserv/remote/stub/idserv-stub.go 
+
+* Step III - Implement the Raft interface in a Server/Node
+.code ../../../dp/kvstore/core/raft/node.go /type Node/,28
+
+* Step IV - Write Tests 
+.code ../../../dp/kvstore/core/raft/node_test.go /TestElection/,33
+
+* Interesting Parts
+- Statemachine 
+- Concurrency: Behavoir of remote calls, election and heartbeat timers
+- Design: Timer implementation
+- Architecture: Separation of Raft and server APIs -> Hexagonal Model
+- Code: Testability, Unit testing, integration testing
+
+* Be Creative!
+- Write your own Raft Implementation!
+.link https://www.youtube.com/watch?v=YbZ3zDzDnrw More information
+
+* Summary 
+- Go is an excellent choice to implement an distributed protocol like Raft
+- You can implement the Raft specification with ca 1000-2000 Loc 
+- You can learn from the Etcd implementation, which is on Github
+- Building a production safe implementation is hard! Even in Golang ;-)
