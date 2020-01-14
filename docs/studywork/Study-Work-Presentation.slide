@@ -18,7 +18,6 @@ http://www.qaware.de
 * Timeline - 01-09-2020 
 9:45 - 13:15 - Functional Boolparser + Single Process Raft
 
-- Compare Functional Programming. Go with *Elixir*: Philipp Prommersberger 
 - Compare Functional Programming. Go with *F#*: Victor Wolf
 - Compare Functional Programming. Go with *Haskell*: Veronika Holzmayer
 - Compare Functional Programming. Go with *JavaScript*: Markus Voit
@@ -28,12 +27,10 @@ http://www.qaware.de
 - Compare Parallel Programming. Go with	*Scala*: Max Bundscherer
 		
 * Timeline - 01-16-2020 
-9:45 - 13:15 - OOP Boolparser + Distributed Raft Microservice
+9:45 - 12:00 - OOP Boolparser + Distributed Raft Microservice
 
 - Compare Object Oriented Programming. Go with *Smalltalk*: Markus Kaleta
 - Compare Object Oriented Programming. Go with *TypeScript*: Alexander Hauenstein
 - Compare Object Oriented Programming. Go with *Ruby*: Alexander Hennecke
-- Compare Object Oriented Programming. Go with *Lua*: Michael Bichler
 
-- Compare Distributed Programming. Go with *Rust*: Florian Kallabinski
 - Compare Distributed Programming. Go with *Kotlin*: Tobias Lautenschlager

@@ -1,10 +1,13 @@
+#+theme=black
 Implementing Raft
-Go Days 2020 Berlin
+GoDays 2020 Berlin
 22 Jan 2020
 Tags: golang, programming, raft, concurrency, go routines, channels
 
 Johannes Weigend
-QAware GmbH, Rosenheim Technical University
+QAware GmbH 
+Rosenheim Technical University
+
 johannes.weigend@qaware.de
 http://www.qaware.de
 
@@ -12,22 +15,30 @@ http://www.qaware.de
 - Building stateful distributed systems is hard. 
 - Especially when scalability and resiliency are required (Cloud)!
 
+* This talk is for you!
+- If you write the next Cloud native database
+- If you want to understand when your Kubernetes cluster gets into trouble
+- If you want to understand resiliency limits in a distributed database
+- If you want to know about consistency limits in a distributed system
+
 * About this talk: Goals
 - Get a basic understanding of the Raft algorithm 
 - Get hints how to implement the Raft algorithm using Golang
 - Learn about existing implementations (Etcd, Elastic Search)
 - Take a look at non trivial Go code
 
-* Typical problems when building distributed stateful systems
-- The system gets inconsistent or unavailable if some component crashes or goes down
-- The system gets inconsistent or unavailable if a network partition occurs
- 
+* Typical problems in a distributed stateful system
+- The system gets inconsistent if a component (SW/HW) fails
+- The system gets down if a component (SW/HW) fails
+- The system gets inconsistent if a network partition occurs
+- The system gets down if a network partition occurs
+
 * What is Distributed Consensus?
 Distributed consensus is the problem how to achieve consistency in distributed systems. 
-Distributed consensus protocols can be used for distributed databases which should stay consistent:
+Distributed consensus protocols solve this problem when consistency is a major requirement:
 
-- The system stays consistent even if some nodes goes down
-- The system stays consistent if a network partition occurs (but could get unavailable)
+- The system stays consistent (C) even if nodes go down
+- The system stays consistent if a network partition (P) occurs
 - The system never responds with wrong or inconsistent data (different responses from nodes)
 
 * The CAP Theorem
@@ -38,13 +49,16 @@ In a distributed system the following requirements can be met:
 - *Partition* *Tolerance* - If parts of the system loose connection to other parts, the system stays alive
 
 Pick Two: Only two requirements can be met -> CP, AP are typical (CA does not exists)
+
 .link https://codahale.com/you-cant-sacrifice-partition-tolerance/
 
 * Securing C and P
-- All known algorithms use the concept of a quorum to detect network partition problems
+There are two major algorithms to secure CP: Raft and ZAB  
+
+- Both use the concept of a quorum to detect network partition problems
 - Only the partition with the majority of nodes stay alive to ensure consistency
-- All known algorithms use the concept of a Master or Leader node to control replication
-- All known algorithms use a replicated log and implement a two phase commit
+- Both use the concept of a Master or Leader node to control replication
+- Both use a replicated log implemented with a two phase commit protocol
 
 * Two Phase Commit
 Phases:
@@ -58,9 +72,9 @@ Phases:
 * What is Raft?
 - Raft is a protocol for distributed consensus
 - Raft is designed to be easy understandable
-- Raft predecessor Paxos was highly complex
-- Most Paxos implementations are buggy or academic 
-- Raft was developed 2014 in a phd thesis at Stanford University
+- Raft academic predecessor Paxos was complex
+- Most Paxos implementations are buggy or too complex 
+- Raft was developed 2014 in a PhD thesis at Stanford University
 - Zookeeper ZAB is an alternative but more complex solution
 .link https://raft.github.io/raft.pdf The Raft Paper
 .link https://github.com/lshmouse/reading-papers/blob/master/distributed-system/Zab:%20High-performance%20broadcast%20for%0Aprimary-backup%20systems.pdf The ZAB paper
@@ -77,14 +91,14 @@ Phases:
 - Elastic Search - Distributed Search engine (=document oriented database)
 - ...
 
-* The Raft Algorithm
+* The Raft Algorithm in a Nutshell
 - Raft is based on a replicated state machine with the states: *FOLLOWER*, *CANDIDATE* and *LEADER*
-- All nodes start in the FOLLOWER state
+- All members start at *FOLLOWER* state
+- If a *FOLLOWER* does not recieve a message from a *LEADER* (timeout), an *election* starts
+- During an election a *CANDIDATE* sends vote messages to all cluster members
+- The election is won, if a *quorum* (>50% = n/2 + 1) of members respond with OK!
 - The leader is responsible for sending heartbeat message to all members
-- The leader is responsible to replicate data to all other nodes (2 phase commit)
-- If a member does not receive a leader message in a random timeout interval, an election starts
-- During an election a candidate sends vote messages to all cluster members
-- The election is won, if a quorum (>50% = n/2 + 1) of members respond with OK
+- The leader is responsible to replicate data to all other members (2 phase commit)
 
 * Raft in Action
 .link http://thesecretlivesofdata.com/raft/ Raft Explanation
@@ -105,20 +119,22 @@ Other implementations
 .link https://github.com/peterbourgon/raft
 .link https://raft.github.io/raft.pdf Read the Raft paper for specification
 
-* Some interesting Parts to look at
-- Statemachine 
+* Interesting Parts to look at ...
+- Statemachine
+- Transaction log
 - Behavoir and Concurrency of remote calls, election and heartbeat timers
 - Timer implementation
-- Clean Architecture - Separation of Raft and remote APIs -> Hexagonal Model
+- Clean Architecture - Separation of Raft and remote APIs (Transport) -> Hexagonal Model
 - Clean Code: Testability
 
 * Highlights of the Etcd Raft implementation
-TODO TODO TODO
+- Most widely Raft library in production (K8s, Docker Swarm ...)
+- Plugable network and disk IO
+- Deterministic testability by using a Statemachine
 
-
-
-
-
+The state machine takes a Message as input. 
+A message can either be a local timer update or a network message sent from a remote peer. 
+The state machine's output is a 3-tuple {[]Messages, []LogEntries, NextState} consisting of an array of Messages, log entries, and Raft state changes.
 
 * Is it possible to build your own Raft implementation?
 Requirements and Decisions
