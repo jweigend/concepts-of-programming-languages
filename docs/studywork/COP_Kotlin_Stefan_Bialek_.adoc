@@ -1,0 +1,317 @@
+= Comparison of object-oriented programming in Kotlin and Go 
+Stefan Bialek, 819023 <Stefan.Bialek@Stud.fh-rosenheim.de>
+:toc:
+
+This paper compares the two programming languages Kotlin and Go based on object-oriented programming.
+Kotlin and Go will be compared by a few characteristics of object-oriented programming languages. In detail this paper deals with functions, variables, flow control structures, classes, inheritance and polymorphism.
+The first section will provide an introduction to Kotlin and Go. After that, Chapter 2 is going to present and compare object-oriented programmming characteristics.
+
+=== *1.1 Introduction to Kotlin*
+
+Kotlin is a general purpose programming language with static typing and type inference. It's open source and sponsored by the software development company JetBrains. Furthermore Kotlin is compatible with Java and runs in the Java virtual machine. So Kotlin can be used everywhere Java is used. Kotlin can also be compiled to JavaScript or native code. On the mobile side Kotlin can be used for Android mobile development. In October 2017 Google included the Android Kotlin compiler in it's Android Studio 3.0 release. 
+
+JetBrains lead Dimitry Jemerov stated Kotlin was developed resulting in the need most languages did not have the features, they were looking for. In February 2012, JetBrains fully open sourced Kotlin under the Apache 2.0 License.
+
+Some well-known android apps, developed in Kotlin, are pinterest, Expedia and Flipboard. 
+
+
+=== *1.2 Introduction to Go*
+
+Go is a static typed and compiled programming designed at Google. The main designers were Rob Pike, Ken Thompson and Robert Griesemer. Similar to Kotlin, Go was developed resulting the demand of a programming language that unites useful characteristics like: 
+
+* static typing, 
+* run-time efficiency, 
+* readability 
+* usability 
+* High-performance netoworking 
+* multiprocessing.
+
+In November 2009 Go was officially announced and released in March 2012. The virtualization software Docker and the container-orchestration software Kubernetes belong to well-known projects written in Go.  	
+
+==  *2. Object-oriented programming*
+
+=== *2.1 Basic types*
+{nbsp} +
+
+==== *Basic types in Kotlin*
+
+The basic types of Kotlin can be categorized as
+
+* Numbers
+ - Byte
+ - Short
+ - Int
+ - Long
+ - Float 
+ - Double
+
+* Characters 
+ - char
+* Booleans
+ - Boolean
+* Arrays
+ - Array
+* Strings
+ - String
+
+{nbsp} +
+
+==== *Basic types in Go*
+
+* bool
+
+* string
+
+* int  int8  int16  int32  int64
+* uint uint8 uint16 uint32 uint64 uintptr
+
+* byte // alias for uint8
+
+* rune // alias for int32
+     // represents a Unicode code point
+
+* float32 float64
+
+* complex64 complex128
+
+{nbsp} +
+
+=== *2.2 Functions*
+This section describes the usage of functions and special features of each programming language
+
+==== *Functions in Kotlin*
+
+In Kotlin functions are declared with the *fun* keyword. The following code demonstrates the usage of functions. 
+Part 1 shows a simple function with the name add and it has two parameter with the type of Integer. The return type is also an Integer.
+
+In part 2 the function has Unit as return type. If a function doesn't have a return type the type unit gets returned.
+If the function has no return type, unit can also be ommited. 
+
+Part 3 shows an *single-expression function*. 
+These are functions where the body has only one line. A Single-Expression can also ommit the curly braces and the body is behind an equal sign. If a function has a block body, it needs to specify the return type. Kotlin prescribes this rule in order to prevent that the return type is not obvious to the reader.
+
+[source, kotlin]
+----
+fun add(x: Int, y: Int): Int {                                          // 1
+    return x + y
+}
+
+fun greeting(message: String): Unit {                                   // 2
+    println(message)
+}
+
+fun substract(x: Int, y: Int) = x - y                                   // 3
+
+----
+
+==== *Functions in Go*
+
+[source, go]
+----
+func add(x int, y int) int {
+    return x + y
+}
+
+func doSomething(value int) (x, y int) {
+    x = value + 10
+    y = value - 10
+    return
+}
+----
+
+
+
+=== *2.2 Variables*
+The following section will list variable characteristics in Kotlin and Go.
+
+==== *Variables in Kotlin*
+
+In Kotlin variables either can be declared *immutable* or *mutable*. To declare a mutable variable the keyword var is used. Instead the keyword val is used to declare a immutable variable.
+
+The following code sample demonstrates this.
+
+* mutable:     
+[source, kotlin]
+----
+var vehicle: String = “car”   
+----
+* immutable:
+[source, kotlin]
+----
+val name: String = “carl”
+----
+
+==== *Type inference*
+In Kotlin it is possible to explicitly declare the type of are variable or to let the compiler infer the type of a variable. The following example shows the two possibilities.
+
+[source, kotlin]
+----
+var vehicle: String = ”car”
+----
+also right
+
+[source, kotlin]
+----
+var vehicle = “car”
+----
+
+    
+==== *Null Safety*
+Because Kotlin is designed to interoperate with Java, but wants to hand the bad habbits of Java better, variable types in Kotlin don't allow the assigment of null by default. Kotlin does this to get rid off *NullPointerExceptions* 
+
+(1) So in Kotlin the following assigment is not possible.
+[source, kotlin]
+----
+var name: String = "Kotlin"
+name = null             //compilation error
+----
+If a null value is needed Kotlin provides the ?-Sign to add behind a type. 
+
+[source, kotlin]
+----
+var name: String? = "Kotlin"
+name = null             //sets null
+----
+
+
+
+==== *Variables in Go*
+The var statement declares a list of variables and it can include initializer for each variable. 
+
+[source, kotlin]
+----
+var firstName, lastName string = "Hans", "Maier"
+----
+
+Inside a function variables in Go can infer the type with the short variable declaration.  
+
+[source, kotlin]
+----
+firstName := "Hans" 
+----
+
+
+=== *2.3 Flow control structures*
+This section will compare the controll structures between Kotlin and Go.
+
+==== *Flow control in Kotlin*
+
+Kotlin has the usual control structures like *if, when, for, while*.
+In Kotlin *if* is an expression. Furthermore the *if* expression returns a value. 
+
+If the if expression is assigned to a variable, the expression needs an else statement.
+
+[source, kotlin]
+----
+val max = if (a > b) a else b
+----
+
+The *for loop* in Kotlin iterates through anything that provides an iterator. 
+
+If it needs to iterate over a range of numbers, a range expression is needed
+
+[source, kotlin]
+----
+for (i in 1..3) {
+    println(i)
+}
+----
+
+==== *Flow control in Go*
+Go on the otherhand has only the *for loop*
+
+[source, kotlin]
+----
+	sum := 0
+	for i := 0; i < 10; i++ {
+		sum += i
+	}
+	fmt.Println(sum)
+----
+Furthermore the init and post statement can be omitted.
+
+[source, kotlin]
+----
+	sum := 0
+	for ; i < 10; {
+		sum += i
+	}
+	fmt.Println(sum)
+----
+
+
+
+=== *2.4 Classes*
+
+
+==== *Classes in Kotlin*
+Besides the standard class Kotlin has different special classes. 
+
+*Data class* 
+
+A data class is used to create a class that stores values. The Data class built-in methods for copying, getting a string representation, and using instances in collections. 
+
+[source, kotlin]
+----
+data class Car(val id: Int, val brand: String)
+----
+
+*Enum class*
+
+The enum class is used for types with a finite and distinct values. 
+
+[source, kotlin]
+----
+enum class Weekday {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY 
+}
+----
+
+*Sealed class*
+
+With the sealed class keyword a class can restrict the use of inheritance. As a result no one else can create its subclasses.
+
+
+
+==== *Classes in Go*
+Go doesn't have classes in common sense, but it has structs than can simulate classes. Methods can be added to structs. 
+
+[source, kotlin]
+----
+type Car struct {  
+    brand               string
+    constructionYear    int
+    mileage             int
+}
+
+func NewCar(brand string, constructionYear int, mileage int){
+    car := Car{}
+    car.brand = brand
+    car.constructionYear = constructionYear
+    car.mileage = mileage
+    
+    return car
+}
+----
+
+
+=== *2.5 Inheritance and Polymorphism*
+
+==== *Inheritance in Kotlin*
+Kotlin supports inheretance, but Kotlin classes and methods are final by default. To open a class for inheritance the keyword *open* needs to be in front of the class identifier. To expand a class with a superclass, the class needs to specify the : SuperclassName() after its name. 
+
+==== *Inheritance in Go*
+Go on the otherhand has no inheritance. Go uses embedding which solves the same purpose. However a class, which embedds a superclass doesn't support polymorphism. For this case Go uses interfaces.
+
+== *3. Conclusion*
+Kotlin provides lot of utility for object-oriented programming. Due to its design to interoperate with Java, Kotlin has access to a vast collection of Java libraries. Kotlins type inference and special classes let the language be concise. 
+
+Go on the otherhand provides not much new, but it has main characteristics a object-oriented programming language needs to provide. The main advantage in Go lies in its concurrency and distributed approach, which wasn't taken into account in this comparison. 
+
+
+
+
+
+
+
+
