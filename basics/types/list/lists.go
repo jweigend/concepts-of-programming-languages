@@ -1,4 +1,4 @@
-// Copyright 2018 by Johannes Siedersleben
+// Copyright 2018-2026 by Johannes Siedersleben
 // 04.07.2018
 
 package main

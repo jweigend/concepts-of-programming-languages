@@ -5,25 +5,25 @@ Tags: go, programming, master
 
 Dr.-Ing. Florian Lautenschlager
 Rosenheim Technical University
-(florian.lautenschlager|johannes.weigend)@qaware.de
-http://www.qaware.de
+johannes.weigend@weigend.de
+http://www.weigend.de
 
 
 
 * Focus of today's lecture: Practice your GO-Skills
 - on something new what is called _parsers_ (high level perspective - i am a parser-🐣)
-.image img/04-parsers/01-practice-go.gif 400 _
+.image ./img/04-parsers/01-practice-go.gif 400 _
 
 
 
 * New things you will learn today and which you should remember! 
-.image img/04-parsers/02-parsers-for-what.png _ 900
+.image ./img/04-parsers/02-parsers-for-what.png _ 900
 - Could you describe or name the things? How are these things connected?
 
 
 
 * What we want to achieve: Evaluating boolean expressions with GO
-.image img/04-parsers/03-parsers-overview.png _ 1000
+.image ./img/04-parsers/03-parsers-overview.png _ 1000
 
 
 
@@ -59,13 +59,13 @@ http://www.qaware.de
 
 * Implement a lexer for boolean expressions
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise4.md (see Exercise4.md)
-.background img/04-parsers/programming.png
+.background ./img/04-parsers/programming.png
 
 
 
 * Three building blocks: Parser
 - Builds an _Abstract_ _Syntax_ _Tree_ (AST) or _Parse_ _Tree_ from the tokens
-.image img/04-parsers/04-ast-vs-cst.png _ 900
+.image ./img/04-parsers/04-ast-vs-cst.png _ 900
 - AST represents the abstract syntactic structure (does not contain all the details)
 
 
@@ -76,7 +76,7 @@ http://www.qaware.de
 - All nodes except the root have a unique _parent_
 - A Node that has children (1..N) and is not the root is called an _interior_ node
 - A node without children is a _leaf_ node
-.image img/04-parsers/05-tree-terms.png _ 550
+.image ./img/04-parsers/05-tree-terms.png _ 550
 
 
 
@@ -86,7 +86,7 @@ http://www.qaware.de
 - All nodes except the root have a unique _parent_
 - A Node that has children (1..N) and is not the root is called an _interior_ node
 - A node without children is a _leaf_ node
-.image img/04-parsers/05-whaat.gif _ 550
+.image ./img/04-parsers/05-whaat.gif _ 550
 
 
 
@@ -103,17 +103,17 @@ http://www.qaware.de
 
 
 * 
-.background img/04-parsers/Parsers.006.png
+.background ./img/04-parsers/Parsers.006.png
 * 
-.background img/04-parsers/Parsers.007.png
+.background ./img/04-parsers/Parsers.007.png
 * 
-.background img/04-parsers/Parsers.008.png
+.background ./img/04-parsers/Parsers.008.png
 * 
-.background img/04-parsers/Parsers.009.png
+.background ./img/04-parsers/Parsers.009.png
 * 
-.background img/04-parsers/Parsers.010.png
+.background ./img/04-parsers/Parsers.010.png
 * 
-.background img/04-parsers/Parsers.011.png
+.background ./img/04-parsers/Parsers.011.png
 
 
 
@@ -158,7 +158,7 @@ http://www.qaware.de
 
 
 * Implement a parser for boolean expressions
-.background img/04-parsers/programming.png
+.background ./img/04-parsers/programming.png
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise4.md (see Exercise4.md)
 
 
@@ -166,7 +166,7 @@ http://www.qaware.de
 * Mentimeter
 
 * Choose your answers... 🤔
-.image img/04-parsers/02-menti.png _ 1000
+.image ./img/04-parsers/02-menti.png _ 1000
 - Duration: 10 minutes
 - You are anonymous
 - Code: 49 21 09

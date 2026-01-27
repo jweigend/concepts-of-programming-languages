@@ -1,5 +1,5 @@
 // Package index makes a book index out of pages.
-// Copyright 2018 Johannes Weigend, Johannes  Siedersleben
+// Copyright 2018-2026 Johannes Weigend, Johannes  Siedersleben
 // Licensed under the Apache License, Version 2.0
 package index
 

@@ -1,5 +1,5 @@
-// Package utils contains examples for fanout und fanin functions using channels.
-package utils
+// Package fan contains fan-in and fan-out functions for channel operations.
+package fan
 
 // FanOut reads from a channel and starts an async processing task.
 // The result values of the tasks will be returned in the result channel

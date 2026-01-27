@@ -1,8 +1,8 @@
-// Copyright 2018 Johannes Weigend
+// Copyright 2018-2026 Johannes Weigend
 // Licensed under the Apache License, Version 2.0
 
-// Package fan contains examples for fanout und fanin functions using channels.
-package utils
+// Package fan contains fan-in and fan-out functions for channel operations.
+package fan
 
 import (
 	"testing"

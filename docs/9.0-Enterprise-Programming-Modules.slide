@@ -3,10 +3,10 @@ Concepts of Programming Languages
 19 Dec 2019
 Tags: go, programming, modules
 
-Johannes Weigend (QAware GmbH)
+Johannes Weigend (Weigend AM)
 University of Applied Sciences Rosenheim
-johannes.weigend@qaware.de
-http://www.qaware.de
+johannes.weigend@weigend.de
+http://www.weigend.de
 @johannesweigend
 
 * Enterprise Programming
@@ -47,7 +47,7 @@ system."
 - Languages differ greatly on that issue (From support of naming conventions to build tools (maven))
 
 * Versions and Conflicts
-.image img/09-conflicting-versions.png 500 800
+.image ./img/09-conflicting-versions.png 500 800
 
 * Module System in Java
 - Java knows Modules since Java SE 9 (Project Jigsaw)

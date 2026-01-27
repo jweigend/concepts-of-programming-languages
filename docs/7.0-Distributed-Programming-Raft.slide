@@ -5,8 +5,8 @@ Tags: go, programming, concurrent, go routines, channels
 
 Johannes Weigend
 Rosenheim Technical University
-johannes.weigend@qaware.de
-http://www.qaware.de
+johannes.weigend@weigend.de
+http://www.weigend.de
 
 * About this Lecture: Some Thoughts 
 - Goal of this lecture is to look at a non trivial example in Go.
@@ -127,7 +127,7 @@ Requirements and Decisions
 
 * Interesting Parts
 - Statemachine 
-- Concurrency: Behavoir of remote calls, election and heartbeat timers
+- Concurrency: Behavior of remote calls, election and heartbeat timers
 - Design: Timer implementation
 - Clean Architecture: Separation of Raft and server APIs 
 - Clean Code: Testability

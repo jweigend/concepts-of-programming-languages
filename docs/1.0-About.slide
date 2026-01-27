@@ -1,12 +1,12 @@
 Welcome
-Concepts of Programming Languages - TH Rosenheim - WS 2010/2020
+Concepts of Programming Languages - TH Rosenheim - WS 2019/2020
 10 Oct 2019
 Tags: go, programming, master
 
 Johannes Weigend
-QAware GmbH
-johannes.weigend@qaware.de
-http://www.qaware.de
+Weigend AM
+johannes.weigend@weigend.de
+http://www.weigend.de
 @johannesweigend
 
 * There are so many Languages ...
@@ -20,7 +20,7 @@ http://www.qaware.de
 
 * Goal of the Course
 
-.image img/go.png
+.image ./img/go.png
 - Learn how Go differs from other languages conceptually 
 - Gain skills to pick the right language for a given problem
 - Knowledge about the concepts of existing programming languages
@@ -36,7 +36,7 @@ Lecture 3 - *OOP* *with* *Go*
 
 Lecture 4 - *Functional* *Programming*
 
-Lecture 5 - *Fuctional* *Parsers*
+Lecture 5 - *Functional* *Parsers*
 
 Lecture 6 - *Parallel* *Programming* - Part I
 

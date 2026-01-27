@@ -6,8 +6,8 @@ Tags: go, programming, master
 
 Johannes Weigend
 Rosenheim Technical University
-johannes.weigend@qaware.de
-http://www.qaware.de
+johannes.weigend@weigend.de
+http://www.weigend.de
 
 * What is Functional Programming?
 .image ./img/04-lambda.png 200 350
@@ -125,7 +125,7 @@ Functions can be composed with functions as parameters
     
     fmt.Printf("%v\n", compose(compose(square, square), square)(2)) // --> 256
   
-* Clojures (Only impure if you modify the closed-over variable)
+* Closures (Only impure if you modify the closed-over variable)
 .play ../fp/clojures/main.go /intSeq/,/EOF OMIT/
 
 * History: The Lambda Calculus
@@ -297,7 +297,7 @@ Hint: To understand this video you will watch it at least three times :-)
     }
 
 * Functions as First Class Citizens in Go
-- Go supports functions as 1st Class Citizens: Clojures und Lambdas
+- Go supports functions as 1st Class Citizens: Closures and Lambdas
 - Functions can be assigned to variables
 - Functions can be used as function parameters and return values (High Order Functions)
 - Functions can be created inside functions
@@ -317,12 +317,12 @@ Hint: To understand this video you will watch it at least three times :-)
     }, s)
     fmt.Println(s) // --> Ifmmp-!xpsme"
 
-* Go does not have an API similar to Java Streams
-- It is possible to build such an API in Go
-.code ../fp/streams/streams_test.go /array/,/lambda/
+* Go Streams with Generics (Go 1.18+)
+- Since Go 1.18, we can build type-safe stream APIs
+.code ../fp/streams/streams_test.go /stringSlice OMIT/,/EOF OMIT/
 
-* Classic Word Count Sample
-.code ../fp/streams/streams_test.go /wordcount/,/ENDWC OMIT/
+* Classic Word Count Sample with ReduceTo
+.code ../fp/streams/streams_test.go /WC OMIT/,/ENDWC OMIT/
 
 * Questions
 - How can you implement parallel execution for our API?
@@ -330,8 +330,7 @@ Hint: To understand this video you will watch it at least three times :-)
 
 * Summary
 - You can do functional programming with Go
-- Generics and type inference for functions are missing (maybe 2.0?)
+- Go 1.18+ supports generics for type-safe functional programming
 - Type definitions for functions make code readable
-- You can use functional patterns and generic programming with extra casting (type assertions) 
-- Functional patterns like Map/Filter/Reduce are easy to implement in Go
-- Reflection can help to avoid casting, but it is slow!
+- Functional patterns like Map/Filter/Reduce are easy to implement with generics
+- No more type assertions needed for generic containers

@@ -4,9 +4,9 @@ Concepts of Programming Languages
 Tags: go, programming, master
 
 Johannes Weigend
-QAware GmbH
-johannes.weigend@qaware.de
-http://www.qaware.de
+Weigend AM
+johannes.weigend@weigend.de
+http://www.weigend.de
 @johannesweigend
 
 * Gopher
@@ -30,7 +30,7 @@ http://www.qaware.de
 * Introduction to Golang
 Rob Pike @ Google 2009 (60 Min)
 .link https://www.youtube.com/watch?v=rKnDgT73v8s
-.image img/01-go-programming-Language.png 450 700
+.image ./img/01-go-programming-language.png 450 700
 
 * Some Questions 
 - What makes Go different to other Languages? 
@@ -39,7 +39,7 @@ Rob Pike @ Google 2009 (60 Min)
 
 * Exercise 1
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise1.md
-.image img/01-exercise.png 500 700
+.image ./img/01-exercise.png 500 700
 
 * See also
 

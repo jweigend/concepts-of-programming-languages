@@ -1,10 +1,26 @@
 package main
 
+// ⚠️ WARNING: This is an ANTI-PATTERN in Go!
+// This example demonstrates how try-catch-finally COULD be implemented in Go,
+// but you should NOT use this pattern in production Go code.
+//
+// Idiomatic Go error handling:
+//   result, err := doSomething()
+//   if err != nil {
+//       // handle error
+//   }
+//   defer cleanup()
+//
+// This example is for educational purposes only to show:
+// 1. How panic/recover works internally
+// 2. Why Go chose explicit error handling over exceptions
+
 import (
 	"fmt"
 )
 
 // TryCatchBlock is a codeblock with a try and optional catch, finally clause.
+// ⚠️ DO NOT USE THIS IN PRODUCTION CODE - use explicit error handling instead!
 type TryCatchBlock struct {
 	T func()
 	C func(Exception)

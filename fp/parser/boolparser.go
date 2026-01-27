@@ -1,5 +1,5 @@
 /**
-  (C) Copyright 2018 Armin Heller
+  (C) Copyright 2018-2026 Armin Heller
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

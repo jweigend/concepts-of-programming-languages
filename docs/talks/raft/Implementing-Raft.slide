@@ -5,11 +5,11 @@ GoDays 2020 Berlin
 Tags: golang, programming, raft, concurrency, go routines, channels
 
 Johannes Weigend
-QAware GmbH 
+Weigend AM 
 Rosenheim Technical University
 
-johannes.weigend@qaware.de
-http://www.qaware.de
+johannes.weigend@weigend.de
+http://www.weigend.de
 
 * Preliminary note
 - Building stateful distributed systems is hard. 
@@ -122,7 +122,7 @@ Other implementations
 * Interesting Parts to look at ...
 - Statemachine
 - Transaction log
-- Behavoir and Concurrency of remote calls, election and heartbeat timers
+- Behavior and Concurrency of remote calls, election and heartbeat timers
 - Timer implementation
 - Clean Architecture - Separation of Raft and remote APIs (Transport) -> Hexagonal Model
 - Clean Code: Testability
@@ -189,7 +189,7 @@ Requirements and Decisions
 
 * Interesting Parts
 - Statemachine 
-- Concurrency: Behavoir of remote calls, election and heartbeat timers
+- Concurrency: Behavior of remote calls, election and heartbeat timers
 - Design: Timer implementation
 - Architecture: Separation of Raft and server APIs -> Hexagonal Model
 - Code: Testability, Unit testing, integration testing

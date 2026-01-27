@@ -1,4 +1,4 @@
-// Copyright 2018 Johannes Weigend, copied from Johannes Siedersleben
+// Copyright 2018-2026 Johannes Weigend, copied from Johannes Siedersleben
 // Licensed under the Apache License, Version 2.0
 
 // Package blockingqueue contains a blocking LIFO container.

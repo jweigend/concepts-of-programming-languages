@@ -1,4 +1,4 @@
-// Copyright 2018 Johannes Weigend
+// Copyright 2018-2026 Johannes Weigend
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,41 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//Package stack contains LIFO functions.
+// Package stack contains LIFO functions.
 package stack
 
-// Stack is a generic LIFO container for untyped object.
-type Stack struct {
-	data []interface{}
+import "errors"
+
+// Stack is a generic LIFO container using Go 1.18+ generics.
+// Type parameter T can be any type.
+type Stack[T any] struct {
+	data []T
 }
 
 // NewStack constructs an empty stack.
-func NewStack() *Stack {
-	return new(Stack)
+func NewStack[T any]() *Stack[T] {
+	return &Stack[T]{}
 }
 
 // Push pushes a value on the stack.
-func (s *Stack) Push(value interface{}) {
+func (s *Stack[T]) Push(value T) {
 	s.data = append(s.data, value)
 }
 
-// Pop pops a value from the stack. It returns an error if the stack is empty.
-func (s *Stack) Pop() interface{} {
+// Pop pops a value from the stack. Returns error if empty (idiomatic Go).
+func (s *Stack[T]) Pop() (T, error) {
+	var zero T
 	if len(s.data) == 0 {
-		panic("can not pop: empty stack")
+		return zero, errors.New("cannot pop: empty stack")
 	}
-	var result = s.data[len(s.data)-1]
-	s.data = s.data[0 : len(s.data)-1]
-	return result
+	result := s.data[len(s.data)-1]
+	s.data = s.data[:len(s.data)-1]
+	return result, nil
 }
 
 // Size returns the count of elements in the Stack
-func (s *Stack) Size() int {
+func (s *Stack[T]) Size() int {
 	return len(s.data)
 }
 
 // Get returns the n-th element in the Stack
-func (s *Stack) Get(idx int) interface{} {
+func (s *Stack[T]) Get(idx int) T {
 	return s.data[idx]
 }
 

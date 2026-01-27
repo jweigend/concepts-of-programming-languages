@@ -1,4 +1,4 @@
-// Copyright 2018 Johannes Weigend, Johannes  Siedersleben
+// Copyright 2018-2026 Johannes Weigend, Johannes  Siedersleben
 // Licensed under the Apache License, Version 2.0
 package client
 
@@ -14,5 +14,5 @@ func init() {
 }
 
 func TestMail(t *testing.T) {
-	SendMail("johannes.weigend@qaware.de", "Hello from Go!")
+	SendMail("johannes.weigend@weigend.de", "Hello from Go!")
 }

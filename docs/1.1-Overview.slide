@@ -4,14 +4,14 @@ Overview
 Tags: go, programming, master
 
 Johannes Weigend
-QAware GmbH
-johannes.weigend@qaware.de
-http://www.qaware.de
+Weigend AM
+johannes.weigend@weigend.de
+http://www.weigend.de
 @johannesweigend
 
 * Evolution of Programming Languages
-.link img/01-Languages.png
-.image img/01-Languages.png 500 1000
+.link ./img/01-languages.png
+.image ./img/01-languages.png 500 1000
 
 * Types of Programming Languages
 - *Imperative*: Assembler as root (Operations and Control Structures)
@@ -39,12 +39,12 @@ http://www.qaware.de
 - Safe vs. Unsafe (Crash a process or even the system)
 - Simple vs. Complex
 - Platform Independent Bytecode vs. Platform Dependent Assemblercode
-- Plattform Dependent Compiler vs. Cross Compiler
+- Platform Dependent Compiler vs. Cross Compiler
 
 * Some Thoughts
 - There are many solutions for a given problem
 - The "best" language is nothing without a proper ecosystem (Libraries, Examples, Community)
-- There are straight forward choices for a given platform (Mac: Swift + Objectiv-C, Linux: C + Python, Android: Java)
-- Dont expect "Magic" from programming Languages
+- There are straight forward choices for a given platform (Mac: Swift + Objective-C, Linux: C + Python, Android: Java/Kotlin)
+- Don't expect "Magic" from programming Languages
 - Clean code and good programming is orthogonal to the language
 - Learn more than one programming language at a professional level

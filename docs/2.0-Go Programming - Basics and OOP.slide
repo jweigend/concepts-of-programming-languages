@@ -6,14 +6,14 @@ Tags: go, programming, master
 
 Johannes Weigend
 Rosenheim Technical University
-johannes.weigend@qaware.de
-http://www.qaware.de
+johannes.weigend@weigend.de
+http://www.weigend.de
 
 * Golang
 - Go is an open source programming language for distributed and parallel systems
 - Go addresses the problems of C ++ backend development at Google
 - The Go core team is prominent: Robert Griesheimer (Hotspot VM), Ken Thompson (UX / B) and Rob Pike (UTF-8)
-- Go is actively developed since 2008 (current version 1.11)
+- Go is actively developed since 2009 (current version 1.24)
 - Go is *THE* language behind the Cloud Native Stack
 .link https://www.cncf.io/
 .image ./img/01-cncf-projects.png 100 1024
@@ -82,7 +82,7 @@ http://www.qaware.de
 .code ../basics/types/strings/strings.go /Reverse/,/End OMIT/
 
 * Arrays and Slices
-- Arrays have a fixed length and can not resized
+- Arrays have a fixed length and cannot be resized
 - Slices are views to underlying arrays 
 - Slices can be resized (append()) 
 - The underlying array grows automatically (if needed)
@@ -140,7 +140,7 @@ http://www.qaware.de
 
 * Exercise 2.1
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.1.md
-.image img/02-exercise.png 500 700
+.image ./img/02-exercise.png 500 700
 
 * public static void
 - Thoughts about language design:
@@ -166,16 +166,15 @@ http://www.qaware.de
       return fmt.Sprintf (% x, n)
   }
 
-* The Base Type for Container is the Empty Interface (interface {})
+* Generic Containers with Go 1.18+ Generics
 .code ../oop/stack/stack.go /Stack/,/END OMIT/
 
-* The Downcast Syntax is similar to a Function Call
-.code ../oop/stack/stack_test.go /TestCasting/,/END OMIT/
-- Object types (e.g., Containers) are used by pointers (no copies)
-- Data types (e.g., Money, Date, ...) are used by value (copies)
-- The downcast is safe (== dynamic_cast in C ++ or cast in Java)
-- No dereference (*s) is needed to call a method
+* Type-safe Stack Usage
+.code ../oop/stack/stack_test.go /TestStack/,/END OMIT/
+- With generics, no type assertions are needed
+- Error handling instead of panic (idiomatic Go)
+- Compile-time type safety
 
 * Exercise 2.2
 .link https://github.com/jweigend/concepts-of-programming-languages/blob/master/docs/exercises/Exercise2.2.md
-.image img/02-exercise.png 500 700
+.image ./img/02-exercise.png 500 700
